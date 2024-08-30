@@ -1,5 +1,6 @@
-from .main import lineas
-from .main import escaner
+
+from main import lineas
+from main import escaner
 from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.servicios.enums import Categoria
 from gestorAplicacion.servicios.proveedor import Proveedor

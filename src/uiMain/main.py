@@ -1,39 +1,37 @@
-import funcionalidad1
-import funcionalidad2
-import funcionalidad3
-import funcionalidad4
-from uiMain.funcionalidad5 import funcionalidad5
-from uiMain.identidad import Identidad
+from funcionalidad1 import Funcionalidad1
+from funcionalidad2 import Funcionalidad2
+from funcionalidad3 import Funcionalidad3
+from funcionalidad4 import Funcionalidad4
+from funcionalidad5 import Funcionalidad5
+from identidad import Identidad
 import sys
 
-def lineas():
-    print("-" * 160)
-
-def escaner():
-    try:
-        p = int(input())
-    except ValueError:
-        print("Este no es un número válido")
-        print("Introduzca otro número: ", end="")
-        p = escaner()
-    return p
-
-def escaner_con_rango(rango):
-    try:
-        p = int(input())
-    except ValueError:
-        print("Este no es un número válido")
-        print("Introduzca otro número: ", end="")
-        p = escaner_con_rango(rango)
-    
-    if p < 1 or p > rango:
-        print("Este número está fuera del rango")
-        print("Introduzca otro número: ", end="")
-        p = escaner_con_rango(rango)
-    
-    return p
-
 class Main(Identidad):
+    def lineas():
+        print("-" * 160)
+    
+    def escaner():
+        try:
+            p = int(input())
+        except ValueError:
+            print("Este no es un número válido")
+            print("Introduzca otro número: ", end="")
+            p = Main.escaner()
+        return p
+        
+    def escaner_con_rango(rango):
+        try:
+            p = int(input())
+        except ValueError:
+            print("Este no es un número válido")
+            print("Introduzca otro número: ", end="")
+            p = Main.escaner_con_rango(rango)
+        if p < 1 or p > rango:
+            print("Este número está fuera del rango")
+            print("Introduzca otro número: ", end="")
+            p = Main.escaner_con_rango(rango)
+        return p
+
     @staticmethod
     def main():
         # Deserializador.deserializar_listas()
@@ -45,7 +43,7 @@ class Main(Identidad):
             numeros = [1, 2, 3, 4, 5, 6]
             boleano = False
             
-            lineas()
+            Main.lineas()
             print("""
                 ______________________________
                /  /  /   /   /   /   /   /   /|
@@ -60,7 +58,7 @@ class Main(Identidad):
              |           |    |           |   /
              |___________|____|___________|__/
                 """)
-            lineas()
+            Main.lineas()
             print("Bienvenido a My_Tiendita, ¿qué desea hacer?")
             print("")
             print(" 1. Ecosistema de Consultas Personalizadas\n"
@@ -86,17 +84,17 @@ class Main(Identidad):
             
             match decision:
                 case 1:
-                    funcionalidad1.consultas_eco()
+                    Funcionalidad1.consultas_eco()
                 case 2:
                     cliente = Identidad.identificar_persona()
-                    funcionalidad2.elegir_tipo_busqueda(cliente)
+                    Funcionalidad2.elegir_tipo_busqueda(cliente)
                 case 3:
-                    funcionalidad3.impresion_facturas()
+                    Funcionalidad3.impresion_facturas()
                 case 4:
-                    funcionalidad4.seleccion_tienda()
+                    Funcionalidad4.seleccion_tienda()
                 case 5:
                     admin = Identidad.identificar_persona()
-                    funcionalidad5.personalizar_tienda(admin)
+                    Funcionalidad5.personalizar_tienda(admin)
                 case 6:
                     # Serializador.serializar_todo()
                     print("Ha salido del programa")

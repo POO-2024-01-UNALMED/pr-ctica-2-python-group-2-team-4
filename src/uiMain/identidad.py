@@ -17,7 +17,7 @@ class Identidad:
         print("¿Qué desea hacer?")
         print("1. Digitar otra vez mi documento")
         print("2. Registrar usuario")
-        print("Seleccione una opción: ")
+        print("Seleccione una opción: ") 
         seleccion = int(input())
         
         if seleccion == 1:
