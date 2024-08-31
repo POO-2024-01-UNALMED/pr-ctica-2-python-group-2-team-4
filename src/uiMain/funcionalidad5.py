@@ -1,6 +1,5 @@
 
-from main import lineas
-from main import escaner
+
 from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.servicios.enums import Categoria
 from gestorAplicacion.servicios.proveedor import Proveedor
@@ -10,6 +9,8 @@ class Funcionalidad5:
 
     @staticmethod
     def personalizar_tienda(admin):
+        from main import lineas
+        from main import escaner
         lineas()
         print("Ha seleccionado Personalizar y modificar tiendas.")
         print("Selecciona una de las tiendas disponibles para ti:")
@@ -66,6 +67,8 @@ class Funcionalidad5:
 
     @staticmethod
     def reorganizar_pasillos(tien):
+        from main import lineas
+        from main import escaner
         tien.get_pasillos().clear()
         lineas()
         i = 1
@@ -91,6 +94,8 @@ class Funcionalidad5:
 
     @staticmethod
     def llamar_proveedor(tien, admin):
+        from main import lineas
+        from main import escaner
         lineas()
         if not tien.disponibilidad_productos():
             print(f"{tien.get_dueño().get_nombre()} de la tienda: \"{tien.get_nombre()}\", sus pasillos están vacíos")
@@ -129,6 +134,8 @@ class Funcionalidad5:
 
     @staticmethod
     def contratar(tien):
+        from main import lineas
+        from main import escaner
         lineas()
         j = 1
         iterar = True
