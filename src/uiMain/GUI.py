@@ -3,17 +3,19 @@ import tkinter as tk
 root = tk.Tk()
 root.title("Ventana Principal de Inicio")
 
-# Crear el menú
-menu_bar = tk.Menu(root)
-inicio_menu = tk.Menu(menu_bar, tearoff=0)
-inicio_menu.add_command(label="Opción 1")
-inicio_menu.add_command(label="Opción 2")
-menu_bar.add_cascade(label="Inicio", menu=inicio_menu)
-root.config(menu=menu_bar)
-
 # Frame principal con padding superior
 frame_principal = tk.Frame(root, padx=10, pady=10, bd=2, relief="solid")
-frame_principal.pack(fill=tk.BOTH, expand=True, pady=(30, 10))
+frame_principal.pack(fill=tk.BOTH, expand=True)
+
+# Crear el menú en el cuadro principal
+menu_button = tk.Menubutton(frame_principal, text="Inicio", fg="red", relief="raised")
+menu_button.menu = tk.Menu(menu_button, tearoff=0)
+menu_button["menu"] = menu_button.menu
+
+menu_button.menu.add_command(label="Opción 1")
+menu_button.menu.add_command(label="Opción 2")
+
+menu_button.pack(anchor="nw", padx=5, pady=5)
 
 # Divisiones P1 y P2
 frame_p1 = tk.Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid")
@@ -37,3 +39,4 @@ frame_p6 = tk.Frame(frame_p2, padx=5, pady=5, bd=2, relief="solid")
 frame_p6.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
 root.mainloop()
+
