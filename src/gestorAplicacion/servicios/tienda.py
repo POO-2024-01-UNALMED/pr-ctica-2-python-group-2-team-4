@@ -1,13 +1,3 @@
-from gestorAplicacion.servicios.enums import Categoria
-from gestorAplicacion.servicios.enums import EstadoProducto
-from gestorAplicacion.sujetos.cliente import Tienda
-from gestorAplicacion.sujetos.administrador import Tienda
-from gestorAplicacion.sujetos.conserje import Tienda
-from gestorAplicacion.sujetos.domiciliario import Tienda
-from gestorAplicacion.sujetos.empleado import Tienda
-from gestorAplicacion.sujetos.persona import Tienda
-
-
 
 class Tienda:
     tiendas = []

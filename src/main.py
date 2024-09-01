@@ -1,16 +1,19 @@
-from funcionalidad1 import Funcionalidad1
-from funcionalidad2 import Funcionalidad2
-from funcionalidad3 import Funcionalidad3
-from funcionalidad4 import Funcionalidad4
-from funcionalidad5 import Funcionalidad5
-from identidad import Identidad
 import sys
 
+import importlib
+
+from uiMain.funcionalidad2 import Funcionalidad2
+from uiMain.funcionalidad3 import Funcionalidad3
+from uiMain.funcionalidad4 import Funcionalidad4
+from src.uiMain.identidad import Identidad
+
 class Main(Identidad):
-    def lineas():
+    @classmethod
+    def lineas(cls):
         print("-" * 160)
-    
-    def escaner():
+
+    @classmethod
+    def escaner(cls):
         try:
             p = int(input())
         except ValueError:
@@ -18,8 +21,9 @@ class Main(Identidad):
             print("Introduzca otro número: ", end="")
             p = Main.escaner()
         return p
-        
-    def escaner_con_rango(rango):
+
+    @classmethod
+    def escaner_con_rango(cls,rango):
         try:
             p = int(input())
         except ValueError:

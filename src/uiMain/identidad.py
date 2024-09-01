@@ -4,6 +4,8 @@ from gestorAplicacion.sujetos.cliente import Cliente
 from gestorAplicacion.sujetos.administrador import Administrador
 
 class Identidad:
+    def __init__(self):
+        pass
     @staticmethod
     def identificar_persona():
         print("Digite su documento: ")
