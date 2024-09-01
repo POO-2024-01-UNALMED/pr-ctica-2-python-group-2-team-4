@@ -1,7 +1,4 @@
 from datetime import date
-from gestorAplicacion.servicios.enums import Edades
-from gestorAplicacion.sujetos.persona import Carrito
-from gestorAplicacion.sujetos.cliente import Tienda
 
 
 class Carrito:
@@ -96,11 +93,11 @@ class Carrito:
     # Métodos
     def agregar_al_carrito(self, seleccionado, cantidad):
         monto_actual = sum(p.get_precio() for p in self.productos)
-        tamaño_maximo = 15 if self.tipo_carrito == 'ADULTOS' else 5
+        tamano_maximo = 15 if self.tipo_carrito == 'ADULTOS' else 5
 
         if not self.cliente.mayor_edad() and seleccionado.get_edades() == 'ADULTOS':
             return "Producto no agregado, no tienes la edad válida para este producto"
-        if len(self.productos) >= tamaño_maximo:
+        if len(self.productos) >= tamano_maximo:
             return "Producto no agregado, ya no tienes espacio en el carrito"
         if self.cliente.get_dinero() - monto_actual - (seleccionado.get_precio() * cantidad) < 0:
             return "Producto no agregado, ya no tienes dinero para agregar este producto"

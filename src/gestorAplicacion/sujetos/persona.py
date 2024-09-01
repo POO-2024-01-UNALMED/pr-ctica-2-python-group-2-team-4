@@ -1,9 +1,9 @@
 from typing import List, Optional
-from servicios.enums import Genero
-from servicios.tienda import Tienda
-from servicios.carrito import Carrito
+
 
 class Persona:
+    from gestorAplicacion.servicios.enums import Genero
+    from gestorAplicacion.servicios.tienda import Tienda
     personas: List['Persona'] = []
 
     def __init__(self, nombre: str = "", id: int = 0, edad: int = 0, genero: Genero = None):
