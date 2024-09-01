@@ -1,10 +1,8 @@
-
-
 class Identidad:
     def __init__(self):
         pass
-    @staticmethod
-    def identificar_persona():
+
+    def identificar_persona(self):
         from gestorAplicacion.sujetos.administrador import Administrador
         from gestorAplicacion.sujetos.cliente import Cliente
         from gestorAplicacion.servicios.enums import Genero

@@ -1,15 +1,10 @@
 import sys
 
-import importlib
-
-from uiMain.funcionalidad1 import Funcionalidad1
-from uiMain.funcionalidad2 import Funcionalidad2
-from uiMain.funcionalidad3 import Funcionalidad3
-from uiMain.funcionalidad4 import Funcionalidad4
-from uiMain.funcionalidad5 import Funcionalidad5
 from uiMain.identidad import Identidad
 
 class Main(Identidad):
+    def __init__(self):
+        super().__init__()
     @classmethod
     def lineas(cls):
         print("-" * 160)
@@ -38,13 +33,12 @@ class Main(Identidad):
             p = Main.escaner_con_rango(rango)
         return p
 
-    @staticmethod
-    def main():
-        # Deserializador.deserializar_listas()
-        Main.escoger_funcionalidad()
-
-    @staticmethod
-    def escoger_funcionalidad():
+    def escoger_funcionalidad(self):
+        from uiMain.funcionalidad1 import Funcionalidad1
+        from uiMain.funcionalidad2 import Funcionalidad2
+        from uiMain.funcionalidad3 import Funcionalidad3
+        from uiMain.funcionalidad4 import Funcionalidad4
+        from uiMain.funcionalidad5 import Funcionalidad5
         while True:
             numeros = [1, 2, 3, 4, 5, 6]
             boleano = False
@@ -92,14 +86,14 @@ class Main(Identidad):
                 case 1:
                     Funcionalidad1.consultas_eco()
                 case 2:
-                    cliente = Identidad.identificar_persona()
+                    cliente = self.identificar_persona()
                     Funcionalidad2.elegir_tipo_busqueda(cliente)
                 case 3:
                     Funcionalidad3.impresion_facturas()
                 case 4:
                     Funcionalidad4.seleccion_tienda()
                 case 5:
-                    admin = Identidad.identificar_persona()
+                    admin = self.identificar_persona()
                     Funcionalidad5.personalizar_tienda(admin)
                 case 6:
                     # Serializador.serializar_todo()
@@ -107,4 +101,5 @@ class Main(Identidad):
                     sys.exit(0)
 
 if __name__ == "__main__":
-    Main.main()
+    main=Main()
+    main.escoger_funcionalidad()
