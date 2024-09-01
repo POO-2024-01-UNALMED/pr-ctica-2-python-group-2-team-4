@@ -2,10 +2,12 @@ import sys
 
 import importlib
 
+from uiMain.funcionalidad1 import Funcionalidad1
 from uiMain.funcionalidad2 import Funcionalidad2
 from uiMain.funcionalidad3 import Funcionalidad3
 from uiMain.funcionalidad4 import Funcionalidad4
-from src.uiMain.identidad import Identidad
+from uiMain.funcionalidad5 import Funcionalidad5
+from uiMain.identidad import Identidad
 
 class Main(Identidad):
     @classmethod

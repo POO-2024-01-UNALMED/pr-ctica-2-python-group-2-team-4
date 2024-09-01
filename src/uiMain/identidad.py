@@ -1,13 +1,14 @@
-from gestorAplicacion.sujetos.persona import Persona
-from gestorAplicacion.servicios.enums import Genero
-from gestorAplicacion.sujetos.cliente import Cliente
-from gestorAplicacion.sujetos.administrador import Administrador
+
 
 class Identidad:
     def __init__(self):
         pass
     @staticmethod
     def identificar_persona():
+        from gestorAplicacion.sujetos.administrador import Administrador
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from gestorAplicacion.servicios.enums import Genero
+        from gestorAplicacion.sujetos.persona import Persona
         print("Digite su documento: ")
         p = int(input())
         for persona in Persona.get_personas():

@@ -42,17 +42,17 @@ class TipoCaja(Enum):
                 return caja
         return None
 
-class Tamaño(Enum):
+class Tamano(Enum):
     GRANDE = "Grande"
     MEDIANO = "Mediano"
-    PEQUEÑO = "Pequeño"
+    PEQUENO = "Pequeno"
     
-    def __init__(self, tamaño):
-        self.tamaño = tamaño
+    def __init__(self, tamano):
+        self.tamano = tamano
 
 class Genero(Enum):
     M = "M"
-    H = "H"
+    F = "F"
 
 class TipoEmpleado(Enum):
     CAJERO = "Cajero"
