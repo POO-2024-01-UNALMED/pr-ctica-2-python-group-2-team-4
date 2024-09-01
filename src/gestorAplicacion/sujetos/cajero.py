@@ -1,5 +1,5 @@
-from gestorAplicacion.servicios import Caja, Tienda
-from gestorAplicacion.servicios.enums import Genero, TipoEmpleado
+#from gestorAplicacion.servicios.caja import Caja, Tienda
+from gestorAplicacion.servicios.enums import TipoEmpleado#,Genero 
 from gestorAplicacion.sujetos.empleado import Empleado
 
 class Cajero(Empleado):
@@ -8,8 +8,8 @@ class Cajero(Empleado):
         self.caja = caja
         if tienda is not None:
             tienda.get_empleados().append(self)
-        if caja is not None:
-            caja.set_cajero(self)
+        if not caja is None:
+            caja._cajero=self
 
     def get_caja(self):
         return self.caja

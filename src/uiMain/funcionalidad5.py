@@ -5,7 +5,7 @@ class Funcionalidad5:
 
     @staticmethod
     def personalizar_tienda(admin):
-        from main import Main
+        from uiMain.main import Main
         from gestorAplicacion.servicios.tienda import Tienda
         Main.lineas()
         print("Ha seleccionado Personalizar y modificar tiendas.")
@@ -64,7 +64,7 @@ class Funcionalidad5:
     @staticmethod
     def reorganizar_pasillos(tien):
         from gestorAplicacion.servicios.enums import Categoria
-        from main import Main
+        from uiMain.main import Main
         tien.get_pasillos().clear()
         Main.lineas()
         i = 1
@@ -90,7 +90,7 @@ class Funcionalidad5:
 
     @staticmethod
     def llamar_proveedor(tien, admin):
-        from main import Main
+        from uiMain.main import Main
         from gestorAplicacion.servicios.proveedor import Proveedor
         Main.lineas()
         if not tien.disponibilidad_productos():
@@ -131,7 +131,7 @@ class Funcionalidad5:
     @staticmethod
     def contratar(tien):
         from gestorAplicacion.servicios.tienda import Tienda
-        from main import Main
+        from uiMain.main import Main
         Main.lineas()
         j = 1
         iterar = True

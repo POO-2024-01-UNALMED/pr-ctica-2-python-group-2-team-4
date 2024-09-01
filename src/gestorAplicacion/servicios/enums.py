@@ -51,8 +51,8 @@ class Tamano(Enum):
         self.tamano = tamano
 
 class Genero(Enum):
+    H = "H"
     M = "M"
-    F = "F"
 
 class TipoEmpleado(Enum):
     CAJERO = "Cajero"
