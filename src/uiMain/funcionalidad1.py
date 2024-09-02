@@ -1,11 +1,10 @@
 class Funcionalidad1:
-    from gestorAplicacion.sujetos import Administrador, Cliente, Persona
-    from gestorAplicacion.servicios import Producto, Tienda
-    from gestorAplicacion.servicios.Enums import Membresia, Categoria
-    from uiMain import Main, Identidad
-
     @staticmethod
     def consultas_eco():
+        from uiMain.identidad import Identidad
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from gestorAplicacion.sujetos.administrador import Administrador
+        from uiMain.main import Main
         cliente = None
 
         while cliente is None:
@@ -42,6 +41,9 @@ class Funcionalidad1:
 
     @staticmethod
     def consulta_general_productos(cliente):
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from uiMain.main import Main
+        from gestorAplicacion.servicios.tienda import Tienda
         if Tienda.buscar_tienda():
             print("Selecciona una de las tiendas que tenemos disponibles para ti")
             tiendas = Tienda.revision_tienda(Tienda.get_tiendas())
@@ -84,6 +86,10 @@ class Funcionalidad1:
 
     @staticmethod
     def consulta_por_categoria(cliente):
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from uiMain.main import Main
+        from gestorAplicacion.servicios.tienda import Tienda
+        from gestorAplicacion.servicios.enums import Categoria
         if Tienda.buscar_tienda():
             print("Selecciona una de las categorías disponibles en nuestras tiendas:")
             Main.print_tabla_categorias()
@@ -132,6 +138,10 @@ class Funcionalidad1:
 
     @staticmethod
     def consulta_membresias(cliente):
+        from gestorAplicacion.servicios.enums import Membresia
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from uiMain.main import Main
+        from gestorAplicacion.servicios.tienda import Tienda
         if Tienda.buscar_tienda():
             if cliente.mayor_edad():
                 if cliente.get_membresia():
@@ -216,6 +226,8 @@ class Funcionalidad1:
 
     @staticmethod
     def primera_membresia(cliente, membresia):
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from uiMain.main import Main
         if cliente.get_membresia() is None:
             cliente.set_membresia(membresia)
             Cliente.registrar_membresia(cliente, membresia)

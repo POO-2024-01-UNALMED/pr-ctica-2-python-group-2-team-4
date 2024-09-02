@@ -1,11 +1,6 @@
-from gestorAplicacion.servicios.enums import Categoria
-from gestorAplicacion.servicios.enums import EstadoProducto
-from gestorAplicacion.servicios.enums import Tamaño
-from gestorAplicacion.servicios.enums import Edades
-from gestorAplicacion.sujetos.cliente import Tienda
 from datetime import date
-from datetime import datetime
 from copy import deepcopy
+
 class Producto:
     IVA = 0.19
     fecha_actual = date.today()
@@ -13,6 +8,7 @@ class Producto:
 
     def __init__(self, nombre, marca=None, precio=0.0, tamaño=None, edad_valida=None, id=None, 
                  categoria=None, descripcion="", fecha_perecer=None, pasillo=None, tienda=None):
+        from gestorAplicacion.servicios.enums import EstadoProducto
         self.nombre = nombre
         self.marca = marca
         self.precio = precio
@@ -47,6 +43,7 @@ class Producto:
 
     @staticmethod
     def filtrar_por_edad(productos, cliente):
+        from gestorAplicacion.servicios.enums import Edades
         productos_adecuados = []
         for producto in productos:
             if cliente.mayor_edad() and producto.edad_valida == Edades.ADULTOS:
@@ -57,6 +54,7 @@ class Producto:
 
     @staticmethod
     def filtrar_por_edad_y_categoria(productos, cliente, categoria):
+        from gestorAplicacion.servicios.enums import Edades
         productos_adecuados = []
         for producto in productos:
             if producto.categoria == categoria:

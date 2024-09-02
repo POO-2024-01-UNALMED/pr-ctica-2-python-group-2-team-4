@@ -1,10 +1,10 @@
 from typing import List, Optional
-from gestorAplicacion.servicios import Producto, Proveedor, Tienda
-from gestorAplicacion.sujetos import Administrador
-from gestorAplicacion.servicios.enums import EstadoProducto
+
 
 class Funcionalidad4:
-
+    from gestorAplicacion.servicios.producto import Producto
+    from gestorAplicacion.servicios.tienda import Tienda
+    from gestorAplicacion.sujetos.administrador import Administrador
     tiendaSelecta: Optional[Tienda] = None
 
     @staticmethod
@@ -67,6 +67,8 @@ class Funcionalidad4:
 
     @staticmethod
     def adminitrar_tienda(tienda: Tienda):
+        from gestorAplicacion.servicios.producto import Producto
+        from gestorAplicacion.servicios.enums import EstadoProducto
         print("Seleccione una opción:")
         print("1. Total de productos en el inventario")
         print("2. Productos vencidos")
