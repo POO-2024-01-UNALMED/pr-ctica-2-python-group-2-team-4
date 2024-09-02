@@ -3,9 +3,9 @@ class Tienda:
     tiendas = []
     desempleados = []
 
-    def __init__(self, nit=None, dueño=None, nombre=None, saldo=0, estado="cerrado"):
+    def __init__(self, nit=None, dueno=None, nombre=None, saldo=0, estado="cerrado"):
         self.nit = nit
-        self.dueño = dueño
+        self.dueno = dueno
         self.nombre = nombre
         self.saldo = saldo
         self.estado = estado
@@ -18,9 +18,10 @@ class Tienda:
         self.productos_vencidos = []
         self.productos_devueltos = []
         Tienda.tiendas.append(self)
-        
-        if dueño:
-            dueño.tiendas.append(self)
+
+#COMO QUE IF DUENO, dueño no es un booleano
+        if dueno:
+            dueno.tiendas.append(self)
 
     # Getters and Setters
 
@@ -36,11 +37,11 @@ class Tienda:
     def set_nit(self, nit):
         self.nit = nit
 
-    def get_dueño(self):
-        return self.dueño
+    def get_dueno(self):
+        return self.dueno
 
-    def set_dueño(self, dueño):
-        self.dueño = dueño
+    def set_dueno(self, dueno):
+        self.dueno = dueno
 
     def get_nombre(self):
         return self.nombre

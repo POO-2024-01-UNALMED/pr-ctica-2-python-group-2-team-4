@@ -1,4 +1,3 @@
-from gestorAplicacion.servicios.enums import Categoria
 class Proveedor:
     # Atributos estáticos
     seis_proveedores = []

@@ -1,10 +1,4 @@
 from typing import List
-
-from gestorAplicacion.servicios.enums import TipoCaja
-#from gestorAplicacion.sujetos.cajero import Persona
-#from gestorAplicacion.sujetos.cliente import Tienda
-
-
 class Caja:
     # Atributos
     def __init__(self, nombre=None, tipo=None, tienda=None):

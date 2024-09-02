@@ -144,12 +144,9 @@ class Carrito:
         return sum(producto.get_precio() for producto in carrito)
 
     def generar_detalles_factura(self, descuento_membresia, gano_juego):
-        detalles = []
-        detalles.append("Factura:")
-        detalles.append("+-----+--------------------+---------------+----------+------------+----------+")
-        detalles.append("| No. | Producto           | Marca         | Tamaño   | Categoría  | Precio   |")
-        detalles.append("+-----+--------------------+---------------+----------+------------+----------+")
-
+        detalles = ["Factura:", "+-----+--------------------+---------------+----------+------------+----------+",
+                    "| No. | Producto           | Marca         | Tamaño   | Categoría  | Precio   |",
+                    "+-----+--------------------+---------------+----------+------------+----------+"]
         for i, producto in enumerate(self.productos, 1):
             detalles.append(f"| {i:<3} | {producto.get_nombre():<18} | {producto.get_marca():<13} | {producto.get_tamaño().get_tamaño():<8} | {producto.get_categoria().get_texto():<10} | {producto.get_precio():<8.2f} |")
         detalles.append("+-----+--------------------+---------------+----------+------------+----------+")

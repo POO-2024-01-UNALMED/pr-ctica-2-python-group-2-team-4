@@ -1,6 +1,3 @@
-import pickle
-from gestorAplicacion.servicios.enums import Categoria
-
 class Pasillo:
     # Atributos
     def __init__(self, nombre=None, categoria=None, tienda=None, productos=None):

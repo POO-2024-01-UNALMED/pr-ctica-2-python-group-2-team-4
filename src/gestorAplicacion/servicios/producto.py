@@ -6,13 +6,13 @@ class Producto:
     fecha_actual = date.today()
 
 
-    def __init__(self, nombre, marca=None, precio=0.0, tamaño=None, edad_valida=None, id=None, 
+    def __init__(self, nombre, marca=None, precio=0.0, tamano=None, edad_valida=None, id=None,
                  categoria=None, descripcion="", fecha_perecer=None, pasillo=None, tienda=None):
         from gestorAplicacion.servicios.enums import EstadoProducto
         self.nombre = nombre
         self.marca = marca
         self.precio = precio
-        self.tamaño = tamaño
+        self.tamano = tamano
         self.edad_valida = edad_valida
         self.id = id
         self.categoria = categoria
@@ -73,7 +73,7 @@ class Producto:
         return hash(self.id)
 
     def __str__(self):
-        return f"{self.nombre}\t{self.marca}\t{self.tamaño}\t{self.precio}"
+        return f"{self.nombre}\t{self.marca}\t{self.tamano}\t{self.precio}"
 
     def clone(self):
         return deepcopy(self)
