@@ -50,7 +50,7 @@ class Tamano(Enum):
     def __init__(self, tamano):
         self.tamano = tamano
 
-class Genero(Enum):
+class Genero(str,Enum):
     H = "H"
     M = "M"
 
