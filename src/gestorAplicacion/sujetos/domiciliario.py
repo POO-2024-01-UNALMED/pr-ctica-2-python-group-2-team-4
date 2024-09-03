@@ -1,5 +1,6 @@
-from gestorAplicacion.servicios import Tienda
+
 from gestorAplicacion.servicios.enums import Genero, TipoEmpleado
+from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.sujetos.empleado import Empleado
 
 class Domiciliario(Empleado):

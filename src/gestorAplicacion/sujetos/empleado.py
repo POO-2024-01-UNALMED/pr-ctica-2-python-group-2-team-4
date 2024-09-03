@@ -5,11 +5,11 @@ from gestorAplicacion.servicios.tienda import Tienda
 class Empleado(Persona):
     # Atributos----------------------------------------------------------------------------------------------------
     
-    def __init__(self, nombre=None, id=None, edad=None, genero=None, liquidacion=0.0, tienda=None,prestacionSalud=False, prestacionPension=False, tipo=None, experiencia=0):
+    def __init__(self, nombre=None, id=None, edad=None, genero=None, liquidacion=0.0, tienda=None,prestacion_salud=False, prestacion_pension=False, tipo=None, experiencia=0):
         super().__init__(nombre, id, edad, genero)
         self.liquidacion = liquidacion
-        self.prestacionSalud = prestacionSalud
-        self.prestacionPension = prestacionPension
+        self.prestacion_salud = prestacion_salud
+        self.prestacion_pension = prestacion_pension
         self.experiencia = experiencia
         self.tienda = tienda
         self.tipo = tipo

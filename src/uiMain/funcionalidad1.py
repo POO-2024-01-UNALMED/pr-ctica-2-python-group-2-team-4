@@ -24,7 +24,7 @@ class Funcionalidad1:
         print("3. Consulta de membresías")
         print("4. Volver")
         print("")
-        consulta = Main.escaner(4)
+        consulta = Main.escaner_con_rango(4)
 
         print(f"Opción seleccionada: {consulta}")
 

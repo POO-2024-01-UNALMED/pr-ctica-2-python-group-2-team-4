@@ -1,16 +1,22 @@
 import sys
 
+
+
+
 class Funcionalidad2:
     def __init__(self):
+        from gestorAplicacion.servicios.carrito import Carrito
+        from gestorAplicacion.servicios.tienda import Tienda
+        from gestorAplicacion.sujetos.cliente import Cliente
         self.productos = []
         self.cliente = Cliente(Tienda(), Carrito())
 
-    @staticmethod
-    def imprimirProducto(mayorN, mayorM, mayorP, mayorC, cantidad, producto):
-        nombre = producto.getNombre().ljust(mayorN)
-        marca_tamaño = f"{producto.getMarca()} {producto.getTamaño()}".ljust(mayorM)
-        precio = f"{producto.getPrecio():.2f}".rjust(mayorP)
-        return f"{nombre} | {marca_tamaño} | {precio} | {cantidad}"
+    @classmethod
+    def imprimir_producto(cls,mayorn, mayorm, mayorp, mayorc, cantidad, producto):
+        nombre = producto.getNombre().ljust(mayorn)
+        marca_tamano = f"{producto.getMarca()} {producto.getTamano()}".ljust(mayorm)
+        precio = f"{producto.getPrecio():.2f}".rjust(mayorp)
+        return f"{nombre} | {marca_tamano} | {precio} | {cantidad}"
 
     def buscarProductos(self, categoria):
         # Implementar la búsqueda de productos por categoría
@@ -41,32 +47,34 @@ class Funcionalidad2:
             print("Entrada no válida.")
             return self.escaner(opciones)
 
-    def cuadriculaProductos(self, productos, inferior, superior):
-        self.lineas()
+    @classmethod
+    def cuadriculaProductos(cls,cliente, productos, inferior, superior):
+        from uiMain.main import Main
+        Main.lineas()
         mayorN = mayorM = mayorP = 0
 
         for p in productos[inferior:superior]:
             if p.getNombre():
                 mayorN = max(mayorN, len(p.getNombre()))
             if p.getMarca():
-                tamaño_len = len(p.getTamaño()) if p.getTamaño() else 0
-                mayorM = max(mayorM, len(p.getMarca()) + tamaño_len + 1)
-            mayorP = max(mayorP, len(f"{p.getPrecio()}"))
+                tamano_len = len(p.getTamaño()) if p.getTamaño() else 0
+                mayorm = max(mayorM, len(p.getMarca()) + tamano_len + 1)
+            mayorp = max(mayorP, len(f"{p.getPrecio()}"))
 
-        mayorN = max(mayorN, 6)
-        mayorM = max(mayorM, 12)
-        mayorP = max(mayorP, 6)
+        mayorn = max(mayorN, 6)
+        mayorm = max(mayorM, 12)
+        mayorp = max(mayorP, 6)
 
-        mayorC = 8
+        mayorc = 8
         print("")
-        print("-" * (mayorM + mayorN + mayorP + 30))
-        print(f"    Nombre{' ' * (mayorN - 4)}|  Marca/Tamaño{' ' * (mayorM - 10)}|  Precio{' ' * (mayorP - 4)}|  Cantidad  ")
-        print("|" + "-" * (mayorM + mayorN + mayorP + 30) + "|")
+        print("-" * (mayorm + mayorn + mayorp + 30))
+        print(f"    Nombre{' ' * (mayorn - 4)}|  Marca/Tamaño{' ' * (mayorm - 10)}|  Precio{' ' * (mayorp - 4)}|  Cantidad  ")
+        print("|" + "-" * (mayorm + mayorn + mayorp + 30) + "|")
 
         contador = 1
         for p in productos[inferior:superior]:
-            cantidad = self.cliente.getTienda().cantidadProducto(p)
-            print(f"{contador}. {self.imprimirProducto(mayorN, mayorM, mayorP, mayorC, cantidad, p)}")
+            cantidad = cliente.getTienda().cantidadProducto(p)
+            print(f"{contador}. {Funcionalidad2.imprimir_producto(mayorn, mayorm, mayorp, mayorc, cantidad, p)}")
             contador += 1
 
         print("-" * (mayorM + mayorN + mayorP + 30))
@@ -194,7 +202,8 @@ class Funcionalidad2:
             return seleccionado
 
     def busquedaCategoria(self, categoria, productos, seleccionado):
-        self.lineas()
+        from gestorAplicacion.servicios.enums import Categoria
+        Main.lineas()
         print("Estas son las categorias de los productos de nuestras tiendas: ")
         print("")
         enumerado = 1
@@ -203,7 +212,7 @@ class Funcionalidad2:
             enumerado += 1
         print(f" {enumerado}. Volver")
         print("")
-        decisionCategoria = self.escaner(enumerado)
+        decisionCategoria = Main.escaner(enumerado)
         if decisionCategoria == enumerado:
             self.elegirTipoBusqueda()
             return
@@ -268,7 +277,7 @@ class Funcionalidad2:
         else:
             self.elegirTipoBusqueda()
 
-    def elegirTipoBusqueda(self):
+    def elegirTipoBusqueda(self,cliente):
         self.lineas()
         print("Seleccione el tipo de búsqueda:")
         print(" 1. Buscar por categoría")

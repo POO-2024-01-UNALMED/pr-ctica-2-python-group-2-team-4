@@ -2,7 +2,8 @@ class Identidad:
     def __init__(self):
         pass
 
-    def identificar_persona(self):
+    @classmethod
+    def identificar_persona(cls):
         from gestorAplicacion.sujetos.administrador import Administrador
         from gestorAplicacion.sujetos.cliente import Cliente
         from gestorAplicacion.servicios.enums import Genero

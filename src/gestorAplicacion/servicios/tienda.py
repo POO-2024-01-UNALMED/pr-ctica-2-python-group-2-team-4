@@ -1,7 +1,10 @@
-
 class Tienda:
+
     tiendas = []
     desempleados = []
+
+    def __init__(self):
+        pass
 
     def __init__(self, nit=None, dueno=None, nombre=None, saldo=0, estado="cerrado"):
         self.nit = nit
@@ -128,7 +131,7 @@ class Tienda:
         self.saldo -= cantidad
 
     @staticmethod
-    def buscar_tienda(categoria):
+    def buscar_tienda_categoria(categoria):
         tiendas_revisadas = Tienda.revision_tienda(Tienda.tiendas)
         tiendas_disp = [tienda for tienda in tiendas_revisadas if any(pasillo.categoria == categoria for pasillo in tienda.pasillos)]
         return len(tiendas_disp) > 0
@@ -159,7 +162,8 @@ class Tienda:
     def buscar_producto(self, n):
         return "\n".join(f"{n}.{producto}" for pasillo in self.pasillos for producto in pasillo.productos)
 
-    def buscar_productos(self, cliente, categoria, productos):
+    @staticmethod
+    def buscar_productos(cliente, categoria, productos):
         ids = []
         for pasillo in cliente.tienda.pasillos:
             for producto in pasillo.productos:
@@ -168,7 +172,8 @@ class Tienda:
                     ids.append(producto.id)
         return productos
 
-    def buscar_productos_por_nombre(self, cliente, nombre):
+    @staticmethod
+    def buscar_productos_por_nombre(cliente, nombre):
         productos = []
         for pasillo in cliente.tienda.pasillos:
             for producto in pasillo.productos:
@@ -195,11 +200,11 @@ class Tienda:
         return [producto for pasillo in self.pasillos for producto in pasillo.productos]
 
     @staticmethod
-    def imprimir_producto(mayorN, mayorM, mayorP, mayorC, cantidad, producto):
-        texto = f"  {producto.nombre}".ljust(mayorN + 4)
-        texto += f"|  {producto.marca}/{producto.tamaño}".ljust(mayorM + 2)
-        texto += f"|  {producto.precio}".ljust(mayorP + 2)
-        texto += f"|  {cantidad}".ljust(mayorC + 2)
+    def imprimir_producto(mayorn, mayorm, mayorp, mayorc, cantidad, producto):
+        texto = f"  {producto.nombre}".ljust(mayorn + 4)
+        texto += f"|  {producto.marca}/{producto.tamaño}".ljust(mayorm + 2)
+        texto += f"|  {producto.precio}".ljust(mayorp + 2)
+        texto += f"|  {cantidad}".ljust(mayorc + 2)
         return texto
 
     def cantidad_producto(self, producto):

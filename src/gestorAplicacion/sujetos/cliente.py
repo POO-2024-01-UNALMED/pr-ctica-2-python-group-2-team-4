@@ -1,4 +1,3 @@
-from typing import List
 from gestorAplicacion.sujetos.persona import Persona
 from gestorAplicacion.servicios.carrito import Carrito
 from gestorAplicacion.servicios.enums import Genero
@@ -124,3 +123,6 @@ class Cliente(Persona):
 
     def bajar_dinero(self, cantidad):
         self.dinero -= cantidad
+
+    def getTienda(self):
+        return self.tienda

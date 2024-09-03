@@ -1,6 +1,5 @@
 from typing import List
 from gestorAplicacion.servicios.tienda import Tienda
-from gestorAplicacion.servicios.enums import Genero
 from gestorAplicacion.sujetos.persona import Persona
 
 class Administrador(Persona):

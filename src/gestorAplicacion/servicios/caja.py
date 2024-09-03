@@ -1,4 +1,3 @@
-from typing import List
 class Caja:
     # Atributos
     def __init__(self, nombre=None, tipo=None, tienda=None):
