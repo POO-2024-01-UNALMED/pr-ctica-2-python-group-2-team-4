@@ -17,8 +17,8 @@ class Funcionalidad5:
 
         tiendas = Tienda.get_tiendas()
 
-        for i in range(len(tiendas) - 1, -1, -1):
-            if tiendas[i].get_dueño() is not None or tiendas[i].get_estado() == "cerrado":
+        for i in range(0,1,len(tiendas) - 1):
+            if tiendas[i].get_dueno() is not None or tiendas[i].get_estado() == "cerrado":
                 tiendas.pop(i)
 
         for i, tienda in enumerate(tiendas):
@@ -27,12 +27,12 @@ class Funcionalidad5:
             print(f"| {i+1:2d} | {nombre_tienda:<28} | {precio_tienda:>8} |")
 
         print("+----+------------------------------+----------+")
-        h = Main.escaner()
-        tien = tiendas[h-1]
+        eleccion = Main.escaner()-1
+        tien = tiendas[eleccion]
 
         diferencia = admin.get_dinero() - tien.get_saldo()
         if diferencia >= 0:
-            tien.set_dueño(admin)
+            tien.set_dueno(admin)
             admin.get_tiendas().append(tien)
             print(f"Has seleccionado la tienda: {tien.get_nombre()}")
             print(f"Se te restó ${tien.get_saldo():.2f} de tu saldo")
@@ -71,13 +71,13 @@ class Funcionalidad5:
         while True:
             Main.lineas()
             print(f"¿Qué categorías tendrá el pasillo {i}?")
-            for n, categoria in enumerate(Categoria.value, 1):
+            for n, categoria in enumerate(list(Categoria), 1):
                 print(f"{n}. {categoria}")
             x2 = Main.escaner()
             Main.lineas()
             print(f"Nombre del pasillo número {i}:")
             nom = Funcionalidad5.sc()
-            tien.añadir_pasillo(x2, nom)
+            tien.anadir_pasillo(x2, nom)
             print("Pasillo añadido")
             Main.lineas()
             print(tien.mostrar_pasillos())
@@ -94,7 +94,7 @@ class Funcionalidad5:
         from gestorAplicacion.servicios.proveedor import Proveedor
         Main.lineas()
         if not tien.disponibilidad_productos():
-            print(f"{tien.get_dueño().get_nombre()} de la tienda: \"{tien.get_nombre()}\", sus pasillos están vacíos")
+            print(f"{tien.get_dueno().get_nombre()} de la tienda: \"{tien.get_nombre()}\", sus pasillos están vacíos")
             print("He aquí nuestros proveedores:")
             print(tien.listar_proveedores())
             k = Main.escaner()

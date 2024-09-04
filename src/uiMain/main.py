@@ -333,6 +333,10 @@ if __name__ == "__main__":
     cajero4.caja = caja4
     cajero5.caja = caja5
     tienda = Tienda("Tienda Principal", [pasilloBebidas, pasilloPersonal, pasilloLimpieza])
+
+    admin=Administrador("pp",23)
+    tienda34 = Tienda("Tienda Principal", [pasilloBebidas, pasilloPersonal, pasilloLimpieza],None,admin,0,"abierto")
+
     cliente1 = Cliente("Carlos", 11001, 30, Genero.H, 50000, None, tienda)
     carrito1 = Carrito(cliente1, False, Edades.MENORES, tienda)
     carrito2 = Carrito(cliente2, True, Edades.ADULTOS, tienda)

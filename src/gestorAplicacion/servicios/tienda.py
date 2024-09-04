@@ -1,3 +1,4 @@
+
 class Tienda:
 
     tiendas = []
@@ -5,6 +6,8 @@ class Tienda:
     def __init__(self, nombre=None, pasillos=None, nit=None, dueno=None, saldo=0, estado="cerrado"):
         self._nit = nit
         self._dueno = dueno
+        if dueno is  not None:
+            dueno.tiendas.append(self)
         self._nombre = nombre
         self._saldo = saldo
         self._estado = estado
@@ -209,3 +212,23 @@ class Tienda:
 
     def cantidad_producto(self, producto):
         return sum(1 for pasillo in self._pasillos for prod in pasillo.get_productos() if prod.get_id() == producto.get_id())
+
+    def anadir_pasillo(self, x2, nom):
+        from gestorAplicacion.servicios.enums import Categoria  # Importar la enumeración Categoria si es necesario
+        from gestorAplicacion.servicios.pasillo import Pasillo
+        Pasillo(nom,None, list(Categoria)[x2 - 1], self)
+
+    def mostrar_pasillos(self):
+        if len(self._pasillos) == 0:
+            return "La tienda " + self.get_nombre() + " no tiene pasillos"
+        else:
+            s = "  Pasillo     Categoria \n"
+            for i in self._pasillos:
+                s += "    "
+                s += i.get_nombre()
+                s += "        "
+                s += str(i.get_categoria()) + "\n"
+            return s
+
+    def __str__(self):
+        return self._nombre + self._saldo.__str__()
