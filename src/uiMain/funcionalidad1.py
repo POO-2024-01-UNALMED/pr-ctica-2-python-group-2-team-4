@@ -1,6 +1,6 @@
 class Funcionalidad1:
-    @staticmethod
-    def consultas_eco():
+    @classmethod
+    def consultas_eco(cls):
         from uiMain.identidad import Identidad
         from gestorAplicacion.sujetos.cliente import Cliente
         from gestorAplicacion.sujetos.administrador import Administrador

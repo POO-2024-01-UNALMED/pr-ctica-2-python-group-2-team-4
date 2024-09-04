@@ -4,32 +4,50 @@ from gestorAplicacion.servicios.enums import Genero
 from gestorAplicacion.servicios.enums import Membresia
 
 class Cliente(Persona):
-    def __init__(self, nombre, id, edad, genero, dinero=0, carrito=None):
+    def __init__(self, nombre, id, edad, genero, dinero=0, carrito=None, tienda=None):
         super().__init__(nombre, id, edad, genero)
-        self.membresia = None
-        self.tienda = None
-        self.dinero = dinero
-        self.carrito = carrito
-        self.caja = None
-        self.facturas = []
+        self._membresia = None
+        self._tienda = tienda
+        self._dinero = dinero
+        self._carrito = carrito
+        self._caja = None
+        self._facturas = []
 
-    def set_carrito(self, carrito):
-        self.carrito = carrito
-
-    def set_caja(self, caja):
-        self.caja = caja
-
-    def set_tienda(self, tienda):
-        self.tienda = tienda
-
-    def set_dinero(self, dinero):
-        self.dinero = dinero
-
-    def set_facturas(self, facturas):
-        self.facturas = facturas
+    def get_membresia(self):
+        return self._membresia
 
     def set_membresia(self, membresia):
-        self.membresia = membresia
+        self._membresia = membresia
+
+    def get_tienda(self):
+        return self._tienda
+
+    def set_tienda(self, tienda):
+        self._tienda = tienda
+
+    def get_dinero(self):
+        return self._dinero
+
+    def set_dinero(self, dinero):
+        self._dinero = dinero
+
+    def get_carrito(self):
+        return self._carrito
+
+    def set_carrito(self, carrito):
+        self._carrito = carrito
+
+    def get_caja(self):
+        return self._caja
+
+    def set_caja(self, caja):
+        self._caja = caja
+
+    def get_facturas(self):
+        return self._facturas
+
+    def set_facturas(self, facturas):
+        self._facturas = facturas
 
     @staticmethod
     def existe_cliente(nombre):
@@ -105,24 +123,21 @@ class Cliente(Persona):
             return nueva_membresia.get_precio()
         return nueva_membresia.get_precio() - membresia_actual.get_precio()
 
-    def get_facturas(self, tienda_seleccionada):
+    def get_facturas1(self, tienda_seleccionada):
         return [c for c in tienda_seleccionada.get_facturas() if c.cliente == self]
 
     def get_tiendas_con_facturas(self):
-        tiendas = set(factura.tienda for factura in self.facturas if factura)
+        tiendas = set(factura.tienda for factura in self._facturas if factura)
         return list(tiendas)
 
     def calcular_descuento_por_membresia(self):
-        if self.membresia:
+        if self._membresia:
             return {
                 Membresia.BASICO: 0.05,
                 Membresia.PREMIUM: 0.10,
                 Membresia.VIP: 0.20,
-            }.get(self.membresia, 0.0)
+            }.get(self._membresia, 0.0)
         return 0.0
 
     def bajar_dinero(self, cantidad):
-        self.dinero -= cantidad
-
-    def getTienda(self):
-        return self.tienda
+        self._dinero -= cantidad

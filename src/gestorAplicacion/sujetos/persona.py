@@ -54,7 +54,7 @@ class Persona:
     def get_tiendas_con_facturas(self) -> Optional[List['Tienda']]:
         return None
 
-    def get_facturas(self, tienda_seleccionada: 'Tienda') -> Optional[List['Carrito']]:
+    def get_facturas1(self, tienda_seleccionada: 'Tienda') -> Optional[List['Carrito']]:
         return None
 
     def mostrar_facturas(self):

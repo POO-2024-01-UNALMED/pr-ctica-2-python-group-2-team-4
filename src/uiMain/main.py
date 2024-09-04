@@ -1,11 +1,7 @@
 import sys
 
 import json
-from gestorAplicacion.servicios.caja import Caja
-from gestorAplicacion.servicios.enums import Genero, TipoCaja
-from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.sujetos.administrador import Administrador
-from gestorAplicacion.sujetos.cajero import Cajero
 from uiMain.identidad import Identidad
 
 class Main(Identidad):
@@ -95,7 +91,8 @@ class Main(Identidad):
                     Funcionalidad1.consultas_eco()
                 case 2:
                     cliente = Main.identificar_persona()
-                    Funcionalidad2.elegir_tipo_busqueda(cliente)
+                    funcionalidad2obj=Funcionalidad2()
+                    funcionalidad2obj.elegir_tipo_busqueda(cliente)
                 case 3:
                     Funcionalidad3.impresion_facturas()
                 case 4:
@@ -109,18 +106,26 @@ class Main(Identidad):
                     sys.exit(0)
 
 if __name__ == "__main__":
+    from gestorAplicacion.sujetos.cajero import Cajero
+    from gestorAplicacion.sujetos.cliente import Cliente
+    from gestorAplicacion.servicios.producto import Producto
+    from gestorAplicacion.servicios.caja import Caja
+    from gestorAplicacion.servicios.carrito import Carrito
+    from gestorAplicacion.servicios.enums import Genero, TipoCaja, Edades, Tamano, Categoria
+    from gestorAplicacion.servicios.pasillo import Pasillo
+    from gestorAplicacion.servicios.tienda import Tienda
     main=Main()
-    admin1 = Administrador("Beatriz Gómez", 201, 40, Genero.M, 12000.0)
+    """  admin1 = Administrador("Beatriz Gómez", 201, 40, Genero.M, 12000.0)
     admin2 = Administrador("Ricardo Díaz", 202, 45, Genero.H, 15000.0)
     admin3 = Administrador("Sofía Sánchez", 203, 38, Genero.M, 11000.0)
     admin4 = Administrador("Miguel Ramírez", 204, 50, Genero.H, 16000.0)
 
-    print(admin1.__dict__)
-    print(json.dumps(admin1.__dict__))
-    with open("baseDatos/temp/administradores.json", "w") as write:
-        json.dump(admin1.__dict__, write)
-    data = open("administradores.json", )
-    print(json.load(data))
+    #print(admin1.__dict__)
+   # print(json.dumps(admin1.__dict__))
+    #with open("baseDatos/temp/administradores.json", "w") as write:
+        #json.dump(admin1.__dict__, write)
+    #data = open("administradores.json", )
+    #print(json.load(data))
 
     # Crear tiendas
     tienda9 = Tienda("1234567890", admin1, "Tienda Digital", 25000.0, "abierto")
@@ -164,5 +169,179 @@ if __name__ == "__main__":
     cajero12 = Cajero("Laura Jiménez", 312, 28, Genero.M, 8000.0, tienda15, True, False, 3, caja12)
     cajero13 = Cajero("David López", 313, 36, Genero.H, 8300.0, tienda15, True, False, 5, caja13)
     cajero14 = Cajero("Natalia Morales", 314, 25, Genero.M, 7800.0, tienda16, True, False, 4, caja14)
-    cajero15 = Cajero("Antonio Salazar", 315, 32, Genero.H, 8500.0, tienda16, True, False, 6, caja15)
+    cajero15 = Cajero("Antonio Salazar", 315, 32, Genero.H, 8500.0, tienda16, True, False, 6, caja15)"""
+
+    producto1 = Producto(
+    "Leche Entera", "La Vaquita", 1.50, Tamano.GRANDE, Edades.MENORES, Categoria.ALIMENTO,
+    "Leche entera de vaca, fortificada con vitaminas A y D.", "15/10/2024", 101
+    )
+
+    producto2 = Producto(
+    "Pan Integral", "PanRico", 2.00, Tamano.MEDIANO, Edades.MENORES, Categoria.ALIMENTO,
+    "Pan integral alto en fibra, ideal para una dieta saludable.", "22/08/2024", 102
+    )
+
+    producto3 = Producto(
+    "Yogur Natural", "BioLácteos", 3.25, Tamano.MEDIANO, Edades.ADULTOS, Categoria.ALIMENTO,
+    "Yogur natural sin azúcar añadido, fuente de probióticos.", "10/09/2024", 103
+    )
+
+    producto4 = Producto(
+    "Queso Cheddar", "La Gran Quesería", 4.50, Tamano.MEDIANO, Edades.ADULTOS, Categoria.ALIMENTO,
+    "Queso cheddar madurado, ideal para sandwiches y gratinados.", "30/09/2024", 104
+    )
+
+    producto5 = Producto(
+    "Galletas de Avena", "Cerealia", 2.75, Tamano.PEQUENO, Edades.MENORES, Categoria.ALIMENTO,
+    "Galletas de avena y miel, perfectas para un snack saludable.", "05/11/2024", 105
+    )
+
+    producto6 = Producto(
+    "Jugo de Manzana", "Frutas del Valle", 2.50, Tamano.MEDIANO, Edades.MENORES, Categoria.BEBIDA,
+    "Jugo de manzana natural, sin azúcares añadidos.", "01/12/2024", 106
+    )
+
+    producto7 = Producto(
+    "Agua Mineral", "Pureza Total", 1.00, Tamano.GRANDE, Edades.MENORES, Categoria.BEBIDA,
+    "Agua mineral natural, embotellada en origen.", "15/11/2024", 107
+    )
+
+    producto8 = Producto(
+    "Refresco de Cola", "SodaFresca", 1.75, Tamano.MEDIANO, Edades.ADULTOS, Categoria.BEBIDA,
+    "Refresco de cola con gas, sabor intenso y refrescante.", "20/11/2024", 108
+    )
+
+    producto9 = Producto(
+    "Bebida Energética", "PowerUp", 3.00, Tamano.PEQUENO, Edades.ADULTOS, Categoria.BEBIDA,
+    "Bebida energética con vitaminas y cafeína para un impulso rápido.", "10/12/2024", 109
+    )
+
+    producto10 = Producto(
+    "Té Helado", "TeaTime", 2.00, Tamano.MEDIANO, Edades.MENORES, Categoria.BEBIDA,
+    "Té helado con sabor a limón, refrescante y sin calorías.", "30/12/2024", 110
+    )
+
+    producto11 = Producto(
+    "Desodorante Aerosol", "FreshUp", 2.50, Tamano.MEDIANO, Edades.ADULTOS, Categoria.PERSONAL,
+    "Desodorante en aerosol con fragancia duradera y protección antitranspirante.", "01/01/2025", 111
+    )
+
+    producto12 = Producto(
+    "Crema Dental", "WhiteSmile", 1.80, Tamano.PEQUENO, Edades.MENORES, Categoria.PERSONAL,
+    "Crema dental con flúor, para una limpieza completa y protección contra caries.", "15/02/2025", 112
+    )
+
+    producto13 = Producto(
+    "Jabón Líquido", "CleanTouch", 2.00, Tamano.MEDIANO, Edades.ADULTOS, Categoria.PERSONAL,
+    "Jabón líquido para manos con ingredientes naturales y fragancia fresca.", "10/03/2025", 113
+    )
+
+    producto14 = Producto(
+    "Acondicionador Hidratante", "HydraSoft", 3.50, Tamano.MEDIANO, Edades.ADULTOS, Categoria.PERSONAL,
+    "Acondicionador hidratante para cabello seco, con extracto de coco.", "25/04/2025", 114
+    )
+
+    producto15 = Producto(
+    "Gel Antibacterial", "SafeHands", 1.50, Tamano.PEQUENO, Edades.MENORES, Categoria.PERSONAL,
+    "Gel antibacteriano para manos, con un 70% de alcohol y fragancia ligera.", "05/05/2025", 115
+    )
+
+    producto16 = Producto(
+    "Detergente en Polvo", "LimpiaFacil", 4.00, Tamano.GRANDE, Edades.ADULTOS, Categoria.LIMPIEZA,
+    "Detergente en polvo para ropa, eficaz en manchas difíciles.", "01/06/2025", 116
+    )
+
+    producto17 = Producto(
+    "Limpiador Multiusos", "Sparkle", 3.50, Tamano.MEDIANO, Edades.ADULTOS, Categoria.LIMPIEZA,
+    "Limpiador multiusos para superficies, con fragancia cítrica.", "15/07/2025", 117
+    )
+
+    producto18 = Producto(
+    "Desinfectante de Baño", "Sanitex", 2.75, Tamano.PEQUENO, Edades.ADULTOS, Categoria.LIMPIEZA,
+    "Desinfectante para baño, elimina bacterias y malos olores.", "30/08/2025", 118
+    )
+
+    producto19 = Producto(
+    "Esponjas de Cocina", "ScrubPlus", 1.50, Tamano.PEQUENO, Edades.MENORES, Categoria.LIMPIEZA,
+    "Esponjas de cocina, resistentes y eficaces para limpiar utensilios.", "10/09/2025", 119
+    )
+
+    producto20 = Producto(
+    "Toallas de Papel", "CleanTowel", 2.00, Tamano.MEDIANO, Edades.MENORES, Categoria.LIMPIEZA,
+    "Toallas de papel absorbentes, ideales para la limpieza de superficies.", "25/10/2025", 120
+    )
+
+    pasilloBebidas = Pasillo(
+    "Pasillo de Bebidas",
+    [producto6, producto7, producto8, producto9, producto10],
+    Categoria.BEBIDA,
+    None
+    )
+
+    pasilloPersonal = Pasillo(
+    "Pasillo de Personal",
+    [producto11, producto12, producto13, producto14, producto15],
+    Categoria.PERSONAL,
+    None
+    )
+
+    pasilloLimpieza = Pasillo(
+    "Pasillo de Limpieza",
+    [producto16, producto17, producto18, producto19, producto20],
+    Categoria.LIMPIEZA,
+    None
+    )
+
+    producto6.set_pasillo(pasilloBebidas)
+    producto7.set_pasillo(pasilloBebidas)
+    producto8.set_pasillo(pasilloBebidas)
+    producto9.set_pasillo(pasilloBebidas)
+    producto10.set_pasillo(pasilloBebidas)
+
+    producto11.set_pasillo(pasilloPersonal)
+    producto12.set_pasillo(pasilloPersonal)
+    producto13.set_pasillo(pasilloPersonal)
+    producto14.set_pasillo(pasilloPersonal)
+    producto15.set_pasillo(pasilloPersonal)
+
+    producto16.set_pasillo(pasilloLimpieza)
+    producto17.set_pasillo(pasilloLimpieza)
+    producto18.set_pasillo(pasilloLimpieza)
+    producto19.set_pasillo(pasilloLimpieza)
+    producto20.set_pasillo(pasilloLimpieza)
+
+    cliente2 = Cliente("Ana", 22002, 25, Genero.M, 60000, None)
+    cliente3 = Cliente("Luis", 33003, 35, Genero.H, 70000, None)
+    cliente4 = Cliente("Maria", 44004, 28, Genero.M, 80000, None)
+    cliente5 = Cliente("Jorge", 55005, 40, Genero.H, 90000, None)
+
+    caja1 = Caja("Caja Principal", TipoCaja.NORMAL, None)
+    caja2 = Caja("Caja 2", TipoCaja.RAPIDA, None)
+    caja3 = Caja("Caja Express", TipoCaja.RAPIDA, None)
+    caja4 = Caja("Caja 4", TipoCaja.NORMAL, None)
+    caja5 = Caja("Caja VIP", TipoCaja.RAPIDA, None)
+
+    cajero1 = Cajero("Javier", 4040, 25, Genero.H, 30000, None, True, False, 5, None)
+    cajero2 = Cajero("Elena", 5050, 26, Genero.M, 28000, None, False, True, 6, None)
+    cajero3 = Cajero("Fernando", 6060, 24, Genero.H, 29000, None, True, True, 4, None)
+    cajero4 = Cajero("Sofía", 7070, 27, Genero.M, 31000, None, True, False, 7, None)
+    cajero5 = Cajero("Miguel", 8080, 28, Genero.H, 32000, None, False, True, 8, None)
+
+    cajero1.caja = caja1
+    cajero2.caja = caja2
+    cajero3.caja = caja3
+    cajero4.caja = caja4
+    cajero5.caja = caja5
+    tienda = Tienda("Tienda Principal", [pasilloBebidas, pasilloPersonal, pasilloLimpieza])
+    cliente1 = Cliente("Carlos", 11001, 30, Genero.H, 50000, None, tienda)
+    carrito1 = Carrito(cliente1, False, Edades.MENORES, tienda)
+    carrito2 = Carrito(cliente2, True, Edades.ADULTOS, tienda)
+    carrito3 = Carrito(cliente3, False, Edades.ADULTOS, tienda)
+    carrito4 = Carrito(cliente4, True, Edades.MENORES, tienda)
+    carrito5 = Carrito(cliente5, False, Edades.MENORES, tienda)
+    carrito6=Carrito(None,False,Edades.ADULTOS)
+    cliente1.set_carrito(carrito6)
+    carrito6.set_cliente(cliente1)
+    carrito6.set_tienda(cliente1.get_tienda())
+
     main.escoger_funcionalidad()

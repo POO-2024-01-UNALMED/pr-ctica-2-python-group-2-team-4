@@ -11,7 +11,10 @@ class Categoria(Enum):
     def __init__(self, identificador, texto):
         self.identificador = identificador
         self.texto = texto
-    
+
+    def get_texto(self):
+        return self.texto
+
     @staticmethod
     def resolver_enum(decision):
         for categoria in Categoria:
@@ -48,7 +51,10 @@ class Tamano(Enum):
     PEQUENO = "Pequeno"
     
     def __init__(self, tamano):
-        self.tamano = tamano
+        self._tamano = tamano
+
+    def get_tamano(self):
+        return self._tamano
 
 class Genero(str,Enum):
     H = "H"

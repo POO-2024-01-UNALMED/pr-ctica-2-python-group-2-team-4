@@ -2,85 +2,84 @@ class Tienda:
 
     tiendas = []
     desempleados = []
-
-    def __init__(self):
-        pass
-
-    def __init__(self, nit=None, dueno=None, nombre=None, saldo=0, estado="cerrado"):
-        self.nit = nit
-        self.dueno = dueno
-        self.nombre = nombre
-        self.saldo = saldo
-        self.estado = estado
-        self.carrito = None
-        self.facturas = []
-        self.proveedores = []
-        self.cajas = []
-        self.empleados = []
-        self.pasillos = []
-        self.productos_vencidos = []
-        self.productos_devueltos = []
+    def __init__(self, nombre=None, pasillos=None, nit=None, dueno=None, saldo=0, estado="cerrado"):
+        self._nit = nit
+        self._dueno = dueno
+        self._nombre = nombre
+        self._saldo = saldo
+        self._estado = estado
+        self._carrito = None
+        self._facturas = []
+        self._proveedores = []
+        self._cajas = []
+        self._empleados = []
+        if pasillos is None:
+            self._pasillos = []
+        else:
+            self._pasillos = pasillos
+        self._productos_vencidos = []
+        self._productos_devueltos = []
         Tienda.tiendas.append(self)
 
 #COMO QUE IF DUENO, dueño no es un booleano
-        if dueno:
-            dueno.tiendas.append(self)
+        if dueno is not None:
+            dueno.get_tiendas().append(self)
 
     # Getters and Setters
 
     def get_cajas(self):
-        return self.cajas
+        return self._cajas
 
     def set_cajas(self, cajas):
-        self.cajas = cajas
+        self._cajas = cajas
 
     def get_nit(self):
-        return self.nit
+        return self._nit
 
     def set_nit(self, nit):
-        self.nit = nit
+        self._nit = nit
 
     def get_dueno(self):
-        return self.dueno
+        return self._dueno
 
     def set_dueno(self, dueno):
-        self.dueno = dueno
+        self._dueno = dueno
 
     def get_nombre(self):
-        return self.nombre
+        return self._nombre
 
     def set_nombre(self, nombre):
-        self.nombre = nombre
+        self._nombre = nombre
 
     def get_saldo(self):
-        return self.saldo
+        return self._saldo
 
     def set_saldo(self, saldo):
-        self.saldo = saldo
+        self._saldo = saldo
 
     def get_estado(self):
-        return self.estado
+        return self._estado
 
     def set_estado(self, estado):
-        self.estado = estado
+        self._estado = estado
 
     def get_empleados(self):
-        return self.empleados
+        return self._empleados
 
     def set_empleados(self, empleados):
-        self.empleados = empleados
+        self._empleados = empleados
 
     def get_pasillos(self):
-        return self.pasillos
+        return self._pasillos
 
     def set_pasillos(self, pasillos):
-        self.pasillos = pasillos
+        self._pasillos = pasillos
 
     def get_proveedores(self):
-        return self.proveedores
+        return self._proveedores
 
     def set_proveedores(self, proveedores):
-        self.proveedores = proveedores
+        self._proveedores = proveedores
 
     @staticmethod
     def get_tiendas():
@@ -99,36 +98,36 @@ class Tienda:
         Tienda.desempleados = desempleados
 
     def get_productos_vencidos(self):
-        return self.productos_vencidos
+        return self._productos_vencidos
 
     def set_productos_vencidos(self, productos_vencidos):
-        self.productos_vencidos = productos_vencidos
+        self._productos_vencidos = productos_vencidos
 
     def get_facturas(self):
-        return self.facturas
+        return self._facturas
 
     def set_facturas(self, facturas):
-        self.facturas = facturas
+        self._facturas = facturas
 
     def get_carrito(self):
-        return self.carrito
+        return self._carrito
 
     def set_carrito(self, carrito):
-        self.carrito = carrito
+        self._carrito = carrito
 
     def get_productos_devueltos(self):
-        return self.productos_devueltos
+        return self._productos_devueltos
 
     def set_productos_devueltos(self, productos_devueltos):
-        self.productos_devueltos = productos_devueltos
+        self._productos_devueltos = productos_devueltos
 
     # Métodos
 
     def subir_saldo(self, cantidad):
-        self.saldo += cantidad
+        self._saldo += cantidad
 
     def bajar_saldo(self, cantidad):
-        self.saldo -= cantidad
+        self._saldo -= cantidad
 
     @staticmethod
     def buscar_tienda_categoria(categoria):
@@ -160,16 +159,17 @@ class Tienda:
         return list(tiendas_con_cliente)
 
     def buscar_producto(self, n):
-        return "\n".join(f"{n}.{producto}" for pasillo in self.pasillos for producto in pasillo.productos)
+        return "\n".join(f"{n}.{producto}" for pasillo in self._pasillos for producto in pasillo.productos)
 
     @staticmethod
-    def buscar_productos(cliente, categoria, productos):
+    def buscar_productos(cliente, categoria):
+        productos=[]
         ids = []
-        for pasillo in cliente.tienda.pasillos:
+        for pasillo in cliente.get_tienda().get_pasillos():
             for producto in pasillo.productos:
-                if producto.categoria == categoria and producto.id not in ids:
+                if producto.get_categoria() == categoria and producto.get_id() not in ids:
                     productos.append(producto)
-                    ids.append(producto.id)
+                    ids.append(producto.get_id())
         return productos
 
     @staticmethod
@@ -182,30 +182,30 @@ class Tienda:
         return productos
 
     def disponibilidad_productos(self):
-        return any(len(pasillo.productos) > 0 for pasillo in self.pasillos)
+        return any(len(pasillo.productos) > 0 for pasillo in self._pasillos)
 
     def agregar_producto(self, producto):
-        for pasillo in self.pasillos:
+        for pasillo in self._pasillos:
             if pasillo.categoria == producto.categoria:
                 pasillo.agregar_producto(producto)
                 return
 
     def agregar_producto_a_pasillo(self, producto, nombre_pasillo):
-        for pasillo in self.pasillos:
+        for pasillo in self._pasillos:
             if pasillo.nombre == nombre_pasillo:
                 pasillo.productos.append(producto)
                 producto.tienda = self
 
     def obtener_todos_los_productos(self):
-        return [producto for pasillo in self.pasillos for producto in pasillo.productos]
+        return [producto for pasillo in self._pasillos for producto in pasillo.productos]
 
     @staticmethod
     def imprimir_producto(mayorn, mayorm, mayorp, mayorc, cantidad, producto):
-        texto = f"  {producto.nombre}".ljust(mayorn + 4)
-        texto += f"|  {producto.marca}/{producto.tamaño}".ljust(mayorm + 2)
-        texto += f"|  {producto.precio}".ljust(mayorp + 2)
+        texto = f"  {producto.get_nombre()}".ljust(mayorn + 4)
+        texto += f"|  {producto.get_marca()}/{producto.get_tamano().get_tamano()}".ljust(mayorm + 2)
+        texto += f"|  {producto.get_precio()}".ljust(mayorp + 2)
         texto += f"|  {cantidad}".ljust(mayorc + 2)
         return texto
 
     def cantidad_producto(self, producto):
-        return sum(1 for pasillo in self.pasillos for prod in pasillo.productos if prod.id == producto.id)
+        return sum(1 for pasillo in self._pasillos for prod in pasillo.get_productos() if prod.get_id() == producto.get_id())

@@ -11,7 +11,7 @@ class Administrador(Persona):
     def get_tiendas(self):
         return self.tiendas
 
-    def get_facturas(self, tienda):
+    def get_facturas1(self, tienda):
         # Método que debe estar implementado para devolver las facturas de la tienda
         return tienda.get_facturas()
 

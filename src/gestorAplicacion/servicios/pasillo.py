@@ -1,6 +1,6 @@
 class Pasillo:
     # Atributos
-    def __init__(self, nombre=None, categoria=None, tienda=None, productos=None):
+    def __init__(self, nombre=None,productos=None, categoria=None, tienda=None):
         self.nombre = nombre
         self.categoria = categoria
         self.tienda = tienda
