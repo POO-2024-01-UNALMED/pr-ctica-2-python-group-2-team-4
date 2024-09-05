@@ -39,24 +39,28 @@ class Funcionalidad2:
         mayor_p = max(mayor_p, 6)
         mayor_c = 8
 
-        print("")
-
         # Imprimir líneas horizontales superiores
         print("-" * (mayor_m + mayor_n + mayor_p + 30))
 
-        # Imprimir encabezados de la tabla
-        print("    Nombre" + " " * (mayor_n - 4) + "|  Marca/Tamaño" + " " * (mayor_m - 10) +
-              "|  Precio" + " " * (mayor_p - 4) + "|  Cantidad  |")
+        # Encabezados de la tabla
+        header = "{:<{n_width}} |  {:<{m_width}} |  {:<{p_width}} |  {:<{c_width}} |".format(
+            "Nombre", "Marca/Tamaño", "Precio", "Cantidad",
+            n_width=mayor_n, m_width=mayor_m, p_width=mayor_p, c_width=mayor_c
+        )
+        print("    " + header)
 
         print("-" * (mayor_m + mayor_n + mayor_p + 30))
 
         # Imprimir productos en la tabla
         contador = 1
         for p in productos[inferior:superior]:
-            cantidad = cliente.get_tienda().cantidad_producto(p)  # Llamada a cantidad_producto()
-            print(f"{contador}.", end="")
-            print(Tienda.imprimir_producto(mayor_n, mayor_m, mayor_p, mayor_c, cantidad,
-                                           p))  # Llamada a imprimir_producto()
+            cantidad = cliente.get_tienda().cantidad_producto(p)
+            product_line = "{:<{n_width}} |  {:<{m_width}} |  {:<{p_width}} |  {:<{c_width}} |".format(
+                p.get_nombre(), f"{p.get_marca()} {p.get_tamano().get_tamano() if p.get_tamano() else ''}",
+                str(p.get_precio()), str(cantidad),
+                n_width=mayor_n, m_width=mayor_m, p_width=mayor_p, c_width=mayor_c
+            )
+            print(f"{contador}. {product_line}")
             contador += 1
 
         # Imprimir líneas horizontales inferiores
@@ -129,7 +133,7 @@ class Funcionalidad2:
                         mal_seleccionado = True
                         continue
                 elif numero == 5:
-                    self.busqueda_categoria(cliente,categoria, productos, seleccionado)
+                    self.busqueda_categoria(cliente)
                     return None
                 else:
                     print("Ese número está fuera del rango")
@@ -184,11 +188,16 @@ class Funcionalidad2:
                 if numero in [1, 2, 3, 4]:
                     seleccionado = productos[numero + inferior - 1]
                 elif numero == 5:
-                    self.busqueda_nombre(cliente, productos, seleccionado)  # Llamada a busqueda_nombre()
+                    self.busqueda_nombre(cliente)  # Llamada a busqueda_nombre()
 
             return seleccionado
 
     def busqueda_categoria(self, cliente):
+        productos=""
+        for pasillo in cliente.get_tienda().get_pasillos():
+            for producto in pasillo.get_productos():
+                productos+= producto.get_nombre()+", "
+        print(productos)
         productos = []
         seleccionado = None
         from main import Main
@@ -210,7 +219,7 @@ class Funcionalidad2:
 
         categoria = Categoria.resolver_enum(decision_categoria)
 
-        productos = cliente.get_tienda().buscar_productos(cliente, categoria)
+        productos = cliente.get_tienda().buscar_productos(categoria)
 
         while len(productos) == 0:
             print("No hay productos disponibles de esa categoría, escoja otra por favor.")
@@ -220,7 +229,7 @@ class Funcionalidad2:
                 self.elegir_tipo_busqueda(cliente)
 
             categoria = Categoria.resolver_enum(decision_categoria)
-            productos = cliente.get_tienda().buscar_productos(cliente, categoria)
+            productos = cliente.get_tienda().buscar_productos(categoria)
 
         mal_seleccionado = False
 
@@ -254,8 +263,7 @@ class Funcionalidad2:
             self.elegir_tipo_busqueda(cliente)  # Llamada a elegir_tipo_busqueda()
             return
 
-        productos = []  # Inicialización de productos
-        productos = cliente.get_tienda().buscar_productos(cliente, nombre)  # Llamada a buscar_productos()
+        productos = cliente.get_tienda().buscar_productos_por_nombre(nombre)  # Llamada a buscar_productos()
 
         while len(productos) == 0:
             print("No hay productos disponibles con ese nombre, escoja otro por favor")
@@ -277,7 +285,7 @@ class Funcionalidad2:
                 self.elegir_tipo_busqueda(cliente)  # Llamada a elegir_tipo_busqueda()
                 return
 
-            productos = cliente.get_tienda().buscar_productos(cliente, nombre)  # Llamada a buscar_productos()
+            productos = cliente.get_tienda().buscar_productos_por_nombre(nombre)  # Llamada a buscar_productos()
 
         seleccionado = self.impresion_seleccion_nombre(cliente, productos,
                                                   seleccionado)  # Llamada a impresion_seleccion_nombre()
@@ -399,14 +407,14 @@ class Funcionalidad2:
             self.busqueda_nombre(cliente)  # Implementar este método
         elif decision == 3:
             if len(cliente.get_carrito().get_productos()) == 0:
-                Main.lineas()  # Implementar este método
+                Main.lineas()
                 print("Usted no puede seleccionar esta opción")
                 self.elegir_tipo_busqueda(cliente)
                 return
 
-            Main.lineas()  # Implementar este método
-            print("Estos son los productos de su carrito:")
-            print("")
+            Main.lineas()
+            print("Estos son los productos de su carrito: \n")
+
             productos = cliente.get_carrito().get_productos()
 
             ancho_celda_nombre = 20
@@ -415,44 +423,48 @@ class Funcionalidad2:
             ancho_celda_precio = 10
             ancho_celda_cantidad = 10
 
-            # Mostrar productos únicos en el carrito
+            # Encabezado de la tabla
             print("+----+--------------------+---------------+----------+----------+----------+")
             print("| No | Nombre             | Marca         | Tamaño   | Precio   | Cantidad |")
             print("+----+--------------------+---------------+----------+----------+----------+")
 
+            # Diccionarios para almacenar los productos y sus cantidades sumadas
             productos_cantidad = {}
             productos_map = {}
 
             # Sumar cantidades de productos iguales
             for producto in cliente.get_carrito().get_productos():
                 id_producto = producto.get_id()
-                productos_map[id_producto] = producto
+                productos_map[id_producto] = producto  # Guardar referencia del producto
                 productos_cantidad[id_producto] = productos_cantidad.get(id_producto, 0) + 1
 
             # Imprimir los productos sin duplicados con la cantidad total
             contador = 1
             for id_producto, producto in productos_map.items():
-                cantidad_total = productos_cantidad[producto.get_id()]
+                cantidad_total = productos_cantidad[id_producto]
+
                 nombre_producto = producto.get_nombre()
                 marca_producto = producto.get_marca()
-                tamano_producto = producto.get_tamano().get_tamano()  # Implementar método en clase Tamaño
-                precio_producto = f"{producto.get_precio():.2f}"
+                tamano_producto = producto.get_tamano().get_tamano()
+                precio_producto = f"{producto.get_precio():.2f}"  # Precio formateado a dos decimales
 
+                # Imprimir cada producto en la tabla
                 print(
-                    f"| {contador:2d} | {nombre_producto:<18} | {marca_producto:<13} | {tamano_producto:<8} | {precio_producto:<8} | {cantidad_total:<8} |")
+                    f"| {contador:<2} | {nombre_producto:<18} | {marca_producto:<13} | {tamano_producto:<8} | {precio_producto:<8} | {cantidad_total:<8} |")
                 contador += 1
 
+            # Pie de la tabla
             print("+----+--------------------+---------------+----------+----------+----------+")
-            print("")
-            print("Escoja una de los productos que desee borrar")
+            print("\nSeleccione el número del producto que desea eliminar del carrito:")
             print(f"{contador}. Cancelar borrar producto del carrito")
-            seleccion = Main.escaner_con_rango(contador)  # Implementar este método
+            seleccion = int(input("Seleccione una opción: "))
 
             if seleccion == contador:
                 self.elegir_tipo_busqueda(cliente)
                 return
 
-            if 0 < seleccion <= len(cliente.get_carrito().get_productos()):
+            if 1 <= seleccion <= len(productos_map):
+                # Buscar el producto seleccionado en la lista impresa
                 productos_impresos = set()
                 producto_seleccionado = None
                 index = 0
@@ -466,21 +478,22 @@ class Funcionalidad2:
                         producto_seleccionado = producto
                         break
 
-                if producto_seleccionado:
-                    print("")
-                    cantidad_eliminar = int(input("Ingrese la cantidad que desea eliminar: "))
-                    cantidad_actual = cliente.get_carrito().contar_repeticiones(
-                        producto_seleccionado)  # Implementar método en Carrito
+                if producto_seleccionado is not None:
+                    print("\nIngrese la cantidad que desea eliminar: ")
+                    cantidad_eliminar = int(input())
+
+                    cantidad_actual = cliente.get_carrito().contar_repeticiones(producto_seleccionado)
                     if 0 < cantidad_eliminar <= cantidad_actual:
-                        cliente.get_carrito().eliminar_productos(producto_seleccionado,
-                                                                 cantidad_eliminar)  # Implementar método en Carrito
-                        Main.lineas()  # Implementar este método
-                        print("Productos actualizados en el carrito:")
-                        print("")
+                        cliente.get_carrito().eliminar_productos(producto_seleccionado, cantidad_eliminar)
+                        Main.lineas()
+                        print("Productos actualizados en el carrito:\n")
+
+                        # Encabezado de la tabla
                         print("+----+--------------------+---------------+----------+----------+----------+")
                         print("| No | Nombre             | Marca         | Tamaño   | Precio   | Cantidad |")
                         print("+----+--------------------+---------------+----------+----------+----------+")
 
+                        # Imprimir productos actualizados sin duplicados
                         productos_impresos.clear()
                         contador = 1
 
@@ -490,24 +503,24 @@ class Funcionalidad2:
 
                             nombre_producto = producto.get_nombre()
                             marca_producto = producto.get_marca()
-                            tamano_producto = producto.get_tamano().get_tamano()  # Implementar método en clase Tamaño
+                            tamano_producto = producto.get_tamano().get_tamano()
                             precio_producto = f"{producto.get_precio():.2f}"
-                            cantidad_producto = cliente.get_carrito().contar_repeticiones(
-                                producto)  # Implementar método en Carrito
+                            cantidad_producto = cliente.get_carrito().contar_repeticiones(producto)
 
                             print(
-                                f"| {contador:2d} | {nombre_producto:<18} | {marca_producto:<13} | {tamano_producto:<8} | {precio_producto:<8} | {cantidad_producto:<8} |")
+                                f"| {contador:<2} | {nombre_producto:<18} | {marca_producto:<13} | {tamano_producto:<8} | {precio_producto:<8} | {cantidad_producto:<8} |")
                             productos_impresos.add(producto.get_id())
                             contador += 1
-                        print("+----+--------------------+---------------+----------+----------+----------+")
-
                     else:
                         print("Cantidad inválida.")
                 else:
                     print("Producto seleccionado no encontrado.")
             else:
                 print("Selección inválida.")
+
+            print("+----+--------------------+---------------+----------+----------+----------+")
             self.elegir_tipo_busqueda(cliente)
+
 
         elif decision == 4:
             carrito = cliente.get_carrito()

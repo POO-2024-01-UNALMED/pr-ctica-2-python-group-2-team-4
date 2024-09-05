@@ -94,7 +94,8 @@ class Main(Identidad):
                     funcionalidad2obj=Funcionalidad2()
                     funcionalidad2obj.elegir_tipo_busqueda(cliente)
                 case 3:
-                    Funcionalidad3.impresion_facturas()
+                    persona = Main.identificar_persona()
+                    Funcionalidad3.impresion_facturas(persona)
                 case 4:
                     Funcionalidad4.seleccion_tienda()
                 case 5:
@@ -332,17 +333,28 @@ if __name__ == "__main__":
     cajero3.caja = caja3
     cajero4.caja = caja4
     cajero5.caja = caja5
+
+    caja1.set_cajero(cajero1)
+    caja2.set_cajero(cajero2)
+    caja3.set_cajero(cajero3)
+    caja4.set_cajero(cajero4)
+    caja5.set_cajero(cajero5)
+
     tienda = Tienda("Tienda Principal", [pasilloBebidas, pasilloPersonal, pasilloLimpieza])
 
+    tienda.set_cajas([caja1, caja2, caja3, caja4, caja5])
+
+    for c in [caja1, caja2, caja3, caja4, caja5]:
+        c.set_tienda(tienda)
     admin=Administrador("pp",23)
     tienda34 = Tienda("Tienda Principal", [pasilloBebidas, pasilloPersonal, pasilloLimpieza],None,admin,0,"abierto")
 
     cliente1 = Cliente("Carlos", 11001, 30, Genero.H, 50000, None, tienda)
-    carrito1 = Carrito(cliente1, False, Edades.MENORES, tienda)
-    carrito2 = Carrito(cliente2, True, Edades.ADULTOS, tienda)
-    carrito3 = Carrito(cliente3, False, Edades.ADULTOS, tienda)
-    carrito4 = Carrito(cliente4, True, Edades.MENORES, tienda)
-    carrito5 = Carrito(cliente5, False, Edades.MENORES, tienda)
+    #carrito1 = Carrito(cliente1, False, Edades.MENORES, tienda)
+    #carrito2 = Carrito(cliente2, True, Edades.ADULTOS, tienda)
+    #carrito3 = Carrito(cliente3, False, Edades.ADULTOS, tienda)
+    #carrito4 = Carrito(cliente4, True, Edades.MENORES, tienda)
+    #carrito5 = Carrito(cliente5, False, Edades.MENORES, tienda)
     carrito6=Carrito(None,False,Edades.ADULTOS)
     cliente1.set_carrito(carrito6)
     carrito6.set_cliente(cliente1)

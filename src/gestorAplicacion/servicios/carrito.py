@@ -106,7 +106,7 @@ class Carrito:
             for _ in range(cantidad):
                 if seleccionado in pasillo_encontrado.get_productos():
                     pasillo_encontrado.get_productos().remove(seleccionado)
-                    self._productos.append(seleccionado.clone())  # Agregar el producto eliminado a la lista de productos
+                    self._productos.append(seleccionado)  # Agregar el producto eliminado a la lista de productos
                 else:
                     break
 
@@ -117,37 +117,28 @@ class Carrito:
 
     def eliminar_productos(self, seleccionado, cantidad):
         tienda = self._tienda
-        pasillo = seleccionado.get_pasillo()
-
-        for p in tienda.get_pasillos():
-            if p == pasillo:
-                pasillo = p
-                break
-
+        pasillo=seleccionado.get_pasillo()
         for _ in range(cantidad):
-            if self._productos.remove(seleccionado):
-                pasillo.get_productos().append(seleccionado.clone())
-            else:
-                print("No hay suficientes productos en el carrito para eliminar.")
-                break
+            if seleccionado in self._productos:
+                self._productos.remove(seleccionado)
+                pasillo.get_productos().append(seleccionado)
 
-    @staticmethod
-    def calcular_total(carrito):
-        return sum(producto.get_precio() for producto in carrito)
+    def calcular_total(self):
+        return sum(producto.get_precio() for producto in self._productos)
 
     def generar_detalles_factura(self, descuento_membresia, gano_juego):
         detalles = ["Factura:", "+-----+--------------------+---------------+----------+------------+----------+",
                     "| No. | Producto           | Marca         | Tamaño   | Categoría  | Precio   |",
                     "+-----+--------------------+---------------+----------+------------+----------+"]
         for i, producto in enumerate(self._productos, 1):
-            detalles.append(f"| {i:<3} | {producto.get_nombre():<18} | {producto.get_marca():<13} | {producto.get_tamaño().get_tamaño():<8} | {producto.get_categoria().get_texto():<10} | {producto.get_precio():<8.2f} |")
+            detalles.append(f"| {i:<3} | {producto.get_nombre():<18} | {producto.get_marca():<13} | {producto.get_tamano().get_tamano():<8} | {producto.get_categoria().get_texto():<10} | {producto.get_precio():<8.2f} |")
         detalles.append("+-----+--------------------+---------------+----------+------------+----------+")
 
         detalles.append(f"Descuento por membresía: {descuento_membresia * 100:.2f}%")
         if gano_juego:
             detalles.append("Descuento adicional por ganar el juego: 10%")
 
-        precio_final = self.calcular_total(self._productos) * (1 - descuento_membresia) * (0.9 if gano_juego else 1.0)
+        precio_final = self.calcular_total() * (1 - descuento_membresia) * (0.9 if gano_juego else 1.0)
         detalles.append(f"Precio final: {precio_final:.2f}")
 
         return "\n".join(detalles)

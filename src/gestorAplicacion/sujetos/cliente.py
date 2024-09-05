@@ -124,10 +124,10 @@ class Cliente(Persona):
         return nueva_membresia.get_precio() - membresia_actual.get_precio()
 
     def get_facturas1(self, tienda_seleccionada):
-        return [c for c in tienda_seleccionada.get_facturas() if c.cliente == self]
+        return [c for c in tienda_seleccionada.get_facturas() if c.get_cliente() == self]
 
     def get_tiendas_con_facturas(self):
-        tiendas = set(factura.tienda for factura in self._facturas if factura)
+        tiendas = set(factura.get_tienda() for factura in self._facturas if factura)
         return list(tiendas)
 
     def calcular_descuento_por_membresia(self):

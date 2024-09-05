@@ -3,12 +3,15 @@ import sys
 class Funcionalidad3:
     @staticmethod
     def impresion_facturas(persona):
+        from uiMain.main import Main
+        from gestorAplicacion.sujetos.administrador import Administrador
+        from gestorAplicacion.sujetos.cliente import Cliente
         tiendas = persona.get_tiendas_con_facturas()
 
         if not tiendas:
             print("No tienes facturas en ninguna tienda.")
             return
-        
+
         # Crear un diccionario para contar facturas por tienda
         conteo_tiendas = {}
         for tienda in tiendas:
@@ -16,7 +19,7 @@ class Funcionalidad3:
             if nombre_tienda:
                 cantidad_facturas = len(tienda.get_facturas()) if tienda.get_facturas() else 0
                 conteo_tiendas[nombre_tienda] = cantidad_facturas
-        
+
         # Imprimir tabla de tiendas y cantidad de facturas
         print("Número de Facturas")
         print("+-----+----------------+-----------------+")
@@ -25,7 +28,7 @@ class Funcionalidad3:
 
         for numero, (nombre, cantidad) in enumerate(conteo_tiendas.items(), start=1):
             print(f"| {numero:<3} | {nombre:<14} | {cantidad:<15} |")
-        
+
         print("+-----+----------------+-----------------+")
 
         # Solicitar selección del usuario
@@ -37,10 +40,10 @@ class Funcionalidad3:
                 if numero == seleccion:
                     tienda_seleccionada = tienda
                     break
-        
+
         if tienda_seleccionada:
             print("Has seleccionado la tienda:", tienda_seleccionada.get_nombre())
-            mis_facturas = persona.get_facturas(tienda_seleccionada)
+            mis_facturas = persona.get_facturas1(tienda_seleccionada)
 
             # Imprimir las facturas
             print("+-----+--------------------+------------+-----------------+------------+----------+")
@@ -49,10 +52,11 @@ class Funcionalidad3:
 
             for numero, factura in enumerate(mis_facturas, start=1):
                 if factura:
-                    estado_pago = "Sí" if factura.is_pagado() else "No"
-                    precio_total = Carrito.calcular_total(factura.get_productos())
-                    print(f"| {numero:<3} | {factura.get_tienda().get_nombre():<18} | {factura.get_fecha_facturacion():<10} | {len(factura.get_productos()):<15} | {precio_total:<10.2f} | {estado_pago:<8} |")
-            
+                    estado_pago = "Sí" if factura.get_pagado() else "No"
+                    precio_total = factura.calcular_total()
+                    print(
+                        f"| {numero:<3} | {factura.get_tienda().get_nombre():<18} | {factura.get_fecha_facturacion():<10} | {len(factura.get_productos()):<15} | {precio_total:<10.2f} | {estado_pago:<8} |")
+
             print("+-----+--------------------+------------+-----------------+------------+----------+")
 
             # Solicitar selección de factura
@@ -70,8 +74,9 @@ class Funcionalidad3:
 
                     for numero_producto, producto in enumerate(factura_seleccionada.get_productos(), start=1):
                         if producto:
-                            print(f"| {numero_producto:<3} | {producto.get_nombre():<18} | {producto.get_marca():<13} | {producto.get_tamaño().get_tamaño():<8} | {producto.get_categoria().get_texto():<10} | {producto.get_precio():<8.2f} |")
-                    
+                            print(
+                                f"| {numero_producto:<3} | {producto.get_nombre():<18} | {producto.get_marca():<13} | {producto.get_tamano().get_tamano():<8} | {producto.get_categoria().get_texto():<10} | {producto.get_precio():<8.2f} |")
+
                     print("+-----+--------------------+---------------+----------+------------+----------+")
 
                     # Opciones adicionales dependiendo del tipo de objeto
@@ -95,6 +100,7 @@ class Funcionalidad3:
 
                         opcion = int(input("Seleccione una opción: "))
                         if opcion == 1:
+                            persona.set_tienda(factura_seleccionada.get_tienda())
                             Funcionalidad3.seleccionar_caja(persona, factura_seleccionada)
                         elif opcion == 2:
                             Funcionalidad3.impresion_facturas(persona)  # Volver a llamar al método
@@ -110,9 +116,10 @@ class Funcionalidad3:
             print("Selección inválida.")
 
     @staticmethod
-    def seleccionar_caja(cliente, carrito):
+    def seleccionar_caja(cliente,carrito):
+        from gestorAplicacion.servicios.enums import TipoCaja
+        from uiMain.main import Main
         cajas = cliente.get_tienda().cajas_disponibles()
-        cliente.set_carrito(carrito)
         caja_seleccionada = None
 
         while True:
@@ -123,41 +130,42 @@ class Funcionalidad3:
                 opcion = int(input("Seleccione una opción: "))
 
                 if opcion == 1:
-                    tienda = cliente.get_tienda()
-                    tienda.asignar_cajero(Tienda.encontrar_cajero(tienda.get_empleados()))  # Método para asignar un empleado a una caja
-                    continue
+                    tienda = cliente.tienda
+                    tienda.asignar_cajero(tienda.encontrar_cajero(tienda.empleados))
+                    continue  # Repetir el proceso después de asignar un empleado
                 elif opcion == 2:
                     print("Ha decidido no pagar. Saliendo del proceso.")
+                    Main.escoger_funcionalidad()  # Salir del método
                     return
                 else:
-                    print("Opción no válida.")
+                    print("Opción no válida. Inténtelo de nuevo.")
                     continue
 
             print("Seleccione una caja para pagar:")
             for i, caja in enumerate(cajas):
-                print(f"{i + 1}. Caja: {caja.get_nombre()}, Tipo: {caja.get_tipo()}, Empleado: {caja.get_cajero().get_nombre()}")
+                cajero = caja.get_cajero()
+                print(f"{i + 1}. Caja: {caja.get_nombre()}, Tipo: {caja.get_tipo()}, Empleado: {cajero.get_nombre()}")
 
             seleccion = int(input("Seleccione el número de la caja: "))
 
             if 1 <= seleccion <= len(cajas):
                 caja_seleccionada = cajas[seleccion - 1]
 
-                if caja_seleccionada.get_tipo() == TipoCaja.RAPIDA and len(cliente.get_carrito().get_productos()) > 5:
+                if caja_seleccionada.get_tipo() == TipoCaja.RAPIDA and len(carrito.get_productos()) > 5:
                     print("No puede usar la caja rápida porque tiene más de 5 productos.")
                     print("Por favor, seleccione otra caja.")
                     continue
 
                 print("Ha seleccionado la caja:", caja_seleccionada.get_nombre())
-                break
+                break  # Caja seleccionada correctamente, salir del bucle
             else:
                 print("Selección inválida. Inténtelo de nuevo.")
 
-        caja_seleccionada.set_cliente(cliente)
-        cliente.set_carrito(carrito)
+        caja_seleccionada.cliente = cliente
 
         # Aplicar descuento por membresía
         descuento_membresia = cliente.calcular_descuento_por_membresia()
-        precio_total = Carrito.calcular_total(carrito.get_productos())
+        precio_total = carrito.calcular_total()
         precio_con_descuento = precio_total * (1 - descuento_membresia)
 
         # Imprimir factura con descuento por membresía
@@ -171,8 +179,7 @@ class Funcionalidad3:
 
         if opcion_borrar == 1:
             carrito.eliminar_carrito()  # Eliminar carrito y devolver productos
-            cliente.set_carrito(None)  # Desasignar carrito del cliente
-            caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+            caja_seleccionada.cliente = None  # Desasignar cliente de la caja
             print("Factura eliminada y productos devueltos al inventario.")
             return
 
@@ -182,13 +189,15 @@ class Funcionalidad3:
         print("2. No")
         opcion_juego = int(input())
 
+        costo_juego = 0
         gano_juego = False
         if opcion_juego == 1:
             tiene_membresia = cliente.get_membresia() is not None
             if not tiene_membresia:
                 print("Debe pagar 10 mil para intentar jugar.")
-                carrito.incrementar_costo(10000)
-                precio_total += 10000  # Aumentar el precio total antes de aplicar descuento del juego
+                costo_juego = 10000
+                carrito.incrementar_costo(costo_juego)
+                precio_total += costo_juego  # Aumentar el precio total antes de aplicar descuento del juego
 
             # Selección del juego
             print("Seleccione un juego:")
@@ -200,46 +209,102 @@ class Funcionalidad3:
                 gano_juego = Funcionalidad3.tres_en_raya()
             elif seleccion_juego == 2:
                 gano_juego = Funcionalidad3.ahorcado()
-            else:
-                print("Selección inválida.")
-                return
 
             if gano_juego:
-                descuento_juego = 0.10
-                precio_con_descuento -= precio_total * descuento_juego
-                print("¡Ganó el juego! Se aplica un 10% de descuento.")
+                print("¡Felicidades! Ha ganado un descuento adicional del 10%.")
+                precio_con_descuento *= 0.9  # Aplicar descuento adicional del juego
             else:
-                print("No ganó el juego. No se aplica descuento adicional.")
-        
-        # Realizar el pago final
-        if precio_con_descuento > 0:
-            if cliente.get_saldo() >= precio_con_descuento:
-                cliente.set_saldo(cliente.get_saldo() - precio_con_descuento)
-                caja_seleccionada.registrar_pago(precio_con_descuento)
-                print("Pago realizado con éxito.")
-            else:
-                print("Saldo insuficiente para completar la compra.")
-        else:
-            print("El total de la compra es 0. No se requiere pago.")
+                print("Lo sentimos, no ha ganado el juego.")
+
+        # Imprimir factura con descuento adicional si ganó el juego
+        print(carrito.generar_detalles_factura(descuento_membresia, gano_juego))
+
+        # Confirmar si el cliente desea pagar la factura
+        print("¿Desea pagar la factura?")
+        print("1. Sí")
+        print("2. No")
+        opcion_pago = int(input())
+
+        if opcion_pago == 2:
+            print("Ha decidido no pagar la factura. Regresando a la tienda...")
+            cliente.carrito = None  # Desasignar carrito del cliente
+            caja_seleccionada.cliente = None  # Desasignar cliente de la caja
+            return
+        elif opcion_pago == 1:
+            # Verificar si el cliente tiene suficiente saldo
+            precio_final = precio_con_descuento  # Usar el precio con descuento
+            if cliente.get_dinero() < precio_final:
+                print("No tiene suficiente saldo para pagar la factura. Regresando a la tienda...")
+                cliente.carrito = None  # Desasignar carrito del cliente
+                caja_seleccionada.cliente = None  # Desasignar cliente de la caja
+                return
+
+            # Marcar la factura como pagada
+            carrito.set_pagado(True)
+            cliente.get_facturas().append(carrito)  # Registrar la factura en las facturas del cliente
+
+            # Actualizar saldo de la tienda
+            cliente.get_tienda().subir_saldo(precio_final)
+
+            # Restar el monto al saldo del cliente
+            cliente.bajar_dinero(precio_final + costo_juego)
+
+            # Calcular y descontar el pago del cajero
+            cajero = caja_seleccionada.get_cajero()
+            pago_cajero = 20000  # Pago inicial
+            if cajero.get_prestacion_pension():
+                pago_cajero += 5000
+            if cajero.get_prestacion_salud():
+                pago_cajero += 5000
+            cliente.get_tienda().bajar_saldo(pago_cajero)
+
+            # Desasignar referencias
+            cliente.set_carrito(None)   # Desasignar carrito del cliente
+            caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+            carrito.set_caja(None)  # Desasignar caja del carrito
+
+            print("La factura ha sido pagada exitosamente.")
+            Main.escoger_funcionalidad()
 
     @staticmethod
     def tres_en_raya():
-        # Implementar el juego Tres en Raya aquí
-        pass
+        from uiMain.main import Main
+        from gestorAplicacion.servicios.tresEnRaya import TresEnRaya
+        # Juego de Tres en Raya
+        juego_tres_en_raya = TresEnRaya()
+        juego_tres_en_raya.iniciar()
+
+        while not juego_tres_en_raya.ha_ganado() and not juego_tres_en_raya.ha_perdido():
+            print(juego_tres_en_raya.obtener_estado())
+            print("Elige una posición (1-9): ")
+            posicion= Main.escaner_con_rango(9)
+
+            if not juego_tres_en_raya.jugar(posicion):
+                print("Posición inválida. Intenta de nuevo.")
+                continue
+
+        print(juego_tres_en_raya.obtener_estado())
+        if juego_tres_en_raya.ha_ganado():
+            print("¡Ganaste!")
+            return True
+        else:
+            print("¡Perdiste!")
+            return False
 
     @staticmethod
     def ahorcado():
-        # Implementar el juego Ahorcado aquí
-        pass
+        from gestorAplicacion.servicios.ahorcado import Ahorcado
+        juego_ahorcado = Ahorcado("java")
 
-class Carrito:
-    @staticmethod
-    def calcular_total(productos):
-        # Implementar el cálculo total de productos en el carrito
-        pass
+        while not juego_ahorcado.ha_ganado() and not juego_ahorcado.ha_perdido():
+            print(juego_ahorcado.obtener_estado())
+            letra = input("Introduce una letra: ").lower()
+            juego_ahorcado.jugar(letra)
 
-class Main:
-    @staticmethod
-    def escoger_funcionalidad():
-        # Implementar el menú para seleccionar funcionalidades
-        pass
+        print(juego_ahorcado.obtener_estado())
+        if juego_ahorcado.ha_ganado():
+            print("¡Ganaste!")
+            return True
+        else:
+            print("¡Perdiste!")
+            return False

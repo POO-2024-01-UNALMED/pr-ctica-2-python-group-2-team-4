@@ -13,52 +13,50 @@ class Caja:
             tienda.get_cajas().append(self)
 
     # Getters y Setters
-    @property
-    def nombre(self):
+    def get_nombre(self):
         return self._nombre
 
-    @nombre.setter
-    def nombre(self, nombre):
+    def set_nombre(self, nombre):
         self._nombre = nombre
 
-    @property
-    def estado(self):
+
+    def get_estado(self):
         return self._estado
 
-    @estado.setter
-    def estado(self, estado):
+
+    def set_estado(self, estado):
         self._estado = estado
 
-    @property
-    def tipo(self):
+
+    def get_tipo(self):
         return self._tipo
 
-    @tipo.setter
-    def tipo(self, tipo):
+
+    def set_tipo(self, tipo):
         self._tipo = tipo
 
-    @property
-    def tienda(self):
+
+    def get_tienda(self):
         return self._tienda
 
-    @tienda.setter
-    def tienda(self, tienda):
+
+    def set_tienda(self, tienda):
         self._tienda = tienda
 
-    @property
-    def cajero(self):
+
+    def get_cajero(self):
         return self._cajero
 
-    @cajero.setter
-    def cajero(self, cajero):
+
+    def set_cajero(self, cajero):
         self._cajero = cajero
 
-    @property
-    def cliente(self):
+
+    def get_cliente(self):
         return self._cliente
 
-    @cliente.setter
-    def cliente(self, cliente):
+
+    def set_cliente(self, cliente):
         self._cliente = cliente
 
    

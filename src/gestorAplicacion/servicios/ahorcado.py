@@ -14,8 +14,7 @@ class Ahorcado(Juego):
         self.errores = 0
         print("¡El juego ha comenzado!")
 
-    def jugar(self, posicion: int) -> bool:
-        letra = chr(posicion).lower()
+    def jugar(self, letra):
         if letra in self.palabra:
             self.letras_adivinadas.add(letra)
             return True

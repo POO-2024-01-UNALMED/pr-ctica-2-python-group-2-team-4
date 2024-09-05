@@ -7,14 +7,14 @@ class Producto:
 
 
     def __init__(self, nombre, marca=None, precio=0.0, tamano=None, edad_valida=None,
-                 categoria=None, descripcion="", fecha_perecer=None, id=None, pasillo=None, tienda=None):
+                 categoria=None, descripcion="", fecha_perecer=None, _id=None, pasillo=None, tienda=None):
         from gestorAplicacion.servicios.enums import EstadoProducto
         self._nombre = nombre
         self._marca = marca
         self._precio = precio
         self._tamano = tamano
         self._edad_valida = edad_valida
-        self._id = id
+        self._id = _id
         self._categoria = categoria
         self._descripcion = descripcion
         self._fecha_perecer = fecha_perecer
@@ -52,8 +52,8 @@ class Producto:
     def get_id(self):
         return self._id
 
-    def set_id(self, id):
-        self._id = id
+    def set_id(self, _id):
+        self._id = _id
 
     def get_categoria(self):
         return self._categoria

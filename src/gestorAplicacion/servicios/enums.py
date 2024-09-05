@@ -37,7 +37,9 @@ class TipoCaja(Enum):
     
     def __init__(self, tipo):
         self.tipo = tipo
-    
+
+    def get_tipo(self):
+        return self.tipo
     @staticmethod
     def resolver_tipo_caja(tipo):
         for caja in TipoCaja:

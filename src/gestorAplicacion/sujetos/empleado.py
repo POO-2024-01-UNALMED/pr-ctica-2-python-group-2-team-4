@@ -7,12 +7,12 @@ class Empleado(Persona):
     
     def __init__(self, nombre=None, id=None, edad=None, genero=None, liquidacion=0.0, tienda=None,prestacion_salud=False, prestacion_pension=False, tipo=None, experiencia=0):
         super().__init__(nombre, id, edad, genero)
-        self.liquidacion = liquidacion
-        self.prestacion_salud = prestacion_salud
-        self.prestacion_pension = prestacion_pension
-        self.experiencia = experiencia
-        self.tienda = tienda
-        self.tipo = tipo
+        self._liquidacion = liquidacion
+        self._prestacion_salud = prestacion_salud
+        self._prestacion_pension = prestacion_pension
+        self._experiencia = experiencia
+        self._tienda = tienda
+        self._tipo = tipo
 
     # Métodos------------------------------------------------------------------------------------------------------
     

@@ -166,23 +166,26 @@ class Tienda:
     def buscar_producto(self, n):
         return "\n".join(f"{n}.{producto}" for pasillo in self._pasillos for producto in pasillo.productos)
 
-    @staticmethod
-    def buscar_productos(cliente, categoria):
+    def buscar_productos(self,categoria):
         productos=[]
         ids = []
-        for pasillo in cliente.get_tienda().get_pasillos():
+        for pasillo in self.get_pasillos():
             for producto in pasillo.productos:
                 if producto.get_categoria() == categoria and producto.get_id() not in ids:
                     productos.append(producto)
                     ids.append(producto.get_id())
         return productos
 
-    @staticmethod
-    def buscar_productos_por_nombre(cliente, nombre):
+    def buscar_productos_por_nombre(self, nombre):
         productos = []
-        for pasillo in cliente.tienda.pasillos:
-            for producto in pasillo.productos:
-                if producto.nombre.lower().find(nombre.lower()) != -1 and producto.id not in [p.id for p in productos]:
+        for pasillo in self.get_pasillos():
+            for producto in pasillo.get_productos():
+                exists = False
+                for prod in productos:
+                    if prod.get_id() == producto.get_id():
+                        exists = True
+                        break
+                if not exists and nombre.lower() in producto.get_nombre().lower():
                     productos.append(producto)
         return productos
 
@@ -231,6 +234,22 @@ class Tienda:
                 s += "        "
                 s += str(i.get_categoria()) + "\n"
             return s
+
+    @staticmethod
+    def encontrar_cajero(empleados):
+        from gestorAplicacion.sujetos.cajero import Cajero
+        for empleado in empleados:
+            if isinstance(empleado, Cajero):
+                return empleado
+        return None  # Retorna None si no se encuentra ningún Cajero
+
+    def cajas_disponibles(self):
+        cajas_disponibles = []
+        for caja in self._cajas:
+            if caja.get_estado() == 2 and caja.get_cajero() is not None:
+                cajas_disponibles.append(caja)
+        return cajas_disponibles
+
     @classmethod
     def mostrar_desempleados(cls):
         n=1
