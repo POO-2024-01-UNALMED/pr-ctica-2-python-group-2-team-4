@@ -444,6 +444,7 @@ class Funcionalidad2:
 
             print("+----+--------------------+---------------+----------+----------+----------+")
             print("")
+            print("Escoja una de los productos que desee borrar")
             print(f"{contador}. Cancelar borrar producto del carrito")
             seleccion = Main.escaner_con_rango(contador)  # Implementar este método
 
@@ -498,6 +499,7 @@ class Funcionalidad2:
                                 f"| {contador:2d} | {nombre_producto:<18} | {marca_producto:<13} | {tamano_producto:<8} | {precio_producto:<8} | {cantidad_producto:<8} |")
                             productos_impresos.add(producto.get_id())
                             contador += 1
+                        print("+----+--------------------+---------------+----------+----------+----------+")
 
                     else:
                         print("Cantidad inválida.")
@@ -505,7 +507,6 @@ class Funcionalidad2:
                     print("Producto seleccionado no encontrado.")
             else:
                 print("Selección inválida.")
-            print("+----+--------------------+---------------+----------+----------+----------+")
             self.elegir_tipo_busqueda(cliente)
 
         elif decision == 4:
@@ -526,6 +527,11 @@ class Funcionalidad2:
             Main.escoger_funcionalidad()  # Implementar este método en Main
 
         elif decision == 5:
+            if len(cliente.get_carrito().get_productos()) == 0:
+                Main.lineas()  # Implementar este método
+                print("Usted no puede seleccionar esta opción")
+                self.elegir_tipo_busqueda(cliente)
+                return
             cliente.get_tienda().get_facturas().append(cliente.get_carrito())  # Implementar métodos en Tienda y Factura
             cliente.get_facturas().append(cliente.get_carrito())
             cliente.set_carrito(None)

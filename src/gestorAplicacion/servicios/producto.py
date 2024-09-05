@@ -96,19 +96,18 @@ class Producto:
 
     def cantidad_producto(self):
         cantidad = 0
-        if self.tienda:
-            for pasillo in self.tienda.get_pasillos():
-                for producto in pasillo.get_productos():
-                    if producto == self:
-                        cantidad += 1
+        for pasillo in self._tienda.get_pasillos():
+            for producto in pasillo.get_productos():
+                if producto == self:
+                    cantidad += 1
         return cantidad
 
     def asignar_pasillo_y_poner_en_tienda(self, pasillo):
-        self.pasillo = pasillo
+        self._pasillo = pasillo
         pasillo.get_productos().append(self)
 
     def asignar_tienda(self, tienda):
-        self.tienda = tienda
+        self._tienda = tienda
 
     @staticmethod
     def filtrar_por_edad(productos, cliente):

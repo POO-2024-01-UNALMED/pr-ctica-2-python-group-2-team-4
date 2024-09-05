@@ -348,4 +348,22 @@ if __name__ == "__main__":
     carrito6.set_cliente(cliente1)
     carrito6.set_tienda(cliente1.get_tienda())
 
+    producto16.set_tienda(pasilloLimpieza.get_tienda())
+    producto17.set_tienda(pasilloLimpieza.get_tienda())
+    producto18.set_tienda(pasilloLimpieza.get_tienda())
+    producto19.set_tienda(pasilloLimpieza.get_tienda())
+    producto20.set_tienda(pasilloLimpieza.get_tienda())
+
+    producto11.set_tienda(pasilloPersonal.get_tienda())
+    producto12.set_tienda(pasilloPersonal.get_tienda())
+    producto13.set_tienda(pasilloPersonal.get_tienda())
+    producto14.set_tienda(pasilloPersonal.get_tienda())
+    producto15.set_tienda(pasilloPersonal.get_tienda())
+
+    producto6.set_tienda(pasilloBebidas.get_tienda())
+    producto7.set_tienda(pasilloBebidas.get_tienda())
+    producto8.set_tienda(pasilloBebidas.get_tienda())
+    producto9.set_tienda(pasilloBebidas.get_tienda())
+    producto10.set_tienda(pasilloBebidas.get_tienda())
+
     main.escoger_funcionalidad()

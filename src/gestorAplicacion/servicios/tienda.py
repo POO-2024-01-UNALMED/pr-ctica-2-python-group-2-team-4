@@ -20,6 +20,8 @@ class Tienda:
             self._pasillos = []
         else:
             self._pasillos = pasillos
+            for pasillo in pasillos:
+                pasillo.set_tienda(self)
         self._productos_vencidos = []
         self._productos_devueltos = []
         Tienda.tiendas.append(self)
@@ -229,6 +231,16 @@ class Tienda:
                 s += "        "
                 s += str(i.get_categoria()) + "\n"
             return s
+    @classmethod
+    def mostrar_desempleados(cls):
+        n=1
+        s=list()
+        for desempleado in cls.desempleados:
+            s.append("\n"+n+"."+desempleado.nombre)
+            s.append("     ")
+            s.append(desempleado.tipo)
+            n+=1
+        return str(s)
 
     def __str__(self):
         return self._nombre + self._saldo.__str__()
