@@ -94,9 +94,9 @@ class Funcionalidad5:
         from gestorAplicacion.servicios.proveedor import Proveedor
         Main.lineas()
         if not tien.disponibilidad_productos():
-            print(f"{tien.get_dueno().get_nombre()} de la tienda: \"{tien.get_nombre()}\", sus pasillos están vacíos")
+            print(f"{tien.get_dueno().get_nombre()} de la tienda: \"{tien.get_nombre()}\", algunos pasillos están vacíos")
             print("He aquí nuestros proveedores:")
-            print(tien.listar_proveedores())
+            print(Proveedor.listar_proveedores())
             k = Main.escaner()
             Main.lineas()
             prov = Proveedor.get_seis_proveedores()[k-1]

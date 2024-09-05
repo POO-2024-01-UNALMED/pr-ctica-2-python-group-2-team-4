@@ -49,6 +49,17 @@ class Proveedor:
         cls.seis_proveedores = provs
 
     # Métodos adicionales
+    @classmethod
+    def listar_proveedores(cls):
+        n=1
+        s=list()
+        for proveedor in cls.seis_proveedores:
+            s.append("\n"+n+"."+proveedor.nombre)
+            s.append("     ")
+            s.append(proveedor.tipo)
+            n+=1
+        return str(s)
+            
     def __str__(self):
         return f"{self.nombre} con categoría: {self.tipo.lower()}" if self.tipo else self.nombre
 
