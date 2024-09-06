@@ -1,6 +1,6 @@
 import sys
 
-import json
+import pickle
 from gestorAplicacion.sujetos.administrador import Administrador
 from uiMain.identidad import Identidad
 
@@ -102,7 +102,7 @@ class Main(Identidad):
                     admin = Main.identificar_persona()
                     Funcionalidad5.personalizar_tienda(admin)
                 case 6:
-                    # Serializador.serializar_todo()
+                    cls.serializarTodo()
                     print("Ha salido del programa")
                     sys.exit(0)
                 case 7:
@@ -116,6 +116,34 @@ class Main(Identidad):
                     Main.escoger_funcionalidad()
 
 
+    @classmethod
+    def deserializarTodo(cls):
+        from gestorAplicacion.sujetos.persona import Persona
+        from gestorAplicacion.servicios.proveedor import Proveedor
+        Tienda.set_tiendas(Main.deserializar("tiendas"))
+        Persona.set_personas(Main.deserializar("personas"))
+        Tienda.set_desempleados(Main.deserializar("empleados"))
+        Proveedor.set_seis_proveedores(Main.deserializar("proveedores"))
+
+    @classmethod
+    def deserializar(cls,nombre):
+            with open("baseDatos/temp/"+nombre+".txt","rb") as file:
+                data=pickle.load(file)
+                file.close()
+                return data
+    @classmethod
+    def serializarTodo(cls):
+        from gestorAplicacion.sujetos.persona import Persona
+        from gestorAplicacion.servicios.proveedor import Proveedor
+        cls.serializar(Tienda.get_tiendas(),"tiendas")
+        cls.serializar(Persona.get_personas(),"personas")
+        cls.serializar(Tienda.get_desempleados(),"empleados")
+        cls.serializar(Proveedor.get_seis_proveedores(),"proveedores")
+    @classmethod
+    def serializar(cls,lista,nombre):
+        with open("baseDatos/temp/"+nombre+".txt","wb") as file:
+            pickle.dump(lista,file)
+
 if __name__ == "__main__":
     from gestorAplicacion.sujetos.cajero import Cajero
     from gestorAplicacion.sujetos.cliente import Cliente
@@ -126,17 +154,14 @@ if __name__ == "__main__":
     from gestorAplicacion.servicios.pasillo import Pasillo
     from gestorAplicacion.servicios.tienda import Tienda
     main=Main()
+    Main.deserializarTodo()
+
     """  admin1 = Administrador("Beatriz Gómez", 201, 40, Genero.M, 12000.0)
     admin2 = Administrador("Ricardo Díaz", 202, 45, Genero.H, 15000.0)
     admin3 = Administrador("Sofía Sánchez", 203, 38, Genero.M, 11000.0)
     admin4 = Administrador("Miguel Ramírez", 204, 50, Genero.H, 16000.0)
 
     #print(admin1.__dict__)
-   # print(json.dumps(admin1.__dict__))
-    #with open("baseDatos/temp/administradores.json", "w") as write:
-        #json.dump(admin1.__dict__, write)
-    #data = open("administradores.json", )
-    #print(json.load(data))
 
     # Crear tiendas
     tienda9 = Tienda("1234567890", admin1, "Tienda Digital", 25000.0, "abierto")
@@ -387,5 +412,5 @@ if __name__ == "__main__":
     producto8.set_tienda(pasilloBebidas.get_tienda())
     producto9.set_tienda(pasilloBebidas.get_tienda())
     producto10.set_tienda(pasilloBebidas.get_tienda())
-
     main.escoger_funcionalidad()
+    
