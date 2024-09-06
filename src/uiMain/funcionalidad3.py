@@ -172,14 +172,17 @@ class Funcionalidad3:
         print(carrito.generar_detalles_factura(descuento_membresia, False))
 
         # Opción de borrar la factura antes de pagar
-        print("¿Desea borrar esta factura antes de pagar?")
+        print("¿Desea borrar esta factura y no pagarla?")
         print("1. Sí")
         print("2. No")
-        opcion_borrar = int(input())
+        opcion_borrar = Main.escaner_con_rango(2)
 
         if opcion_borrar == 1:
-            carrito.eliminar_carrito()  # Eliminar carrito y devolver productos
-            caja_seleccionada.cliente = None  # Desasignar cliente de la caja
+            carrito.eliminar_carrito()# Eliminar carrito y devolver productos
+            cliente.set_tienda(None)
+            cliente.set_carrito(None)  # Desasignar carrito del cliente
+            caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+            carrito.set_caja(None)  # Desasignar cliente de la caja
             print("Factura eliminada y productos devueltos al inventario.")
             return
 
@@ -187,7 +190,7 @@ class Funcionalidad3:
         print("¿Desea intentar obtener un descuento adicional jugando?")
         print("1. Sí")
         print("2. No")
-        opcion_juego = int(input())
+        opcion_juego = Main.escaner_con_rango(2)
 
         costo_juego = 0
         gano_juego = False
@@ -227,16 +230,20 @@ class Funcionalidad3:
 
         if opcion_pago == 2:
             print("Ha decidido no pagar la factura. Regresando a la tienda...")
-            cliente.carrito = None  # Desasignar carrito del cliente
-            caja_seleccionada.cliente = None  # Desasignar cliente de la caja
+            cliente.set_tienda(None)
+            cliente.set_carrito(None)  # Desasignar carrito del cliente
+            caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+            carrito.set_caja(None) # Desasignar cliente de la caja
             return
         elif opcion_pago == 1:
             # Verificar si el cliente tiene suficiente saldo
             precio_final = precio_con_descuento  # Usar el precio con descuento
             if cliente.get_dinero() < precio_final:
                 print("No tiene suficiente saldo para pagar la factura. Regresando a la tienda...")
-                cliente.carrito = None  # Desasignar carrito del cliente
-                caja_seleccionada.cliente = None  # Desasignar cliente de la caja
+                cliente.set_tienda(None)
+                cliente.set_carrito(None)  # Desasignar carrito del cliente
+                caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+                carrito.set_caja(None)  # Desasignar cliente de la caja
                 return
 
             # Marcar la factura como pagada
@@ -259,7 +266,8 @@ class Funcionalidad3:
             cliente.get_tienda().bajar_saldo(pago_cajero)
 
             # Desasignar referencias
-            cliente.set_carrito(None)   # Desasignar carrito del cliente
+            cliente.set_tienda(None)
+            cliente.set_carrito(None)  # Desasignar carrito del cliente
             caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
             carrito.set_caja(None)  # Desasignar caja del carrito
 

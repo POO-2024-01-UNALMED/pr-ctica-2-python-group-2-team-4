@@ -44,7 +44,7 @@ class Main(Identidad):
         from uiMain.funcionalidad4 import Funcionalidad4
         from uiMain.funcionalidad5 import Funcionalidad5
         while True:
-            numeros = [1, 2, 3, 4, 5, 6]
+            numeros = [1, 2, 3, 4, 5, 6,7]
             boleano = False
             
             Main.lineas()
@@ -105,6 +105,16 @@ class Main(Identidad):
                     # Serializador.serializar_todo()
                     print("Ha salido del programa")
                     sys.exit(0)
+                case 7:
+                    from gestorAplicacion.servicios.enums import Edades
+                    from gestorAplicacion.servicios.carrito import Carrito
+                    carrito7 = Carrito(None, False, Edades.ADULTOS)
+                    cliente1.set_carrito(carrito7)
+                    carrito7.set_cliente(cliente1)
+                    carrito7.set_tienda(cliente1.get_tienda())
+                    cliente1.set_tienda(tienda)
+                    Main.escoger_funcionalidad()
+
 
 if __name__ == "__main__":
     from gestorAplicacion.sujetos.cajero import Cajero
