@@ -8,7 +8,7 @@ class Identidad:
         from gestorAplicacion.sujetos.cliente import Cliente
         from gestorAplicacion.servicios.enums import Genero
         from gestorAplicacion.sujetos.persona import Persona
-        from main import Main
+        from .main import Main
         print("Digite su documento: ")
         p = Main.escaner()
         for persona in Persona.get_personas():

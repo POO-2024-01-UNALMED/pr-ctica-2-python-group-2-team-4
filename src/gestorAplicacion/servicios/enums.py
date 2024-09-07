@@ -58,7 +58,7 @@ class Tamano(Enum):
     def get_tamano(self):
         return self._tamano
 
-class Genero(str,Enum):
+class Genero(Enum):
     H = "H"
     M = "M"
 

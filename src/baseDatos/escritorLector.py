@@ -1,0 +1,33 @@
+import pickle
+class EscritorLector:    
+    @classmethod
+    def deserializarTodo(cls):
+        from gestorAplicacion.servicios.tienda import Tienda
+        from gestorAplicacion.sujetos.persona import Persona
+        from gestorAplicacion.servicios.proveedor import Proveedor
+        Tienda.set_tiendas(cls.deserializar("tiendas"))
+        Persona.set_personas(cls.deserializar("personas"))
+        Tienda.set_desempleados(cls.deserializar("empleados"))
+        Proveedor.set_seis_proveedores(cls.deserializar("proveedores"))
+
+    @classmethod
+    def deserializar(cls,nombre):
+            with open("baseDatos/temp/"+nombre+".txt","rb") as file:
+                data=pickle.load(file)
+                file.close()
+                return data
+            
+    @classmethod
+    def serializarTodo(cls):
+        from gestorAplicacion.servicios.tienda import Tienda
+        from gestorAplicacion.sujetos.persona import Persona
+        from gestorAplicacion.servicios.proveedor import Proveedor
+        cls.serializar(Tienda.get_tiendas(),"tiendas")
+        cls.serializar(Persona.get_personas(),"personas")
+        cls.serializar(Tienda.get_desempleados(),"empleados")
+        cls.serializar(Proveedor.get_seis_proveedores(),"proveedores")
+
+    @classmethod
+    def serializar(cls,lista,nombre):
+        with open("baseDatos/temp/"+nombre+".txt","wb") as file:
+            pickle.dump(lista,file)

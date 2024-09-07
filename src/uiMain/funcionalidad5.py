@@ -1,10 +1,9 @@
 
 
 class Funcionalidad5:
-    sc = input
 
-    @staticmethod
-    def personalizar_tienda(admin):
+    @classmethod
+    def personalizar_tienda(cls,admin):
         from uiMain.main import Main
         from gestorAplicacion.servicios.tienda import Tienda
         Main.lineas()
@@ -47,13 +46,13 @@ class Funcionalidad5:
             print("2. ¿Desea llamar al proveedor?")
             print("3. ¿Desea contratar empleados?")
             print("4. Salir de personalizar tienda")
-            decision = Main.escaner()
+            decision = Main.escaner_con_rango(4)
             if decision == 1:
-                Funcionalidad5.reorganizar_pasillos(tien)
+                cls.reorganizar_pasillos(tien)
             elif decision == 2:
-                Funcionalidad5.llamar_proveedor(tien, admin)
+                cls.llamar_proveedor(tien, admin)
             elif decision == 3:
-                Funcionalidad5.contratar(tien)
+                cls.contratar(tien)
             elif decision == 4:
                 iterar = False
                 print("Ha salido de personalizar tienda")
@@ -76,7 +75,7 @@ class Funcionalidad5:
             x2 = Main.escaner()
             Main.lineas()
             print(f"Nombre del pasillo número {i}:")
-            nom = Funcionalidad5.sc()
+            nom = input()
             tien.anadir_pasillo(x2, nom)
             print("Pasillo añadido")
             Main.lineas()
@@ -84,7 +83,7 @@ class Funcionalidad5:
             i += 1
             Main.lineas()
             print("1. Continuar\n2. Terminar")
-            x3 = Main.escaner()
+            x3 = Main.escaner_con_rango(2)
             if x3 != 1:
                 break
 
@@ -97,35 +96,33 @@ class Funcionalidad5:
             print(f"{tien.get_dueno().get_nombre()} de la tienda: \"{tien.get_nombre()}\", algunos pasillos están vacíos")
             print("He aquí nuestros proveedores:")
             print(Proveedor.listar_proveedores())
-            k = Main.escaner()
+            k = Main.escaner_con_rango(6)
             Main.lineas()
             prov = Proveedor.get_seis_proveedores()[k-1]
             entrega = prov.get_entrega()
             s = ""
             for p in entrega:
-                diferencia = tien.get_saldo() - p.get_precio()
-                if diferencia >= 0:
-                    tien.set_saldo(diferencia)
-                    tien.agregar_producto(p)
-                    print("Producto agregado")
-                elif admin.get_dinero() > 0:
-                    print("La tienda no tiene suficiente saldo")
-                    print("¿Desea transferir su dinero a su tienda?\n1. Sí\n2. No")
-                    iter = True
-                    while iter:
-                        l = Main.escaner()
+                iter =True
+                while iter:
+                    diferencia = tien.get_saldo() - p.get_precio()
+                    if diferencia >= 0:
+                        tien.set_saldo(diferencia)
+                        tien.agregar_producto(p)
+                        print("Producto agregado")
+                    elif admin.get_dinero() > 0:
+                        print("La tienda no tiene suficiente saldo")
+                        print("¿Desea transferir su dinero a su tienda?\n1. Sí\n2. No")
+                        l = Main.escaner_con_rango(2)
                         if l == 1:
                             tien.set_saldo(admin.get_dinero())
                             admin.set_dinero(0)
-                            iter = False
                         elif l == 2:
-                            iter = False
                             print("Se terminó el pedido al proveedor")
                         else:
                             print("Entrada inválida")
-                    break
-                else:
-                    s = "Dinero insuficiente\nTerminando pedido"
+                    else:
+                        s = "Dinero insuficiente\nTerminando pedido"
+                        break
             print(s)
 
     @staticmethod
@@ -144,7 +141,7 @@ class Funcionalidad5:
             ems = ["Domiciliario", "Concerje", "Cajero"]
             for n, e in enumerate(ems, 1):
                 print(f"{n}. {e}")
-            x5 = Main.escaner()
+            x5 = Main.escaner_con_rango(3)
             tien.contratar_empleados(x5)
             print(tien.mostrar_empleados())
             j += 1
@@ -152,7 +149,7 @@ class Funcionalidad5:
             while i:
                 Main.lineas()
                 print("1. Continuar\n2. Terminar")
-                x6 = Main.escaner()
+                x6 = Main.escaner_con_rango(2)
                 if x6 == 1:
                     i = False
                 elif x6 == 2:
