@@ -7,7 +7,7 @@ from tkinter import scrolledtext
 def iniciar_ventana_usuario():
     # Ventana principal
     window = Tk()
-    window.geometry("680x420")
+    window.geometry("720x620")
     window.title("Generic IT")
     window.option_add("*tearOff", FALSE)
 
@@ -36,8 +36,8 @@ class HojaVida(Frame):
     _posicion_imagen = [(0, 0), (0, 1), (1, 0), (1, 1)]
     def __init__(self, window):
         super().__init__(window)
-        self._p5 = Frame(self)
-        self._p6 = Frame(self)
+        self._p5 = Frame(self,background="purple",bd=3, relief="solid")
+        self._p6 = Frame(self,background="green",bd=3, relief="solid")
         self._text = None
         self._next_hv = 0
         self._photos = [None, None, None, None]
@@ -69,8 +69,6 @@ class HojaVida(Frame):
     # Carga el component imagen que sirve para mostrar las fotos
     def cargar_hv_imagen(self, hv_num, numero):
         path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets', 'jhorman.png')
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"Image file not found at path: {path}")
         photo = PhotoImage(file=path)
         self._photos[numero] = photo  # Mantén la referencia a la imagen
         self._labels[numero].configure(image=photo)
@@ -91,8 +89,8 @@ class Bienvenida(Frame):
     def __init__(self, window):
         super().__init__(window)
         self._window = window
-        self._p3 = Frame(self)
-        self._p4 = Frame(self)
+        self._p3 = Frame(self,background="blue",bd=3, relief="solid")
+        self._p4 = Frame(self,background="red",bd=3, relief="solid")
         self._next_el = 0
         saludo = Entry(self._p3, width=100)
         self.saludo2 = scrolledtext.ScrolledText(self._p3, height=5)
@@ -146,6 +144,18 @@ class VentanaInicio(Tk):
         self.bienvenida = Bienvenida(self)
         self.hoja_vida.grid(row=0, column=1)
         self.bienvenida.grid(row=0, column=0)
+
+class FieldFrame(Frame):
+    def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado, tipos):
+        self._tituloCriterios = tituloCriterios
+        self._criterios = criterios
+        self._tituloValores = tituloValores
+        self._valores = valores
+        self._habilitado = habilitado
+        self._entries = list()
+        self._tipos = tipos
+        super().__init__(master)
+        self.actualizacion()
 
 if __name__ == "__main__":
     ventana = VentanaInicio()
