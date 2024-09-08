@@ -99,10 +99,10 @@ class Main(Identidad):
                 case 4:
                     Funcionalidad4.seleccion_tienda()
                 case 5:
-                    admin = Main.identificar_persona()
+                    admin = cls.identificar_persona()
                     Funcionalidad5.personalizar_tienda(admin)
                 case 6:
-                    cls.serializarTodo()
+                    EscritorLector.serializarTodo()
                     print("Ha salido del programa")
                     sys.exit(0)
                 case 7:
@@ -116,34 +116,6 @@ class Main(Identidad):
                     Main.escoger_funcionalidad()
 
 
-    @classmethod
-    def deserializarTodo(cls):
-        from gestorAplicacion.sujetos.persona import Persona
-        from gestorAplicacion.servicios.proveedor import Proveedor
-        Tienda.set_tiendas(Main.deserializar("tiendas"))
-        Persona.set_personas(Main.deserializar("personas"))
-        Tienda.set_desempleados(Main.deserializar("empleados"))
-        Proveedor.set_seis_proveedores(Main.deserializar("proveedores"))
-
-    @classmethod
-    def deserializar(cls,nombre):
-            with open("baseDatos/temp/"+nombre+".txt","rb") as file:
-                data=pickle.load(file)
-                file.close()
-                return data
-    @classmethod
-    def serializarTodo(cls):
-        from gestorAplicacion.sujetos.persona import Persona
-        from gestorAplicacion.servicios.proveedor import Proveedor
-        cls.serializar(Tienda.get_tiendas(),"tiendas")
-        cls.serializar(Persona.get_personas(),"personas")
-        cls.serializar(Tienda.get_desempleados(),"empleados")
-        cls.serializar(Proveedor.get_seis_proveedores(),"proveedores")
-    @classmethod
-    def serializar(cls,lista,nombre):
-        with open("baseDatos/temp/"+nombre+".txt","wb") as file:
-            pickle.dump(lista,file)
-
 if __name__ == "__main__":
     from gestorAplicacion.sujetos.cajero import Cajero
     from gestorAplicacion.sujetos.cliente import Cliente
@@ -153,8 +125,9 @@ if __name__ == "__main__":
     from gestorAplicacion.servicios.enums import Genero, TipoCaja, Edades, Tamano, Categoria
     from gestorAplicacion.servicios.pasillo import Pasillo
     from gestorAplicacion.servicios.tienda import Tienda
+    from baseDatos.escritorLector import EscritorLector
     main=Main()
-    Main.deserializarTodo()
+    EscritorLector.deserializarTodo()
 
     """  admin1 = Administrador("Beatriz Gómez", 201, 40, Genero.M, 12000.0)
     admin2 = Administrador("Ricardo Díaz", 202, 45, Genero.H, 15000.0)

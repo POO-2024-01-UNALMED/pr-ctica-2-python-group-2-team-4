@@ -253,13 +253,53 @@ class Tienda:
     @classmethod
     def mostrar_desempleados(cls):
         n=1
-        s=list()
+        s="  Empleado     Categoria \n"
         for desempleado in cls.desempleados:
-            s.append("\n"+n+"."+desempleado.nombre)
-            s.append("     ")
-            s.append(desempleado.tipo)
+            s+="\n"+n+"."+desempleado.nombre
+            s+="     "
+            s+=str(desempleado.tipo)+"\n"
             n+=1
         return str(s)
+
+    def contratar_empleados(self, x5):
+        quitados = []
+        if x5 == 1:
+            for e in self.get_desempleados():
+                from gestorAplicacion.sujetos.domiciliario import Domiciliario
+                if e.validar_criterios() and isinstance(e, Domiciliario):
+                    quitados.append(e)  # Se va de Desempleados
+                    self._empleados.append(e)  # Llega a esta lista
+                    e.set_tienda(self)
+        elif x5 == 2:
+            for e in self.get_desempleados():
+                from gestorAplicacion.sujetos.cajero import Cajero
+                if e.validar_criterios() and isinstance(e, Cajero):
+                    quitados.append(e)  # Se va de Desempleados
+                    self._empleados.append(e)  # Llega a esta lista
+                    self.asignar_cajero(e)
+        elif x5 == 3:
+            for e in self.get_desempleados():
+                from gestorAplicacion.sujetos.conserje import Conserje
+                if e.validar_criterios() and isinstance(e, Conserje):
+                    quitados.append(e)  # Se va de Desempleados
+                    self._empleados.append(e)  # Llega a esta lista
+                    e.set_tienda(self)
+
+        # Remover los empleados contratados de la lista de desempleados
+        for e in quitados:
+            Tienda.desempleados.remove(e)
+
+    def mostrar_empleados(self):
+        if len(self._empleados) == 0:
+            return "La tienda " + self.get_nombre() + " no tiene empleados"
+        else:
+            s = "  Empleado     Tipo \n"
+            for i in self._empleados:
+                s += "    "
+                s += i.get_nombre()
+                s += "        "
+                s += str(i.get_tipo()) + "\n"
+            return s
 
     def __str__(self):
         return self._nombre + self._saldo.__str__()

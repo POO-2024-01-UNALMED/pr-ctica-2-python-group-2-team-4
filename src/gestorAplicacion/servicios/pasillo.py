@@ -55,4 +55,5 @@ class Pasillo:
 
     def agregar_producto(self, producto):
         self.get_productos().append(producto)
+        producto.set_pasillo(self)
 

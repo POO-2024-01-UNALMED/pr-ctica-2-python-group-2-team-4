@@ -1,6 +1,6 @@
 from gestorAplicacion.sujetos.persona import Persona
-from gestorAplicacion.servicios.enums import Genero, TipoEmpleado
-from gestorAplicacion.servicios.tienda import Tienda
+#from gestorAplicacion.servicios.enums import Genero, TipoEmpleado
+#from gestorAplicacion.servicios.tienda import Tienda
 
 class Empleado(Persona):
     # Atributos----------------------------------------------------------------------------------------------------
