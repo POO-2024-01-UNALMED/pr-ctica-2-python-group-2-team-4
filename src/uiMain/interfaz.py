@@ -101,9 +101,9 @@ class Bienvenida(Frame):
 
         # Divisiones P3 y P4 en P1
         self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid")
-        self.frame_p3.pack(fill=X, padx=5, pady=5)
+        self.frame_p3.pack(fill=X, padx=5, pady=10)
 
-        self.frame_p4 = Frame(self._window, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid")
         self.frame_p4.pack(fill=BOTH, expand=True, padx=5, pady=(0, 5), anchor='s')
 
         self._next_el = 0
@@ -111,10 +111,16 @@ class Bienvenida(Frame):
         saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"))
         saludo.pack(pady=5)
 
-        self.saludo2 = scrolledtext.ScrolledText(self.frame_p3, height=8, width=90, padx=5, pady=5)
+        
+
+        frame_aux =Frame(self.frame_p3, height=120)
+        frame_aux.pack(fill=BOTH, expand=True, pady=5)
+
+        # self.saludo2.pack(fill=BOTH, expand=True, pady=5)
+        self.saludo2 = scrolledtext.ScrolledText(frame_aux, height=8, width=77, padx=5, pady=5)
         self.saludo2.tag_configure("center", justify="center")
         self.saludo2.insert(INSERT, "Descripcion texto largo de software My_Tiendita")
-        self.saludo2.pack(fill=BOTH, expand=True, pady=5)
+
 
         self._pantallazos = []
         for i in range(0, 5):
@@ -157,7 +163,7 @@ class VentanaInicio(Tk):
 
         self.menubar = Menu(self)
         inicio = Menu(self.menubar)
-        inicio.add_command(label="Descripcion", font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.bienvenida.saludo2.place(x=5, y=24))
+        inicio.add_command(label="Descripcion", font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.bienvenida.saludo2.pack(fill=BOTH, expand=True, pady=5))
         inicio.add_command(label="Salir", font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.destroy())
 
         self.menubar.add_cascade(label="Inicio", menu=inicio)
