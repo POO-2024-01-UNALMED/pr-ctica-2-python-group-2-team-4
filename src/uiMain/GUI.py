@@ -1,4 +1,7 @@
+import os
+import pathlib
 import tkinter as tk
+from tkinter import *
 
 # nuevo intento 
 def mostrar_miniatura(event):
@@ -109,6 +112,11 @@ frame_p5.pack(fill=tk.X, padx=5, pady=5)
 
 frame_p6 = tk.Frame(frame_p2, padx=5, pady=5, bd=2, relief="solid")
 frame_p6.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+
+for i in range(0, 5):
+            path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),'src\\assets\\pantallazo.png'.format(i))
+            pantallazo = PhotoImage(file=path)
+            self._pantallazos.append(pantallazo)
 
 root.mainloop()
 
