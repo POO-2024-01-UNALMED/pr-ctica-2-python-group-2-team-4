@@ -8,7 +8,7 @@ from tkinter.font import Font
 def iniciar_ventana_usuario():
     # Ventana principal
     window = Tk()
-    window.geometry("750x680")
+    window.state('zoomed')
     window.title("My_Tiendita_2.0")
     window.option_add("*tearOff", FALSE)
 
@@ -37,22 +37,31 @@ class HojaVida(Frame):
     _posicion_imagen = [(0, 0), (0, 1), (1, 0), (1, 1)]
     def __init__(self, window):
         super().__init__(window)
-        self._p5 = Frame(self,background="purple",bd=3, relief="solid",pady=10,padx=10)
-        self._p6 = Frame(self,background="green",bd=3, relief="solid",pady=10,padx=10)
+
+        self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p5.pack(fill=X, padx=5, pady=5)
+
+        self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p6.pack(fill=BOTH, expand=True, padx=5, pady=5)
+
         self._text = None
         self._next_hv = 0
         self._photos = [None, None, None, None]
         self._labels = []
         self.cargar_hv(0)
         for i in range(0, 4):
-            label = Label(self._p6, width=300, height=261)
+            label = Label(self.frame_p6)
             (r, c) = HojaVida._posicion_imagen[i]
             label.grid(row=r, column=c)
+
+            self.frame_p6.grid_rowconfigure(i, weight=1)
+            self.frame_p6.grid_columnconfigure(i, weight=1)
+            
+
             self._labels.append(label)
             # Se cargan las primeras imagenes
             self.cargar_hv_imagen(0, i)
-        self._p5.grid(sticky="nsew")
-        self._p6.grid(sticky="nsew")
+
 
 
     # Se usa para mostrar la hoja de vida que sigue, aumentando el atributo next_hv
@@ -77,8 +86,8 @@ class HojaVida(Frame):
 
     # Carga el texto para la hoja de vida respecto al numero asignado
     def cargar_hv(self, numero):
-        self._text = Text(self._p5,height=5)
-        self._text.grid(row=1, column=0,sticky="nsew")
+        self._text = Text(self.frame_p5,height=10, width=77)
+        self._text.place(x=2, y=0)
         self._text.bind('<Button-1>', self.proximo)
 
         path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\jhorman.txt'.format(numero))
@@ -90,29 +99,37 @@ class Bienvenida(Frame):
     def __init__(self, window):
         super().__init__(window)
         self._window = window
-        self._p3 = Frame(self,background="blue",bd=3, relief="solid",padx=10,height=110,width=780)
-        self._p4 = Frame(self,background="red",bd=3, relief="solid",pady=5,padx=10)
+
+            # Divisiones P3 y P4 en P1
+        self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p3.pack(fill=X, padx=5, pady=5)
+
+        self.frame_p4 = Frame(self._window, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p4.pack(fill=BOTH, expand=True, padx=5, pady=5)
+
         self._next_el = 0
-        saludo = Entry(self._p3, width=128)
-        self.saludo2 = scrolledtext.ScrolledText(self._p3, height=5, width=94)
-        self.saludo2.tag_configure("center", justify="center")
-        saludo.insert(INSERT, "Bienvenido al software de My_Tiendita")
+        
+        saludo = Label(self.frame_p3,text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"))
+
+        self.saludo2 = scrolledtext.ScrolledText(self.frame_p3, height=8, width=90, padx=5,pady=5)
+        self.saludo2.tag_configure("center", justify="center")    
         self.saludo2.insert(INSERT, "Descripcion texto largo de sowftware My_Tiendita")
-        saludo.place(x=-10, y=0)
+        saludo.place(x=8, y=1)
+
+        
+
         self._pantallazos = []
         for i in range(0, 5):
             path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),'src\\assets\\pantallazo.png'.format(i))
             pantallazo = PhotoImage(file=path)
             self._pantallazos.append(pantallazo)
 
-        self._label = Label(self._p4, image=self._pantallazos[0], height=500, width=750)
+        self._label = Label(self.frame_p4, image=self._pantallazos[0], height=350, width=600)
         self._label.bind('<Enter>', self.proximo)
         self._label.pack(pady=5)
 
-        button = Button(self._p4, text="Aca se ira a la otra ventana", command=self.abrir_ventana_principal)
-        button.pack(side="bottom")
-        self._p3.pack(side="top")
-        self._p4.pack(fill="y",expand=True)
+        button = Button(self.frame_p4, text="Aca se ira a la otra ventana", command=self.abrir_ventana_principal)
+        button.pack(side="bottom")     
 
     # Actualiza el proximo pantallazo de la aplicacion
     def proximo(self, _):
@@ -132,21 +149,30 @@ class Bienvenida(Frame):
 class VentanaInicio(Tk):
     def __init__(self):
         super().__init__()
-        self.title('Ventana Principal de Inicio')
-        self.option_add("*tearOff", False)
+        
+        self.title("Ventana Principal de Inicio")
+        self.state("zoomed")
+
+        # Frame principal 
+        frame_principal = Frame(self, padx=10, pady=10, bd=2, relief="solid")
+        frame_principal.pack(fill=BOTH, expand=True)
         self.menubar = Menu(self)
         inicio = Menu(self.menubar)
-        inicio.add_command(label="Descripcion",font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.bienvenida.saludo2.place(x=-10, y=20))
+        inicio.add_command(label="Descripcion",font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.bienvenida.saludo2.place(x=5, y=24))
         inicio.add_command(label="Salir",font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.destroy())
 
         self.menubar.add_cascade(label="Inicio", menu=inicio)
         self.config(menu=self.menubar)
-        frame1 = Frame(self,bd=3, relief="solid")
-        frame2 = Frame(self,bd=3, relief="solid")
-        frame1.pack(side="left",fill="both",pady=20,padx=20)
-        frame2.pack(side="right",fill="both",pady=20,padx=20)
-        self.bienvenida = Bienvenida(frame1)
-        self.hoja_vida = HojaVida(frame2)
+
+        # Divisiones P1 y P2
+        frame_p1 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid")
+        frame_p1.pack(side=LEFT, fill=BOTH, expand=True, padx=5, pady=5)
+
+        frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid")
+        frame_p2.pack(side=RIGHT, fill=BOTH, expand=True, padx=5, pady=5)
+
+        self.bienvenida = Bienvenida(frame_p1)
+        self.hoja_vida = HojaVida(frame_p2)
         self.bienvenida.pack(fill="both",expand=True)
         self.hoja_vida.pack(fill="both",expand=True)
 
