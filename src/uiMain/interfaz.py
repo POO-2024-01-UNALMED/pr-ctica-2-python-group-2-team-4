@@ -111,8 +111,8 @@ class Bienvenida(Frame):
 
         button = Button(self._p4, text="Aca se ira a la otra ventana", command=self.abrir_ventana_principal)
         button.pack(side="bottom")
-        self._p3.grid()
-        self._p4.grid()
+        self._p3.pack(side="top")
+        self._p4.pack(fill="y",expand=True)
 
     # Actualiza el proximo pantallazo de la aplicacion
     def proximo(self, _):
@@ -147,8 +147,8 @@ class VentanaInicio(Tk):
         frame2.pack(side="right",fill="both",pady=20,padx=20)
         self.bienvenida = Bienvenida(frame1)
         self.hoja_vida = HojaVida(frame2)
-        self.bienvenida.pack()
-        self.hoja_vida.pack()
+        self.bienvenida.pack(fill="both",expand=True)
+        self.hoja_vida.pack(fill="both",expand=True)
 
 class FieldFrame(Frame):
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado, tipos):
