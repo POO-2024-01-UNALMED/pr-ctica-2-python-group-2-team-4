@@ -2,13 +2,14 @@ import os
 import pathlib
 from tkinter import *
 from tkinter import scrolledtext
+from tkinter.font import Font
 
 
 def iniciar_ventana_usuario():
     # Ventana principal
     window = Tk()
-    window.geometry("720x620")
-    window.title("Generic IT")
+    window.geometry("750x680")
+    window.title("My_Tiendita_2.0")
     window.option_add("*tearOff", FALSE)
 
     # Métodos sin argumentos para poder ejecutarlos-------------------------------------
@@ -36,22 +37,22 @@ class HojaVida(Frame):
     _posicion_imagen = [(0, 0), (0, 1), (1, 0), (1, 1)]
     def __init__(self, window):
         super().__init__(window)
-        self._p5 = Frame(self,background="purple",bd=3, relief="solid")
-        self._p6 = Frame(self,background="green",bd=3, relief="solid")
+        self._p5 = Frame(self,background="purple",bd=3, relief="solid",pady=10,padx=10)
+        self._p6 = Frame(self,background="green",bd=3, relief="solid",pady=10,padx=10)
         self._text = None
         self._next_hv = 0
         self._photos = [None, None, None, None]
         self._labels = []
         self.cargar_hv(0)
         for i in range(0, 4):
-            label = Label(self._p6, width=300, height=200)
+            label = Label(self._p6, width=300, height=261)
             (r, c) = HojaVida._posicion_imagen[i]
             label.grid(row=r, column=c)
             self._labels.append(label)
             # Se cargan las primeras imagenes
             self.cargar_hv_imagen(0, i)
-        self._p5.grid()
-        self._p6.grid()
+        self._p5.grid(sticky="nsew")
+        self._p6.grid(sticky="nsew")
 
 
     # Se usa para mostrar la hoja de vida que sigue, aumentando el atributo next_hv
@@ -76,8 +77,8 @@ class HojaVida(Frame):
 
     # Carga el texto para la hoja de vida respecto al numero asignado
     def cargar_hv(self, numero):
-        self._text = Text(self._p5, height=10)
-        self._text.grid(row=1, column=0)
+        self._text = Text(self._p5,height=5)
+        self._text.grid(row=1, column=0,sticky="nsew")
         self._text.bind('<Button-1>', self.proximo)
 
         path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\jhorman.txt'.format(numero))
@@ -89,14 +90,15 @@ class Bienvenida(Frame):
     def __init__(self, window):
         super().__init__(window)
         self._window = window
-        self._p3 = Frame(self,background="blue",bd=3, relief="solid")
-        self._p4 = Frame(self,background="red",bd=3, relief="solid")
+        self._p3 = Frame(self,background="blue",bd=3, relief="solid",padx=10,height=110,width=780)
+        self._p4 = Frame(self,background="red",bd=3, relief="solid",pady=5,padx=10)
         self._next_el = 0
-        saludo = Entry(self._p3, width=100)
-        self.saludo2 = scrolledtext.ScrolledText(self._p3, height=5)
+        saludo = Entry(self._p3, width=128)
+        self.saludo2 = scrolledtext.ScrolledText(self._p3, height=5, width=94)
         self.saludo2.tag_configure("center", justify="center")
         saludo.insert(INSERT, "Bienvenido al software de My_Tiendita")
         self.saludo2.insert(INSERT, "Descripcion texto largo de sowftware My_Tiendita")
+        saludo.place(x=-10, y=0)
         self._pantallazos = []
         for i in range(0, 5):
             path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),'src\\assets\\pantallazo.png'.format(i))
@@ -105,13 +107,12 @@ class Bienvenida(Frame):
 
         self._label = Label(self._p4, image=self._pantallazos[0], height=500, width=750)
         self._label.bind('<Enter>', self.proximo)
-        self._label.pack()
+        self._label.pack(pady=5)
 
-        button = Button(self._p4, text="Ventana Principal del Admin", command=self.abrir_ventana_principal)
-        button.pack()
-        saludo.grid()
-        self._p3.pack()
-        self._p4.pack()
+        button = Button(self._p4, text="Aca se ira a la otra ventana", command=self.abrir_ventana_principal)
+        button.pack(side="bottom")
+        self._p3.grid()
+        self._p4.grid()
 
     # Actualiza el proximo pantallazo de la aplicacion
     def proximo(self, _):
@@ -125,25 +126,29 @@ class Bienvenida(Frame):
 
     # Carga la ventana principal del admin y cierra la ventana actual
     def abrir_ventana_principal(self):
-        self._window.destroy()
+        self._window.master.destroy()
         iniciar_ventana_usuario()
 
 class VentanaInicio(Tk):
     def __init__(self):
         super().__init__()
-        self.title('Generic IT')
+        self.title('Ventana Principal de Inicio')
         self.option_add("*tearOff", False)
         self.menubar = Menu(self)
         inicio = Menu(self.menubar)
-        inicio.add_command(label="Descripcion", command=lambda: self.bienvenida.saludo2.grid())
-        inicio.add_command(label="Salir", command=lambda: self.destroy())
+        inicio.add_command(label="Descripcion",font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.bienvenida.saludo2.place(x=-10, y=20))
+        inicio.add_command(label="Salir",font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.destroy())
 
         self.menubar.add_cascade(label="Inicio", menu=inicio)
         self.config(menu=self.menubar)
-        self.hoja_vida = HojaVida(self)
-        self.bienvenida = Bienvenida(self)
-        self.hoja_vida.grid(row=0, column=1)
-        self.bienvenida.grid(row=0, column=0)
+        frame1 = Frame(self,bd=3, relief="solid")
+        frame2 = Frame(self,bd=3, relief="solid")
+        frame1.grid(row=0, column=0,pady=5,padx=5)
+        frame2.grid(row=0, column=1,pady=5,padx=5)
+        self.bienvenida = Bienvenida(frame1)
+        self.hoja_vida = HojaVida(frame2)
+        self.bienvenida.pack()
+        self.hoja_vida.pack()
 
 class FieldFrame(Frame):
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado, tipos):
