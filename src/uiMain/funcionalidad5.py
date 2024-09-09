@@ -1,9 +1,9 @@
-
+import sys
 
 class Funcionalidad5:
 
     @classmethod
-    def personalizar_tienda(cls,admin):
+    def personalizar_tienda(cls, admin):
         from uiMain.main import Main
         from gestorAplicacion.servicios.tienda import Tienda
         Main.lineas()
@@ -16,7 +16,8 @@ class Funcionalidad5:
 
         tiendas = Tienda.get_tiendas()
 
-        for i in range(0,1,len(tiendas) - 1):
+        # Corregido: bucle invertido y pop durante la iteración
+        for i in reversed(range(len(tiendas))):
             if tiendas[i].get_dueno() is not None or tiendas[i].get_estado() == "cerrado":
                 tiendas.pop(i)
 
@@ -26,7 +27,13 @@ class Funcionalidad5:
             print(f"| {i+1:2d} | {nombre_tienda:<28} | {precio_tienda:>8} |")
 
         print("+----+------------------------------+----------+")
-        eleccion = Main.escaner()-1
+        eleccion = Main.escaner() - 1
+
+        # Validación de entrada del usuario
+        if eleccion < 0 or eleccion >= len(tiendas):
+            print("Selección inválida. Por favor, intenta de nuevo.")
+            return
+
         tien = tiendas[eleccion]
 
         diferencia = admin.get_dinero() - tien.get_saldo()
@@ -38,6 +45,9 @@ class Funcionalidad5:
             print(f"Ahora eres el dueño de la tienda: \"{tien.get_nombre()}\"")
             admin.set_dinero(diferencia)
             print(f"Tu saldo ahora es de: ${diferencia:.2f}")
+        else:
+            print("No tienes suficiente dinero para comprar esta tienda.")
+            return
 
         iterar = True
         while iterar:
@@ -102,7 +112,7 @@ class Funcionalidad5:
             entrega = prov.get_entrega()
             s = ""
             for p in entrega:
-                iter =True
+                iter = True
                 while iter:
                     diferencia = tien.get_saldo() - p.get_precio()
                     if diferencia >= 0:
@@ -118,11 +128,12 @@ class Funcionalidad5:
                             admin.set_dinero(0)
                         elif l == 2:
                             print("Se terminó el pedido al proveedor")
+                            iter = False
                         else:
                             print("Entrada inválida")
                     else:
                         s = "Dinero insuficiente\nTerminando pedido"
-                        break
+                        iter = False
             print(s)
 
     @staticmethod
@@ -138,7 +149,7 @@ class Funcionalidad5:
             print(Tienda.mostrar_desempleados())
             Main.lineas()
             print(f"¿Qué tipo de empleado necesita que sea el empleado número {j}?")
-            ems = ["Domiciliario", "Concerje", "Cajero"]
+            ems = ["Domiciliario", "Conserje", "Cajero"]  # Corregido "Conserje"
             for n, e in enumerate(ems, 1):
                 print(f"{n}. {e}")
             x5 = Main.escaner_con_rango(3)
