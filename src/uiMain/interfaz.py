@@ -101,10 +101,10 @@ class Bienvenida(Frame):
 
         # Divisiones P3 y P4 en P1
         self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid")
-        self.frame_p3.pack(fill=X, padx=5, pady=10)
+        self.frame_p3.pack(fill=X, padx=5, pady=5)
 
         self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid")
-        self.frame_p4.pack(fill=BOTH, expand=True, padx=5, pady=(0, 5), anchor='s')
+        self.frame_p4.pack(fill=BOTH, expand=True, padx=5, pady=(5,0), anchor='s')
 
         self._next_el = 0
 
@@ -147,7 +147,7 @@ class Bienvenida(Frame):
 
     # Carga la ventana principal del admin y cierra la ventana actual
     def abrir_ventana_principal(self):
-        self._window.master.destroy()
+        self._window.master.master.destroy()
         iniciar_ventana_usuario()
 
 class VentanaInicio(Tk):
