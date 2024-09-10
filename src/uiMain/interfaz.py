@@ -1,7 +1,8 @@
 import os
 import pathlib
+import tkinter
 from tkinter import *
-from tkinter import scrolledtext
+from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 
 #from numpy.random import random, randint
@@ -140,22 +141,11 @@ def iniciar_ventana_usuario():
 
     # Abre la pestana de dialogo con los nombres de los integrantes del equipo
     def open_popup():
-        top = Toplevel(window)
-        top.grid_rowconfigure(0, weight=1)
-        top.geometry("450x250")
-        top.resizable(False, False)
-        top.title("Ayuda")
-        Label(top, text="Integrantes del equipo:\n- Jhorman Shair Ramirez Henao\n- Juan Esteban Pineda Henao\n- Juan Diego Ordoñez Londoño\n- Jordan Sanchez Torres", font=('Comic Sans MS', 18, 'bold italic')).pack(fill=BOTH, expand=True)
-
+        messagebox.showinfo("Titulo","Integrantes del equipo:\n- Jhorman Shair Ramirez Henao\n- Juan Esteban Pineda Henao\n- Juan Diego Ordoñez Londoño\n- Jordan Sanchez Torres")
     # Abre la pestana de dialogo con la informacion del programa y su funcionalidad.
     def aplicacion_popup():
-        top = Toplevel(window)
-        top.geometry("580x320")
-        top.resizable(False, False)
-        top.title("Aplicación")
-        Label(top, text=textonimo, font=('Times 12')).pack(fill=BOTH, expand=True)
-
-    textonimo = "La aplicación My_Tiendita_2.0 es un software que permite la gestión de una tienda de tecnología. \n "
+        textonimo = "La aplicación My_Tiendita_2.0 es un software que permite la gestión de una tienda de tecnología. \n "
+        messagebox.showinfo("Titulo descriptivo", textonimo)
     # ----------------------------------------------------------------------------------
     def salir():
         framesAMatar = []
