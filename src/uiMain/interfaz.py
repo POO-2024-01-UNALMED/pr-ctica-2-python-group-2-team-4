@@ -58,8 +58,7 @@ def iniciar_ventana_usuario():
 
     def matarloTodo(frameUtilizado):
         for frame in framesAMatar:
-            # frame.pack_forget()  # Comentado por error
-            pass
+            frame.pack_forget()  # Comentado por error
         frameUtilizado.pack(fill=BOTH, expand=True)
 
     def outPut(string, text):
@@ -77,7 +76,7 @@ def iniciar_ventana_usuario():
     def evtGenerarCliente():
         #cliente = generarCliente()
         #outPut("Se genero el cliente ID: " + str(Cliente.clientes.index(cliente)) + " " + cliente.__str__(),
-         #      outputGenerarCliente)
+        #      outputGenerarCliente)
         matarloTodo(outputGenerarCliente)
 
     def evtSolicitarServicio():
@@ -142,6 +141,7 @@ def iniciar_ventana_usuario():
     # Abre la pestana de dialogo con los nombres de los integrantes del equipo
     def open_popup():
         messagebox.showinfo("Titulo","Integrantes del equipo:\n- Jhorman Shair Ramirez Henao\n- Juan Esteban Pineda Henao\n- Juan Diego Ordoñez Londoño\n- Jordan Sanchez Torres")
+
     # Abre la pestana de dialogo con la informacion del programa y su funcionalidad.
     def aplicacion_popup():
         textonimo = "La aplicación My_Tiendita_2.0 es un software que permite la gestión de una tienda de tecnología. \n "
@@ -179,21 +179,13 @@ def iniciar_ventana_usuario():
     # submenu de procesos y consultas
     submenu = Menu(window)
     submenu.add_command(label="Crear cliente manualmente", command=evtClienteManual)
-    submenu.add_command(label="Generar cliente", command=evtGenerarCliente)
-    submenu.add_command(label="Solicitar servicio", command=evtSolicitarServicio)
-    submenu.add_command(label="Diagnosticar producto", command=evtDiagnosticarProducto)
 
     menuarchivo.add_command(label="Aplicacion", command=aplicacion_popup)
     menuarchivo.add_command(label="Guardar y salir", command=salir)
 
-    menuprocesos.add_cascade(label="Menu diagnosticar un producto", menu=submenu)
+    menuprocesos.add_cascade(label="Menu creaciones y destrucciones", menu=submenu)
 
-    menuprocesos.add_command(label="Reparar un producto", command=evtRepararProducto)
-    menuprocesos.add_command(label="Finalizar un servicio", command=evtFinalizarServicio)
-    menuprocesos.add_command(label="Cobrar un servicio", command=evtCobrarServicio)
-    menuprocesos.add_command(label="Liquidar el periodo", command=evtLiquidarPeriodo)
-    menuprocesos.add_command(label="Mostrar clientes", command=evtMostrarClientes)
-    menuprocesos.add_command(label="Mostrar servicios", command=evtMostrarServicios)
+    menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
 
     menuayuda.add_command(label="Acerca de", command=open_popup)
 
@@ -305,7 +297,7 @@ def iniciar_ventana_usuario():
     repararProducto = Frame(window)
     nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
     dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
-    FFrepararProducto = FieldFrame(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
+    FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
     outputRepararProducto = Text(repararProducto, height=3)
     framesAMatar.append(outputRepararProducto)
 
@@ -329,7 +321,7 @@ def iniciar_ventana_usuario():
     finalizarServicio = Frame(window)
     nombreFinalizarServicio = Label(finalizarServicio, text="Finalizar un servicio", bd=10)
     dcrFinalizarServicio = Label(finalizarServicio, text="Ingrese el ID del servicio a finalizar", bd=10)
-    FFfinalizarServicio = FieldFrame(finalizarServicio, None, ["ID Servicio"], None, [None], [], [1])
+    FFfinalizarServicio = FieldFrame_p(finalizarServicio, None, ["ID Servicio"], None, [None], [], [1])
     outputFinalizarServicio = Text(finalizarServicio, height=6)
     framesAMatar.append(outputFinalizarServicio)
 
@@ -354,7 +346,7 @@ def iniciar_ventana_usuario():
     cobrarServicio = Frame(window)
     nombreCobrarServicio = Label(cobrarServicio, text="Cobrar un servicio", bd=10)
     dcrCobrarServicio = Label(cobrarServicio, text="Ingrese el ID del servicio a cobrar", bd=10)
-    FFcobrarServicio = FieldFrame(cobrarServicio, None, ["ID Servicio"], None, [None], [], [1])
+    FFcobrarServicio = FieldFrame_p(cobrarServicio, None, ["ID Servicio"], None, [None], [], [1])
     outputCobrarServicio = Text(cobrarServicio, height=3)
     framesAMatar.append(outputCobrarServicio)
 
@@ -480,16 +472,16 @@ class Bienvenida(Frame):
 
         self._next_el = 0
 
-        saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"))
+        saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"),bg="light blue")
         saludo.pack(pady=5)
 
         
 
-        frame_aux =Frame(self.frame_p3, height=120)
-        frame_aux.pack(fill=BOTH, expand=True, pady=5)
+        self.frame_aux =Frame(self.frame_p3, height=120,bg="light blue")
+        self.frame_aux.pack(fill=BOTH, expand=True)
 
         # self.saludo2.pack(fill=BOTH, expand=True, pady=5)
-        self.saludo2 = scrolledtext.ScrolledText(frame_aux, height=8, width=77, padx=5, pady=5)
+        self.saludo2 = scrolledtext.ScrolledText(self.frame_aux, height=8, width=77, padx=5)
         self.saludo2.tag_configure("center", justify="center")
         self.saludo2.insert(INSERT, "Descripcion texto largo de software My_Tiendita")
 
@@ -502,7 +494,7 @@ class Bienvenida(Frame):
 
         self._label = Label(self.frame_p4, image=self._pantallazos[0], height=350, width=600)
         self._label.bind('<Enter>', self.proximo)
-        self._label.pack(pady=5)
+        self._label.pack(pady=5,fill="both", expand=True)
 
         button = Button(self.frame_p4, text="Aca se ira a la otra ventana", command=self.abrir_ventana_principal)
         button.pack(side="bottom", pady=5)
@@ -523,6 +515,14 @@ class Bienvenida(Frame):
         iniciar_ventana_usuario()
 
 class FieldFrame(Tk):
+    def poner_descripcion(self):
+        saludo2 = self.bienvenida.saludo2
+        if self.confirmacion:
+            saludo2.pack_forget()
+            self.confirmacion = False
+        else:
+            saludo2.pack(fill=BOTH, expand=True, pady=5)
+            self.confirmacion = True
     def __init__(self):
         super().__init__()
 
@@ -535,14 +535,15 @@ class FieldFrame(Tk):
 
         self.menubar = Menu(self)
         inicio = Menu(self.menubar)
-        inicio.add_command(label="Descripcion", font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.bienvenida.saludo2.pack(fill=BOTH, expand=True, pady=5))
+        self.confirmacion=False
+        inicio.add_command(label="Descripcion", font=Font(family="Georgia", size=8, weight="bold"), command=self.poner_descripcion)
         inicio.add_command(label="Salir", font=Font(family="Georgia", size=8, weight="bold"), command=lambda: self.destroy())
 
         self.menubar.add_cascade(label="Inicio", menu=inicio)
         self.config(menu=self.menubar)
 
         # Divisiones P1 y P2
-        frame_p1 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        frame_p1 = Frame(frame_principal,padx=5, pady=5, bd=2, relief="solid",bg="light blue")
         frame_p1.pack(side=LEFT, fill=BOTH, expand=True, padx=5, pady=5)
 
         frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
