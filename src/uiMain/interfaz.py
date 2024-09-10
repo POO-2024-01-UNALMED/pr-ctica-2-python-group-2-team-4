@@ -46,6 +46,9 @@ def iniciar_ventana_usuario():
     window = Tk()
     window.state('zoomed')
     window.title("My_Tiendita_2.0")
+
+    # Icono de la ventana
+    window.iconbitmap(os.path.join(pathlib.Path(__file__).parent.parent, 'assets', 'jhorman.ico'))
     window.option_add("*tearOff", FALSE)
 
     # Métodos sin argumentos para poder ejecutarlos-------------------------------------
@@ -142,7 +145,7 @@ def iniciar_ventana_usuario():
         top.geometry("450x250")
         top.resizable(False, False)
         top.title("Ayuda")
-        Label(top, text="Integrantes del equipo:\n- Jhorman Shair Ramirez Henao\n- Juan Esteban Pineda Henao\n- Juan Diego Ordoñez Londoño\n- Jordan Sanchez Torres", font=('Times 12')).pack(fill=BOTH, expand=True)
+        Label(top, text="Integrantes del equipo:\n- Jhorman Shair Ramirez Henao\n- Juan Esteban Pineda Henao\n- Juan Diego Ordoñez Londoño\n- Jordan Sanchez Torres", font=('Comic Sans MS', 18, 'bold italic')).pack(fill=BOTH, expand=True)
 
     # Abre la pestana de dialogo con la informacion del programa y su funcionalidad.
     def aplicacion_popup():
@@ -152,8 +155,7 @@ def iniciar_ventana_usuario():
         top.title("Aplicación")
         Label(top, text=textonimo, font=('Times 12')).pack(fill=BOTH, expand=True)
 
-    textonimo = "Generic IT es una compañía tecnológica.\nSe busca crear un programa que emule las interacciones de Generic IT,\npara mejorar la organización de la empresa y proveer un mejor servicio.\nSe tendrá en cuenta toda la cadena de servicio, desde que llega el\ncliente con un producto a reparar, su paso por las manos del ténico,\nlas partes que tendrán que ser cambiadas, hasta finalizar con la\ndevolución del producto y el pago del servicio."
-
+    textonimo = "La aplicación My_Tiendita_2.0 es un software que permite la gestión de una tienda de tecnología. \n "
     # ----------------------------------------------------------------------------------
     def salir():
         framesAMatar = []
@@ -388,7 +390,7 @@ def iniciar_ventana_usuario():
 class Inicio(Frame):
     def __init__(self, window):
         super().__init__(window)
-        text = scrolledtext.ScrolledText(self)
+        text = scrolledtext.ScrolledText(self,height=100,width=300)
         text.pack()
         path = os.path.join(pathlib.Path(__file__).parent.parent.absolute(),"instrucciones.txt")
         with open(path, "r+") as instrucciones:
