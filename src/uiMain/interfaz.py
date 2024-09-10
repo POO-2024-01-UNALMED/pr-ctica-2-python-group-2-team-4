@@ -83,6 +83,10 @@ class HojaVida(Frame):
             txt="jhorman"
         elif self._next_hv==1:
             txt="juanes"
+        elif self._next_hv == 2:
+            txt = "juanDiego"
+        else:
+            txt="jordan"
 
         with open(os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\'+txt+".txt"), "r+") as hv_text:
             self._text.insert(INSERT, hv_text.read())
