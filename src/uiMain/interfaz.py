@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import scrolledtext
 from tkinter.font import Font
 
-from numpy.random import random, randint
+#from numpy.random import random, randint
 
 
 class FieldFrame_p(Frame):
@@ -423,7 +423,15 @@ class HojaVida(Frame):
             self.cargar_hv_imagen(0, i)
 
     def cargar_hv_imagen(self, hv_num, numero):
-        path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets', 'jhorman.png')
+        if self._next_hv==0:
+            png="jhorman/foto"+str(numero+1)
+        elif self._next_hv==1:
+            png="juanes/foto"+str(numero+1)
+        elif self._next_hv == 2:
+            png = "juanDiego"
+        else:
+            png="jordan"
+        path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets', png+'.png')
         if not os.path.exists(path):
             raise FileNotFoundError(f"Image file not found at path: {path}")
 
