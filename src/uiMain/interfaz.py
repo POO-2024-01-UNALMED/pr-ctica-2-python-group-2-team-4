@@ -448,7 +448,7 @@ class HojaVida(Frame):
     def cargar_hv(self, numero):
         self._text = Text(self.frame_p5, height=10, width=77)
         self._text.pack(fill=BOTH, expand=True)
-        self._text.bind('<Button-1>', self.proximo)
+        self._text.bind('<Button>', self.proximo)
 
         #path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\jhorman.txt'.format(numero))
         if self._next_hv==0:
@@ -504,8 +504,8 @@ class Bienvenida(Frame):
 
 
         self._pantallazos = []
-        for i in range(0, 5):
-            path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\pantallazo.png'.format(i))
+        for i in range(0, 2):
+            path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\pantallazos\\pantallazo'+str(i+1)+'.png')
             pantallazo = PhotoImage(file=path)
             self._pantallazos.append(pantallazo)
 
