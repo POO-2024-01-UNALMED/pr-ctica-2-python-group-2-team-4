@@ -493,7 +493,7 @@ class Bienvenida(Frame):
             self._pantallazos.append(pantallazo)
 
         self._label = Label(self.frame_p4, image=self._pantallazos[0], height=350, width=600)
-        self._label.bind('<Enter>', self.proximo)
+        self._label.bind('<Leave>', self.proximo)
         self._label.pack(pady=5,fill="both", expand=True)
 
         button = Button(self.frame_p4, text="Aca se ira a la otra ventana", command=self.abrir_ventana_principal)
