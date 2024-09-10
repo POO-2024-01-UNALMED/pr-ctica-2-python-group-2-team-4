@@ -78,12 +78,17 @@ class HojaVida(Frame):
         self._text.pack(fill=BOTH, expand=True)
         self._text.bind('<Button-1>', self.proximo)
 
-        path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\jhorman.txt'.format(numero))
+        #path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\jhorman.txt'.format(numero))
+        if self._next_hv==0:
+            txt="jhorman"
+        elif self._next_hv==1:
+            txt="juanes"
 
-        with open(path, "r+") as hv_text:
+        with open(os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\'+txt+".txt"), "r+") as hv_text:
             self._text.insert(INSERT, hv_text.read())
 
     def proximo(self, _):
+        self._text.destroy()
         if self._next_hv < 3:
             self._next_hv = self._next_hv + 1
         else:
