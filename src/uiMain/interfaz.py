@@ -403,10 +403,10 @@ class HojaVida(Frame):
     def __init__(self, window):
         super().__init__(window)
 
-        self.frame_p5 = Frame(self, height=180, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
         self.frame_p5.pack(fill=X, padx=5, pady=5)
 
-        self.frame_p6 = Frame(self, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
         self.frame_p6.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         self._text = None
@@ -423,6 +423,7 @@ class HojaVida(Frame):
             self.frame_p6.grid_columnconfigure(c, weight=1)
             self._labels.append(label)
             self.cargar_hv_imagen(0, i)
+        self.pack()
 
     def cargar_hv_imagen(self, hv_num, numero):
         if self._next_hv==0:
@@ -481,10 +482,10 @@ class Bienvenida(Frame):
         self._window = window
 
         # Divisiones P3 y P4 en P1
-        self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
         self.frame_p3.pack(fill=X, padx=5, pady=5)
 
-        self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid")
+        self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
         self.frame_p4.pack(fill=BOTH, expand=True, padx=5, pady=(5,0), anchor='s')
 
         self._next_el = 0
@@ -539,7 +540,7 @@ class FieldFrame(Tk):
         self.state("zoomed")
 
         # Frame principal
-        frame_principal = Frame(self, padx=10, pady=10, bd=2, relief="solid")
+        frame_principal = Frame(self, padx=10, pady=10, bd=2, relief="solid",bg="orange")
         frame_principal.pack(fill=BOTH, expand=True)
 
         self.menubar = Menu(self)
@@ -551,16 +552,14 @@ class FieldFrame(Tk):
         self.config(menu=self.menubar)
 
         # Divisiones P1 y P2
-        frame_p1 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid")
+        frame_p1 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
         frame_p1.pack(side=LEFT, fill=BOTH, expand=True, padx=5, pady=5)
 
-        frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid")
+        frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
         frame_p2.pack(side=RIGHT, fill=BOTH, expand=True, padx=5, pady=5)
 
         self.bienvenida = Bienvenida(frame_p1)
         self.hoja_vida = HojaVida(frame_p2)
-        self.bienvenida.pack(fill=BOTH, expand=True)
-        self.hoja_vida.pack(fill=BOTH, expand=True)
 
 if __name__ == "__main__":
     ventana = FieldFrame()
