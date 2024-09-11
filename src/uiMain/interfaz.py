@@ -514,7 +514,7 @@ class Bienvenida(Frame):
         self._window.master.master.destroy()
         iniciar_ventana_usuario()
 
-class FieldFrame(Tk):
+class FieldFrame_2(Tk):
     def poner_descripcion(self):
         saludo2 = self.bienvenida.saludo2
         if self.confirmacion:
@@ -523,9 +523,10 @@ class FieldFrame(Tk):
         else:
             saludo2.pack(fill=BOTH, expand=True, pady=5)
             self.confirmacion = True
+    
     def __init__(self):
         super().__init__()
-
+    def crearVentana1(self):
         self.title("Ventana Principal de Inicio")
         self.state("zoomed")
 
@@ -553,5 +554,10 @@ class FieldFrame(Tk):
         self.hoja_vida = HojaVida(frame_p2)
 
 if __name__ == "__main__":
-    ventana = FieldFrame()
+    from .fieldFrame import FieldFrame
+    ventana = FieldFrame_2()
+    ventana.crearVentana1()
     ventana.mainloop()
+    ventana2=FieldFrame(None,None,None,None,None)
+    ventana2.crearProceso()
+    ventana2.mainloop()
