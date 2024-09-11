@@ -572,6 +572,7 @@ if __name__ == "__main__":
     ventana = FieldFrame_2()
     ventana.crearVentana1()
     ventana.mainloop()
-    ventana2=FieldFrame(None,None,None,None,None)
-    ventana2.crearProceso()
+    ventana2=Tk()
+    fieldf=FieldFrame(ventana2, None,None,None,None,None)
     ventana2.mainloop()
+

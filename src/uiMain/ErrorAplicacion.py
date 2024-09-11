@@ -1,11 +1,17 @@
 class ErrorAplicacion(Exception):
-    pass
+    def __init__(self, mensaje):
+        self.mensaje = mensaje
+
+    def __str__(self):
+        return self.mensaje
 
 class CategoriaPropia1(ErrorAplicacion):
-    pass
+    def __init__(self,mensaje):
+        super().__init__(mensaje)
 
 class CategoriaPropia2(ErrorAplicacion):
-    pass
+    def __init__(self,mensaje):
+        super().__init__(mensaje)
 
 class ExceptionInventada1(CategoriaPropia1):
     pass

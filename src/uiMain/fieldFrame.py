@@ -1,15 +1,18 @@
-from tkinter import Frame, Label
+from tkinter import Frame, Label, LEFT, BOTH
+
+
 class FieldFrame(Frame):
-    def __init__(self, tituloCriterios, criterios, tituloValores, valores, habilitado):
-        super().__init__()
+    def __init__(self, master ,tituloCriterios, criterios, tituloValores, valores, habilitado):
+        super().__init__(master)
         self._tituloCriterios = tituloCriterios
         self._criterios = criterios
         self._tituloValores = tituloValores
         self._valores = valores
         self._habilitado = habilitado
-    def crearProceso(self):
-        proceso = Frame(self)
-        label = Label(self, text="Proceso o Consulta", bd=10)
+
+        zona2=Frame(self)
+        zona2.pack()
+        label = Label(zona2, text="Proceso o Consulta", bd=10)
         descripcion = Label(self, text="Descripcion proceso/consulta", bd=10)
         label.pack()
         descripcion.pack()
