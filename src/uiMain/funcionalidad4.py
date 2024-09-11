@@ -1,5 +1,5 @@
 from typing import List, Optional
-
+import gestorAplicacion
 
 class Funcionalidad4:
     from gestorAplicacion.servicios.producto import Producto

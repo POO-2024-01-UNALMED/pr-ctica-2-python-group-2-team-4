@@ -87,6 +87,14 @@ def iniciar_ventana_usuario():
 
     def evtRepararProducto():
         matarloTodo(repararProducto)
+        
+        
+    def definir_rol():
+        matarloTodo    
+        
+    def event_definirRol():
+        
+        matarloTodo(frame_func4)
 
     def evtFinalizarServicio():
         matarloTodo(finalizarServicio)
@@ -186,6 +194,8 @@ def iniciar_ventana_usuario():
     menuprocesos.add_cascade(label="Menu creaciones y destrucciones", menu=submenu)
 
     menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
+    
+    menuprocesos.add_command(label="Funcionalidad 4", command=event_definirRol)
 
     menuayuda.add_command(label="Acerca de", command=open_popup)
 
@@ -291,8 +301,12 @@ def iniciar_ventana_usuario():
     dcrDiagnosticarProducto.pack()
     FFdiagnosticarProducto.pack()
     framesAMatar.append(diagnosticarProducto)
-    # -------------------------------------------------------------------------------
+    # frame de funcionalidad 4-------------------------------------------------------------------
 
+    frame_func4 = Frame(window)
+    titilo_rol = Label(frame_func4, text="seleccion de rol", bd=10)
+    seleccionId = Label(frame_func4, text="Ingrese su ID ", bd=10)
+    
     # Frame de Reparar un producto-----------------------------------------------------
     repararProducto = Frame(window)
     nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
@@ -554,7 +568,7 @@ class FieldFrame_2(Tk):
         self.hoja_vida = HojaVida(frame_p2)
 
 if __name__ == "__main__":
-    from .fieldFrame import FieldFrame
+    from fieldFrame import FieldFrame
     ventana = FieldFrame_2()
     ventana.crearVentana1()
     ventana.mainloop()
