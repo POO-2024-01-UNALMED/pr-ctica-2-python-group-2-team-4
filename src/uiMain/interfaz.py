@@ -43,19 +43,6 @@ class FieldFrame_p(Frame):
 
 
 def iniciar_ventana_usuario():
-    # Ventana principal
-    window = Tk()
-    window.state('zoomed')
-    window.title("My_Tiendita_2.0")
-
-    # Icono de la ventana
-    window.iconbitmap(os.path.join(pathlib.Path(__file__).parent.parent, 'assets', 'jhorman.ico'))
-    window.option_add("*tearOff", FALSE)
-
-    # Métodos sin argumentos para poder ejecutarlos-------------------------------------
-
-    framesAMatar = []
-
     def matarloTodo(frameUtilizado):
         for frame in framesAMatar:
             frame.pack_forget()  # Comentado por error
@@ -69,11 +56,7 @@ def iniciar_ventana_usuario():
     def evtClienteManual():
         matarloTodo(cliente_manual)
 
-    # Output de Generar cliente
-    outputGenerarCliente = Text(window, height=3)
-    framesAMatar.append(outputGenerarCliente)
-
-    def evtGenerarCliente():
+    """def evtGenerarCliente():
         #cliente = generarCliente()
         #outPut("Se genero el cliente ID: " + str(Cliente.clientes.index(cliente)) + " " + cliente.__str__(),
         #      outputGenerarCliente)
@@ -83,10 +66,10 @@ def iniciar_ventana_usuario():
         matarloTodo(solicitarServicio)
 
     def evtDiagnosticarProducto():
-        matarloTodo(diagnosticarProducto)
+        matarloTodo(diagnosticarProducto)"""
 
     def evtRepararProducto():
-        matarloTodo(repararProducto)
+        matarloTodo(frame1)
         
         
     def definir_rol():
@@ -101,10 +84,6 @@ def iniciar_ventana_usuario():
 
     def evtCobrarServicio():
         matarloTodo(cobrarServicio)
-
-    # Output de Liquidar el periodo
-    outputLiquidarPeriodo = Text(window, height=6)
-    framesAMatar.append(outputLiquidarPeriodo)
 
     def evtLiquidarPeriodo():
         pass
@@ -164,6 +143,96 @@ def iniciar_ventana_usuario():
     def evento():
         pass
 
+    def creacionCliente():
+        pass
+        #try:
+            # cliente = Cliente(crearCliente.getValores())  # Comentado por error
+        #    pass
+        #except ErrorAplicacion as e:
+            # output.insert(INSERT, str(e))  # Comentado por error
+        #    pass
+
+    # Creacion de los botones para aceptar y borrar de creacion manual de cliente
+    #crearCliente.crearBotones(creacionCliente)  # Aceptar             Borrar
+
+    # --------------------------------------------------------------------------------
+
+    # Frame de Solicitar servicio-----------------------------------------------------
+    """solicitarServicio = Frame(window)
+    nombreSolicitarServicio = Label(solicitarServicio, text="Solicitar servicio", bd=10)
+    dcrSolicitarServicio = Label(solicitarServicio,
+                                 text="Ingrese el ID del cliente para solicitar la reparacion de su producto", bd=10)
+    FFsolicitarServicio = FieldFrame_p(solicitarServicio, None, ["ID cliente"], None, [None], [], [1])
+    outputsolicitarServicio = Text(solicitarServicio, height=3)
+    framesAMatar.append(outputsolicitarServicio)"""
+
+    def aceptarSolicitarServicio():
+        pass
+       # try:
+            # cliente = Cliente.getClientes()[int(FFsolicitarServicio.getValue("ID cliente"))]  # Comentado por error
+          #  pass
+        #except ErrorAplicacion as e:
+            # outputsolicitarServicio.insert(INSERT, str(e))  # Comentado por error
+          #  pass
+
+    """FFsolicitarServicio.crearBotones(aceptarSolicitarServicio)
+
+    nombreSolicitarServicio.pack()
+    dcrSolicitarServicio.pack()
+    FFsolicitarServicio.pack()
+    framesAMatar.append(solicitarServicio)"""
+    # -------------------------------------------------------------------------------
+    # @summary Diagnostica el servicio seleccionado por el administrador.
+    # Frame de Diagnosticar producto-----------------------------------------------------
+    """diagnosticarProducto = Frame(window)
+    nombreDiagnosticarProducto = Label(diagnosticarProducto, text="Diagnosticar un producto", bd=10)
+    dcrDiagnosticarProducto = Label(diagnosticarProducto, text="Ingrese el ID del servicio a diagnosticar", bd=10)
+    FFdiagnosticarProducto = FieldFrame_p(diagnosticarProducto, None, ["ID Servicio"], None, [None], [], [1])
+    outputDiagnosticarProducto = Text(diagnosticarProducto, height=7)
+    framesAMatar.append(outputDiagnosticarProducto)"""
+
+    def aceptarDiagnosticarProducto():
+        #try:
+            # servicio = Servicio.getServicios()[int(FFdiagnosticarProducto.getValue("ID Servicio"))]  # Comentado por error
+            pass
+        #except ErrorAplicacion as e:
+            # outputDiagnosticarProducto.insert(INSERT, str(e))  # Comentado por error
+        #    pass
+    def aceptarRepararProducto():
+        #try:
+            # servicio = Servicio.getServicios()[int(FFrepararProducto.getValue("ID Servicio"))]  # Comentado por error
+            #pass
+        #except ErrorAplicacion as e:
+            # outputRepararProducto.insert(INSERT, str(e))  # Comentado por error
+            pass
+    """FFdiagnosticarProducto.crearBotones(aceptarDiagnosticarProducto)
+
+    nombreDiagnosticarProducto.pack()
+    dcrDiagnosticarProducto.pack()
+    FFdiagnosticarProducto.pack()
+    framesAMatar.append(diagnosticarProducto)"""
+
+    # Ventana principal
+    window = Tk()
+    window.state('zoomed')
+    window.title("My_Tiendita_2.0")
+
+    # Icono de la ventana
+    window.iconbitmap(os.path.join(pathlib.Path(__file__).parent.parent, 'assets', 'jhorman.ico'))
+    window.option_add("*tearOff", FALSE)
+
+    # Métodos sin argumentos para poder ejecutarlos-------------------------------------
+
+    framesAMatar = []
+
+    # Output de Generar cliente
+    outputGenerarCliente = Text(window, height=3)
+    framesAMatar.append(outputGenerarCliente)
+    
+    # Output de Liquidar el periodo
+    outputLiquidarPeriodo = Text(window, height=6)
+    framesAMatar.append(outputLiquidarPeriodo)
+    
     frame_a = Frame()  # master = window
 
     frame_a.pack()
@@ -231,19 +300,7 @@ def iniciar_ventana_usuario():
 
     output = Text(cliente_manual, height=3)
     framesAMatar.append(output)
-
-    def creacionCliente():
-        pass
-        #try:
-            # cliente = Cliente(crearCliente.getValores())  # Comentado por error
-        #    pass
-        #except ErrorAplicacion as e:
-            # output.insert(INSERT, str(e))  # Comentado por error
-        #    pass
-
-    # Creacion de los botones para aceptar y borrar de creacion manual de cliente
-    #crearCliente.crearBotones(creacionCliente)  # Aceptar             Borrar
-
+    
     nombre.pack()
     # texto.pack()  # Comentado por error
     interfaz_inicio.pack()
@@ -251,56 +308,6 @@ def iniciar_ventana_usuario():
     #crearCliente.pack(fill=BOTH, expand=True)
     framesAMatar.append(cliente_manual)
 
-    # --------------------------------------------------------------------------------
-
-    # Frame de Solicitar servicio-----------------------------------------------------
-    solicitarServicio = Frame(window)
-    nombreSolicitarServicio = Label(solicitarServicio, text="Solicitar servicio", bd=10)
-    dcrSolicitarServicio = Label(solicitarServicio,
-                                 text="Ingrese el ID del cliente para solicitar la reparacion de su producto", bd=10)
-    FFsolicitarServicio = FieldFrame_p(solicitarServicio, None, ["ID cliente"], None, [None], [], [1])
-    outputsolicitarServicio = Text(solicitarServicio, height=3)
-    framesAMatar.append(outputsolicitarServicio)
-
-    def aceptarSolicitarServicio():
-        pass
-       # try:
-            # cliente = Cliente.getClientes()[int(FFsolicitarServicio.getValue("ID cliente"))]  # Comentado por error
-          #  pass
-        #except ErrorAplicacion as e:
-            # outputsolicitarServicio.insert(INSERT, str(e))  # Comentado por error
-          #  pass
-
-    FFsolicitarServicio.crearBotones(aceptarSolicitarServicio)
-
-    nombreSolicitarServicio.pack()
-    dcrSolicitarServicio.pack()
-    FFsolicitarServicio.pack()
-    framesAMatar.append(solicitarServicio)
-    # -------------------------------------------------------------------------------
-    # @summary Diagnostica el servicio seleccionado por el administrador.
-    # Frame de Diagnosticar producto-----------------------------------------------------
-    diagnosticarProducto = Frame(window)
-    nombreDiagnosticarProducto = Label(diagnosticarProducto, text="Diagnosticar un producto", bd=10)
-    dcrDiagnosticarProducto = Label(diagnosticarProducto, text="Ingrese el ID del servicio a diagnosticar", bd=10)
-    FFdiagnosticarProducto = FieldFrame_p(diagnosticarProducto, None, ["ID Servicio"], None, [None], [], [1])
-    outputDiagnosticarProducto = Text(diagnosticarProducto, height=7)
-    framesAMatar.append(outputDiagnosticarProducto)
-
-    def aceptarDiagnosticarProducto():
-        #try:
-            # servicio = Servicio.getServicios()[int(FFdiagnosticarProducto.getValue("ID Servicio"))]  # Comentado por error
-            pass
-        #except ErrorAplicacion as e:
-            # outputDiagnosticarProducto.insert(INSERT, str(e))  # Comentado por error
-        #    pass
-
-    FFdiagnosticarProducto.crearBotones(aceptarDiagnosticarProducto)
-
-    nombreDiagnosticarProducto.pack()
-    dcrDiagnosticarProducto.pack()
-    FFdiagnosticarProducto.pack()
-    framesAMatar.append(diagnosticarProducto)
     # frame de funcionalidad 4-------------------------------------------------------------------
 
     frame_func4 = Frame(window)
@@ -308,27 +315,26 @@ def iniciar_ventana_usuario():
     seleccionId = Label(frame_func4, text="Ingrese su ID ", bd=10)
     
     # Frame de Reparar un producto-----------------------------------------------------
-    repararProducto = Frame(window)
-    nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
-    dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
-    FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
-    outputRepararProducto = Text(repararProducto, height=3)
-    framesAMatar.append(outputRepararProducto)
+    
 
-    def aceptarRepararProducto():
-        #try:
-            # servicio = Servicio.getServicios()[int(FFrepararProducto.getValue("ID Servicio"))]  # Comentado por error
-            #pass
-        #except ErrorAplicacion as e:
-            # outputRepararProducto.insert(INSERT, str(e))  # Comentado por error
-            pass
+    frame1 = Frame(window)
+    frame1.pack(fill=BOTH, expand=True)
+    zona2=FieldFrame(frame1,None,["criterio1"],None,[None],[])
+    zona2.pack(fill=BOTH, expand=True)
+    #nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
+    #dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
+    #FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
+    #outputRepararProducto = Text(repararProducto, height=3)
+    #framesAMatar.append(outputRepararProducto)
 
-    FFrepararProducto.crearBotones(aceptarRepararProducto)
+    
 
-    nombreRepararProducto.pack()
-    dcrRepararProducto.pack()
-    FFrepararProducto.pack()
-    framesAMatar.append(repararProducto)
+   #FFrepararProducto.crearBotones(aceptarRepararProducto)
+
+    """nombreRepararProducto.pack()
+    dcrRepararProducto.pack()"""
+    #FFrepararProducto.pack()
+    #framesAMatar.append(repararProducto)
     # -------------------------------------------------------------------------------
 
     # Frame de Finalizar un servicio-----------------------------------------------------
@@ -572,7 +578,4 @@ if __name__ == "__main__":
     ventana = FieldFrame_2()
     ventana.crearVentana1()
     ventana.mainloop()
-    ventana2=Tk()
-    fieldf=FieldFrame(ventana2, None,None,None,None,None)
-    ventana2.mainloop()
 
