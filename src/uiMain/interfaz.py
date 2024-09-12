@@ -320,7 +320,7 @@ def iniciar_ventana_usuario():
     #frame1 = Frame(window)
     #frame1.pack(fill=BOTH, expand=True)
     zona2=FieldFrame(window,None,["criterio1"],None,[None],[])
-    zona2.pack(fill=BOTH, expand=True)
+    zona2.pack()
     #nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
     #dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
     #FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
