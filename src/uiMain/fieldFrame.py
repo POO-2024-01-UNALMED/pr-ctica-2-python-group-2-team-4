@@ -24,18 +24,21 @@ class FieldFrame(Frame):
         
     def actualizacion(self):
         campos=Frame(self,relief=SOLID,bd=2)
-        Label(campos, text=self._tituloCriterios).grid(padx=80, column=0, row=0)
-        Label(campos, text=self._tituloValores).grid(padx=80, column=1, row=0)
+        Label(campos, text=self._tituloCriterios,font=("Arial",20)).grid(padx=80, column=0, row=0)
+        Label(campos, text=self._tituloValores,font=("Arial",20)).grid(padx=80, column=1, row=0)
         for i in range(1, len(self._valores) + 1):
-            Label(campos, text=self._criterios[i - 1]).grid(padx=80, pady=2, column=0, row=i)
+            Label(campos, text=self._criterios[i - 1],font=("Arial",20)).grid(padx=80, pady=2, column=0, row=i)
             if self._criterios[i - 1] in self._habilitado:
                 texto = StringVar(value=self._valores[i - 1])
-                entrada = Entry(campos, width=40, textvariable=texto, state=DISABLED, justify="center")
+                entrada = Entry(campos, width=40, textvariable=texto,font=("Arial",15), state=DISABLED, justify="center")
             else:
                 texto = StringVar(value=self._valores[i - 1])
-                entrada = Entry(campos, width=40, textvariable=texto, justify="center")
+                entrada = Entry(campos, width=40, textvariable=texto,font=("Arial",15), justify="center")
 
             entrada.grid(pady=2, column=1, row=i)
             #self._entries.append(entrada)
         #campos.grid(row=2,columnspan=10)
         campos.pack(fill=BOTH,padx=300,pady=70,expand=True)
+        aceptar = Button(campos, text="Aceptar",font=("Arial",15)).grid(pady = 50, column = 0, row = len(self._criterios)+1)
+        borrar = Button(campos, text="Borrar",font=("Arial",15)).grid(pady = 50, column = 1, row = len(self._criterios)+1)
+

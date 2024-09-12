@@ -315,21 +315,15 @@ def iniciar_ventana_usuario():
     seleccionId = Label(frame_func4, text="Ingrese su ID ", bd=10)
     
     # Frame de Reparar un producto-----------------------------------------------------
-    
 
-    #frame1 = Frame(window)
-    #frame1.pack(fill=BOTH, expand=True)
-    zona2=FieldFrame(window,None,["criterio1"],None,[None],[])
+    zona2=FieldFrame(window,"Criterios",["criterio1","citerio2","criterio3"],"Valores",[None,None,None],[])
     zona2.pack()
+    zona2.crearBotones(aceptarRepararProducto)
     #nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
     #dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
     #FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
     #outputRepararProducto = Text(repararProducto, height=3)
     #framesAMatar.append(outputRepararProducto)
-
-    
-
-   #FFrepararProducto.crearBotones(aceptarRepararProducto)
 
     """nombreRepararProducto.pack()
     dcrRepararProducto.pack()"""
