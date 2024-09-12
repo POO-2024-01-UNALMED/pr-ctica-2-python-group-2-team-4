@@ -69,7 +69,7 @@ def iniciar_ventana_usuario():
         matarloTodo(diagnosticarProducto)"""
 
     def evtRepararProducto():
-        matarloTodo(frame1)
+        matarloTodo(zona2)
         
         
     def definir_rol():
@@ -233,9 +233,9 @@ def iniciar_ventana_usuario():
     outputLiquidarPeriodo = Text(window, height=6)
     framesAMatar.append(outputLiquidarPeriodo)
     
-    frame_a = Frame()  # master = window
+    #frame_a = Frame()  # master = window
 
-    frame_a.pack()
+    #frame_a.pack()
     # Barra menu superior
     menubar = Menu()
 
@@ -317,9 +317,9 @@ def iniciar_ventana_usuario():
     # Frame de Reparar un producto-----------------------------------------------------
     
 
-    frame1 = Frame(window)
-    frame1.pack(fill=BOTH, expand=True)
-    zona2=FieldFrame(frame1,None,["criterio1"],None,[None],[])
+    #frame1 = Frame(window)
+    #frame1.pack(fill=BOTH, expand=True)
+    zona2=FieldFrame(window,None,["criterio1"],None,[None],[])
     zona2.pack(fill=BOTH, expand=True)
     #nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
     #dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
