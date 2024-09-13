@@ -366,7 +366,7 @@ class Funcionalidad2:
 
         self.elegir_tipo_busqueda(cliente)
 
-    def elegir_tipo_busqueda(self, cliente):
+    def elegir_tipo_busqueda(self,cliente):
         from main import Main
         from funcionalidad1 import Funcionalidad1
         tienda = cliente.get_tienda()

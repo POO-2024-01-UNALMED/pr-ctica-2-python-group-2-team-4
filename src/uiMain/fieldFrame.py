@@ -4,30 +4,50 @@ import pathlib
 from tkinter import*
 from tkinter import messagebox
 
+from uiMain.funcionalidad1 import Funcionalidad1
+
 
 class FieldFrame(Frame):
     from uiMain.interfaz import FieldFrame_p
-    def __init__(self, master ,tituloCriterios, criterios, tituloValores, valores, habilitado):
-        super().__init__(master,bg="orange")
+    def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado,
+                 titulo="Proceso o Consulta", descripcion="Descripcion proceso/consulta"):
+        super().__init__(master, bg="orange")
         self._tituloCriterios = tituloCriterios
         self._criterios = criterios
         self._tituloValores = tituloValores
         self._valores = valores
         self._habilitado = habilitado
 
+        # Frame para el nombre del proceso
+        nombreProceso = Frame(self, relief=SOLID, bd=2, bg="light blue")
+        nombreProceso.grid(row=0, column=0, columnspan=2, pady=20, padx=10, sticky=N + E + W)
+        proceso = Label(nombreProceso, text=titulo, font=("Arial", 30), bg="light blue")
+        proceso.pack(fill=BOTH, pady=10, padx=10)
 
-        nombreProceso=Frame(self,relief=SOLID,bd=2)
-        proceso=Label(nombreProceso, text="Proceso o Consulta",font=("Arial",30),bg="light blue")
-        proceso.pack(fill=BOTH)
-        nombreProceso.pack(fill=BOTH,padx=400,pady=20, anchor=N)
+        # Frame para la descripción del proceso
+        descripProceso = Frame(self, relief=SOLID, bd=2, bg="light blue")
+        descripProceso.grid(row=1, column=0, columnspan=2, pady=20, padx=10, sticky=N + E + W)
+        descripcionlabel = Label(descripProceso, text=descripcion, font=("Arial", 20), bg="light blue")
+        descripcionlabel.pack(pady=10, padx=10)
 
-        descripProceso = Frame(self,relief=SOLID,bd=2)
-        descripcion = Label(descripProceso, text="Descripcion proceso/consulta\npapap\n", font=("Arial",20),bg="light blue")
-        descripcion.pack(fill=BOTH)
-        descripProceso.pack(fill=BOTH,padx=150)
+        # Frame para los campos
+        campos = Frame(self, relief=SOLID, bd=2)
+        campos.grid(row=2, column=0, columnspan=2, pady=20, padx=10, sticky=N + E + W)
+        Label(campos, text=self._tituloCriterios, font=("Arial", 20)).grid(row=0, column=0, padx=10, pady=10, sticky=W)
+        Label(campos, text=self._tituloValores, font=("Arial", 20)).grid(row=0, column=1, padx=10, pady=10, sticky=W)
 
-        self.actualizacion()
-        
+        for i in range(len(self._valores)):
+            Label(campos, text=self._criterios[i], font=("Arial", 15)).grid(row=i + 1, column=0, padx=10, pady=5,
+                                                                            sticky=E)
+            Entry(campos, textvariable=self._valores[i], state='normal' if self._habilitado[i] else 'disabled',
+                  font=("Arial", 15)).grid(row=i + 1, column=1, padx=10, pady=5, sticky=W)
+
+        # Botones de aceptar y borrar
+        self.aceptar = Button(campos, text="Aceptar", font=("Arial", 15))
+        self.aceptar.grid(row=len(self._valores) + 1, column=0, pady=20, padx=10, sticky=W)
+        self.borrar = Button(campos, text="Borrar", font=("Arial", 15))
+        self.borrar.grid(row=len(self._valores) + 1, column=1, pady=20, padx=10, sticky=W)
+
     def actualizacion(self):
         campos=Frame(self,relief=SOLID,bd=2)
         Label(campos, text=self._tituloCriterios,font=("Arial",20)).grid(padx=80, column=0, row=0)
@@ -45,8 +65,8 @@ class FieldFrame(Frame):
             #self._entries.append(entrada)
         #campos.grid(row=2,columnspan=10)
         campos.pack(fill=BOTH,padx=300,pady=70,expand=True)
-        aceptar = Button(campos, text="Aceptar",font=("Arial",15)).grid(pady = 50, column = 0, row = len(self._criterios)+1)
-        borrar = Button(campos, text="Borrar",font=("Arial",15)).grid(pady = 50, column = 1, row = len(self._criterios)+1)
+        self.aceptar = Button(campos, text="Aceptar",font=("Arial    ",15)).grid(pady = 50, column = 0, row = len(self._criterios)+1)
+        self. borrar = Button(campos, text="Borrar",font=("Arial",15)).grid(pady = 50, column = 1, row = len(self._criterios)+1)
 
         zona2=Frame(self)
         zona2.pack()
@@ -209,8 +229,10 @@ class FieldFrame(Frame):
         menuarchivo.add_command(label="Guardar y salir", command=salir)
 
         menuprocesos.add_cascade(label="Menu creaciones y destrucciones", menu=submenu)
+        from uiMain.funcionalidad2 import Funcionalidad2
+        menuprocesos.add_command(label="Funcionalidad 2", command=Funcionalidad2.elegir_tipo_busqueda())
 
-        menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
+        evtRepararProducto()
 
         menuprocesos.add_command(label="Funcionalidad 4", command=event_definirRol)
 

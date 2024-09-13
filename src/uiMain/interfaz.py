@@ -68,10 +68,8 @@ def iniciar_ventana_usuario():
     def evtDiagnosticarProducto():
         matarloTodo(diagnosticarProducto)"""
 
-    def evtRepararProducto():
-        matarloTodo(zona2)
-        
-        
+
+
     def definir_rol():
         matarloTodo    
         
@@ -262,7 +260,12 @@ def iniciar_ventana_usuario():
 
     menuprocesos.add_cascade(label="Menu creaciones y destrucciones", menu=submenu)
 
+    zona2 = FieldFrame(window, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
+
+    def evtRepararProducto():
+        matarloTodo(zona2)
     menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
+
     
     menuprocesos.add_command(label="Funcionalidad 4", command=event_definirRol)
 
@@ -316,9 +319,6 @@ def iniciar_ventana_usuario():
     
     # Frame de Reparar un producto-----------------------------------------------------
 
-    zona2=FieldFrame(window,"Criterios",["criterio1","citerio2","criterio3"],"Valores",[None,None,None],[])
-    zona2.pack()
-    zona2.crearBotones(aceptarRepararProducto)
     #nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
     #dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
     #FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
