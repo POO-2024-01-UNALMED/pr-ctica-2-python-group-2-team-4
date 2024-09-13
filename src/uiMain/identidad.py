@@ -1,3 +1,12 @@
+import tkinter as tk
+from tkinter import messagebox
+
+from gestorAplicacion.servicios.enums import Genero
+from gestorAplicacion.sujetos.administrador import Administrador
+from gestorAplicacion.sujetos.cliente import Cliente
+from gestorAplicacion.sujetos.persona import Persona
+
+
 class Identidad:
     def __init__(self):
         pass
