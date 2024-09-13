@@ -135,7 +135,8 @@ def iniciar_ventana_usuario():
     def salir():
         framesAMatar = []
         window.destroy()
-        ventana = FieldFrame()
+        ventana = FieldFrame_2()
+        ventana.crearVentana1()
         ventana.mainloop()
 
     def evento():
@@ -427,9 +428,9 @@ class HojaVida(Frame):
         elif self._next_hv==1:
             png="juanes/foto"+str(numero+1)
         elif self._next_hv == 2:
-            png = "juanDiego"
+            png = "juanDiego/foto"+str(numero+1)
         else:
-            png="jordan"
+            png="jordan/foto"+str(numero+1)
         path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets', png+'.png')
         if not os.path.exists(path):
             raise FileNotFoundError(f"Image file not found at path: {path}")
@@ -489,8 +490,6 @@ class Bienvenida(Frame):
         saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"),bg="light blue")
         saludo.pack(pady=5)
 
-        
-
         self.frame_aux =Frame(self.frame_p3, height=120,bg="light blue")
         self.frame_aux.pack(fill=BOTH, expand=True)
 
@@ -501,7 +500,7 @@ class Bienvenida(Frame):
 
 
         self._pantallazos = []
-        for i in range(0, 2):
+        for i in range(0,5):
             path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\pantallazos\\pantallazo'+str(i+1)+'.png')
             pantallazo = PhotoImage(file=path)
             self._pantallazos.append(pantallazo)

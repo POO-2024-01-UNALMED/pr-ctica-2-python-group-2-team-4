@@ -1,6 +1,7 @@
 
 import os
 import pathlib
+import tkinter
 from tkinter import*
 from tkinter import messagebox
 
@@ -17,66 +18,52 @@ class FieldFrame(Frame):
         self._tituloValores = tituloValores
         self._valores = valores
         self._habilitado = habilitado
+        self._entrys = []
 
         # Frame para el nombre del proceso
         nombreProceso = Frame(self, relief=SOLID, bd=2, bg="light blue")
-        nombreProceso.grid(row=0, column=0, columnspan=2, pady=20, padx=10, sticky=N + E + W)
+        nombreProceso.pack(pady=20, padx=10)
         proceso = Label(nombreProceso, text=titulo, font=("Arial", 30), bg="light blue")
         proceso.pack(fill=BOTH, pady=10, padx=10)
 
         # Frame para la descripción del proceso
         descripProceso = Frame(self, relief=SOLID, bd=2, bg="light blue")
-        descripProceso.grid(row=1, column=0, columnspan=2, pady=20, padx=10, sticky=N + E + W)
+        descripProceso.pack(pady=20, padx=10)
         descripcionlabel = Label(descripProceso, text=descripcion, font=("Arial", 20), bg="light blue")
         descripcionlabel.pack(pady=10, padx=10)
 
         # Frame para los campos
-        campos = Frame(self, relief=SOLID, bd=2)
-        campos.grid(row=2, column=0, columnspan=2, pady=20, padx=10, sticky=N + E + W)
-        Label(campos, text=self._tituloCriterios, font=("Arial", 20)).grid(row=0, column=0, padx=10, pady=10, sticky=W)
-        Label(campos, text=self._tituloValores, font=("Arial", 20)).grid(row=0, column=1, padx=10, pady=10, sticky=W)
+        campos = Frame(self, relief=SOLID, bd=2,pady=20, padx=10)
+        campos.pack(pady=20, padx=20,expand=True,fill=BOTH)
+        campos.columnconfigure(0, weight=1)
+        campos.columnconfigure(1, weight=1)
+        campos.columnconfigure(2, weight=1)
+        campos.columnconfigure(3, weight=1)
+        for i in range(len(self._valores)+2):
+            campos.rowconfigure(i, weight=1)
+
+        Label(campos,text=self._tituloCriterios,font=("Arial",20)).grid(padx=10,column=1,row=0)
+        Label(campos, text=self._tituloValores, font=("Arial", 20)).grid(row=0, column=2, padx=10, pady=10)
 
         for i in range(len(self._valores)):
-            Label(campos, text=self._criterios[i], font=("Arial", 15)).grid(row=i + 1, column=0, padx=10, pady=5,
-                                                                            sticky=E)
-            Entry(campos, textvariable=self._valores[i], state='normal' if self._habilitado[i] else 'disabled',
-                  font=("Arial", 15)).grid(row=i + 1, column=1, padx=10, pady=5, sticky=W)
+            Label(campos, text=self._criterios[i], font=("Arial", 15)).grid(row=i + 1, column=1, padx=10)
+            entry=Entry(campos, textvariable=self._valores[i], state='normal' if self._habilitado[i] else 'disabled',font=("Arial", 15))
+            self._entrys.append(entry)
+            entry.grid(row=i + 1, column=2, padx=10)
 
         # Botones de aceptar y borrar
         self.aceptar = Button(campos, text="Aceptar", font=("Arial", 15))
-        self.aceptar.grid(row=len(self._valores) + 1, column=0, pady=20, padx=10, sticky=W)
-        self.borrar = Button(campos, text="Borrar", font=("Arial", 15))
-        self.borrar.grid(row=len(self._valores) + 1, column=1, pady=20, padx=10, sticky=W)
+        self.aceptar.grid(row=len(self._valores) + 1, column=1, padx=10)
+        self.borrar = Button(campos, text="Borrar", font=("Arial", 15), command=self.borrar)
+        self.borrar.grid(row=len(self._valores) + 1, column=2, padx=10)
 
-    def actualizacion(self):
-        campos=Frame(self,relief=SOLID,bd=2)
-        Label(campos, text=self._tituloCriterios,font=("Arial",20)).grid(padx=80, column=0, row=0)
-        Label(campos, text=self._tituloValores,font=("Arial",20)).grid(padx=80, column=1, row=0)
-        for i in range(1, len(self._valores) + 1):
-            Label(campos, text=self._criterios[i - 1],font=("Arial",20)).grid(padx=80, pady=2, column=0, row=i)
-            if self._criterios[i - 1] in self._habilitado:
-                texto = StringVar(value=self._valores[i - 1])
-                entrada = Entry(campos, width=40, textvariable=texto,font=("Arial",15), state=DISABLED, justify="center")
-            else:
-                texto = StringVar(value=self._valores[i - 1])
-                entrada = Entry(campos, width=40, textvariable=texto,font=("Arial",15), justify="center")
-
-            entrada.grid(pady=2, column=1, row=i)
-            #self._entries.append(entrada)
-        #campos.grid(row=2,columnspan=10)
-        campos.pack(fill=BOTH,padx=300,pady=70,expand=True)
-        self.aceptar = Button(campos, text="Aceptar",font=("Arial    ",15)).grid(pady = 50, column = 0, row = len(self._criterios)+1)
-        self. borrar = Button(campos, text="Borrar",font=("Arial",15)).grid(pady = 50, column = 1, row = len(self._criterios)+1)
-
-        zona2=Frame(self)
-        zona2.pack()
-        label = Label(zona2, text="Proceso o Consulta", bd=10)
-        descripcion = Label(self, text="Descripcion proceso/consulta", bd=10)
-        label.pack()
-        descripcion.pack()
         #criterio = FieldFrame_2(self, None, ["ID Servicio"], None, [None], [], [1])
         #outputRepararProducto = Text(self, height=3)
         #framesAMatar.append(outputRepararProducto)
+
+    def borrar(self):
+        for entry in self._entrys:
+            entry.delete(0, END)
 
     def iniciar_ventana_usuario(self):
         # Ventana principal
