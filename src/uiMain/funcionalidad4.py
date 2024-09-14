@@ -1,4 +1,12 @@
+from tkinter import Tk, TkVersion
+import tkinter
+import tkinter as tk
 from typing import List, Optional
+import sys
+sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+import gestorAplicacion
+
+
 import gestorAplicacion
 
 class Funcionalidad4:
@@ -270,3 +278,68 @@ class Funcionalidad4:
             # Aquí deberías incluir el código para volver al menú principal
             pass
 
+            # ------------------------------------------- # 
+
+    # alerta de que el usuario no tiene tiendas 
+    def mostrar_ventana(self):
+        ventana = tk.Tk()
+        ventana.title("Aviso")
+        ventana.geometry("300x150")
+
+        # Crear el mensaje
+        mensaje = tk.Label(ventana, text="El usuario no posee ninguna tienda.")
+        mensaje.pack(pady=20)
+
+        # Crear el botón Aceptar
+        boton_aceptar = tk.Button(ventana, text="Aceptar", command=ventana.destroy)
+        boton_aceptar.pack(pady=10)
+
+        # Iniciar el loop de tkinter
+        ventana.mainloop()
+
+    #muestra el frame donde se puede seleccionar la tienda ( aplicar a fieldframe de ser posible)
+    def mostrar_frame(self, usuario):
+        ventana = tk.Tk()
+        ventana.title("Seleccionar Tienda")
+        ventana.geometry("400x300")
+
+        # Frame para mostrar las tiendas
+        frame_tiendas = tk.Frame(ventana)
+        frame_tiendas.pack(pady=20, padx=10, fill=tk.BOTH, expand=True)
+
+        # Crear botones para cada tienda
+        for i, tienda in enumerate(usuario.get_tiendas()):
+            nombre_tienda = tienda.getNombre()  # Obtener el nombre de la tienda
+            boton_tienda = tk.Button(frame_tiendas, text=nombre_tienda, command=lambda t=tienda: self.seleccionar_tienda(t))
+            boton_tienda.grid(row=i, column=0, padx=10, pady=5, sticky="w")
+
+        # Botón para confirmar la selección
+        boton_confirmar = tk.Button(ventana, text="Confirmar", command=ventana.destroy)
+        boton_confirmar.pack(pady=10)
+
+        # Iniciar el loop de tkinter
+        ventana.mainloop()
+
+    #guarda la seleccion en la variable
+    def seleccionar_tienda(self, tienda):
+        self.seleccion_tienda = tienda
+        print(f"Tienda seleccionada: {tienda.getNombre()}")
+
+    def procesar_seleccion(self, usuario):
+        if not usuario.get_tiendas():  # Verifica si la lista de tiendas está vacía
+            self.mostrar_ventana()
+            return  # Finaliza la ejecución del método si no hay tiendas
+
+        # Muestra la ventana para seleccionar una tienda
+        self.mostrar_frame(usuario)
+
+        # Espera a que el usuario seleccione una tienda
+        # Al finalizar, `self.seleccion_tienda` debería tener la tienda seleccionada
+        if self.seleccion_tienda is not None:
+            self.administrar_tienda(self.seleccion_tienda)
+        else:
+            print("No se ha seleccionado ninguna tienda.")
+
+    def administrar_tienda(self, tienda):
+        # Aquí iría la lógica para administrar la tienda
+        print(f"Administrando la tienda: {tienda.getNombre()}")
