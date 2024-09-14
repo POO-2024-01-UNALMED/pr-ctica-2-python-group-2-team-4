@@ -87,7 +87,7 @@ class Identidad2:
 
     def mostrar_frame(self, titulo, descripcion, criterios, valores, habilitado, callback):
         # Destruir el frame actual si existe
-        if self.frame_actual:
+        if self.frame_actual is not None:
             self.frame_actual.destroy()
         
         # Crear un nuevo FieldFrame

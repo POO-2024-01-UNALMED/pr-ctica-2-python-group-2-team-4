@@ -1,7 +1,7 @@
 import os
 import pickle
 
-from _pytest import pathlib
+import pathlib
 
 
 class EscritorLector:

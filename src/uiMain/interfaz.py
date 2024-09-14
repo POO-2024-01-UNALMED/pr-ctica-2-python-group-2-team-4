@@ -255,7 +255,7 @@ def iniciar_ventana_usuario():
         matarloTodo(zona2)
     menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
     from uiMain.funcionalidad5 import Funcionalidad5
-    #menuprocesos.add_command(label="Funcionalidad 5", command=Funcionalidad5.ingresar(window))
+    menuprocesos.add_command(label="Funcionalidad 5", command=Funcionalidad5.ingresar(window))
     menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
     def funcion2():
         from uiMain.funcionalidad2 import Funcionalidad2

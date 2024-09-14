@@ -4,13 +4,14 @@ from gestorAplicacion.sujetos.administrador import Administrador
 class Funcionalidad5:
     @classmethod
     def ingresar(cls,window):
-        
-        from .identidad import Identidad2
-        persona=Identidad2(window).identificar_persona()
-        if not isinstance(persona,Administrador):
-            cls.personalizar_tienda(persona,window)
-        else:
-            cls.ingresar(window)
+        def ingresa():
+            from .identidad import Identidad2
+            persona=Identidad2(window).identificar_persona()
+            if not isinstance(persona,Administrador):
+                cls.personalizar_tienda(persona,window)
+            else:
+                cls.ingresar(window)
+        ingresa()
     @classmethod
     def personalizar_tienda(cls, admin,window):
         from gestorAplicacion.servicios.tienda import Tienda
@@ -23,7 +24,7 @@ class Funcionalidad5:
         criterios = ["tienda"]
         valores = [""]
         habilitado = [True]
-        FieldFrame(
+        func5=FieldFrame(
             master=window,
             tituloCriterios="tiendas",
             criterios=criterios,
@@ -33,6 +34,7 @@ class Funcionalidad5:
             titulo="Personalizar Tienda",
             descripcion="Para adaptar tu tienda a tu diseño"
             )
+        func5.pack()
         for i, tienda in enumerate(tiendas):
             nombre_tienda = tienda.get_nombre()
             precio_tienda = f"${tienda.get_saldo():,.2f}"
@@ -40,6 +42,7 @@ class Funcionalidad5:
 
         print("+----+------------------------------+----------+")
         #eleccion = Main.escaner() - 1
+        eleccion=0
         
 
         # Validación de entrada del usuario
@@ -69,6 +72,7 @@ class Funcionalidad5:
             print("3. ¿Desea contratar empleados?")
             print("4. Salir de personalizar tienda")
             #decision = Main.escaner_con_rango(4)
+            decision = 1
             if decision == 1:
                 cls.reorganizar_pasillos(tien)
             elif decision == 2:
