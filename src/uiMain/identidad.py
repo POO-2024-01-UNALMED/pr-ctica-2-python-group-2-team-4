@@ -103,7 +103,7 @@ class Identidad2:
         )
         self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
         self.frame_actual.aceptar.config(command=callback)
-        self.frame_actual.borrar.config(command=self.frame_actual.borrar)
+        #self.frame_actual.borrar.config(command=self.frame_actual.borrar)
 
     def identificar_persona(self):
         
@@ -174,3 +174,4 @@ class Identidad2:
         self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
         Label(self.frame_actual, text=mensaje, font=("Arial", 20), bg="light blue").pack(pady=20, padx=20)
         Button(self.frame_actual, text="Aceptar", command=self.frame_actual.destroy).pack(pady=10)
+        self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
