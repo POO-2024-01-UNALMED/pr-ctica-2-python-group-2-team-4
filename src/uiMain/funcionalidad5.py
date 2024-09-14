@@ -1,33 +1,46 @@
-import sys
+from uiMain.fieldFrame import FieldFrame
+from gestorAplicacion.sujetos.administrador import Administrador
 
 class Funcionalidad5:
-
     @classmethod
-    def personalizar_tienda(cls, admin):
-        from uiMain.main import Main
+    def ingresar(cls,window):
+        
+        from .identidad import Identidad2
+        persona=Identidad2(window).identificar_persona()
+        if not isinstance(persona,Administrador):
+            cls.personalizar_tienda(persona,window)
+        else:
+            cls.ingresar(window)
+    @classmethod
+    def personalizar_tienda(cls, admin,window):
         from gestorAplicacion.servicios.tienda import Tienda
-        Main.lineas()
-        print("Ha seleccionado Personalizar y modificar tiendas.")
-        print("Selecciona una de las tiendas disponibles para ti:")
-
-        print("+-----------------------------------+----------+")
-        print("| No.|     Nombre de Tienda         |  Precio  |")
-        print("+-----------------------------------+----------+")
-
         tiendas = Tienda.get_tiendas()
 
         # Corregido: bucle invertido y pop durante la iteración
         for i in reversed(range(len(tiendas))):
             if tiendas[i].get_dueno() is not None or tiendas[i].get_estado() == "cerrado":
                 tiendas.pop(i)
-
+        criterios = ["tienda"]
+        valores = [""]
+        habilitado = [True]
+        FieldFrame(
+            master=window,
+            tituloCriterios="tiendas",
+            criterios=criterios,
+            tituloValores="Valores",
+            valores=valores,
+            habilitado=habilitado,
+            titulo="Personalizar Tienda",
+            descripcion="Para adaptar tu tienda a tu diseño"
+            )
         for i, tienda in enumerate(tiendas):
             nombre_tienda = tienda.get_nombre()
             precio_tienda = f"${tienda.get_saldo():,.2f}"
             print(f"| {i+1:2d} | {nombre_tienda:<28} | {precio_tienda:>8} |")
 
         print("+----+------------------------------+----------+")
-        eleccion = Main.escaner() - 1
+        #eleccion = Main.escaner() - 1
+        
 
         # Validación de entrada del usuario
         if eleccion < 0 or eleccion >= len(tiendas):
@@ -51,12 +64,11 @@ class Funcionalidad5:
 
         iterar = True
         while iterar:
-            Main.lineas()
             print("1. ¿Desea reorganizar pasillos?")
             print("2. ¿Desea llamar al proveedor?")
             print("3. ¿Desea contratar empleados?")
             print("4. Salir de personalizar tienda")
-            decision = Main.escaner_con_rango(4)
+            #decision = Main.escaner_con_rango(4)
             if decision == 1:
                 cls.reorganizar_pasillos(tien)
             elif decision == 2:

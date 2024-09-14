@@ -5,9 +5,10 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 
-#from numpy.random import random, randint
+from baseDatos.escritorLector import EscritorLector
 
 
+from .identidad import Identidad2
 class FieldFrame_p(Frame):
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado, tipos):
         self._tituloCriterios = tituloCriterios
@@ -40,8 +41,6 @@ class FieldFrame_p(Frame):
     def crearBotones(self, comando1):
         aceptar = Button(self, text="Aceptar",command=comando1).grid(pady = 50, column = 0, row = len(self._criterios)+1)
         borrar = Button(self, text="Borrar",command=self.borrarEntry).grid(pady = 50, column = 1, row = len(self._criterios)+1)
-
-
 def iniciar_ventana_usuario():
     def matarloTodo(frameUtilizado):
         for frame in framesAMatar:
@@ -266,7 +265,9 @@ def iniciar_ventana_usuario():
     def evtRepararProducto():
         matarloTodo(zona2)
     menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
-
+    from uiMain.funcionalidad5 import Funcionalidad5
+    #menuprocesos.add_command(label="Funcionalidad 5", command=Funcionalidad5.ingresar(window))
+    menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
     
     menuprocesos.add_command(label="Funcionalidad 4", command=event_definirRol)
 
@@ -567,7 +568,8 @@ class FieldFrame_2(Tk):
         self.hoja_vida = HojaVida(frame_p2)
 
 if __name__ == "__main__":
-    from fieldFrame import FieldFrame
+    EscritorLector.deserializarTodo()
+    from .fieldFrame import FieldFrame
     ventana = FieldFrame_2()
     ventana.crearVentana1()
     ventana.mainloop()
