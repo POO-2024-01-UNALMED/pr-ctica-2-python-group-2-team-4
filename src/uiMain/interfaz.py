@@ -138,12 +138,27 @@ def iniciar_ventana_usuario():
     seleccionId = Label(frame_func4, text="Ingrese su ID ", bd=10)
     
     # Frame de Reparar un producto-----------------------------------------------------
+    repararProducto = Frame(window)
+    nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
+    dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
+    FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
+    outputRepararProducto = Text(repararProducto, height=3)
+    framesAMatar.append(outputRepararProducto)
 
-    #nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
-    #dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
-    #FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
-    #outputRepararProducto = Text(repararProducto, height=3)
-    #framesAMatar.append(outputRepararProducto)
+    def aceptarRepararProducto():
+            # try:
+            # servicio = Servicio.getServicios()[int(FFrepararProducto.getValue("ID Servicio"))]  # Comentado por error
+            # pass
+            # except ErrorAplicacion as e:
+            # outputRepararProducto.insert(INSERT, str(e))  # Comentado por error
+            pass
+
+    FFrepararProducto.crearBotones(aceptarRepararProducto)
+
+    nombreRepararProducto.pack()
+    dcrRepararProducto.pack()
+    FFrepararProducto.pack()
+    framesAMatar.append(repararProducto)
     # ------------------------------------------------------------------------------------------------------
     window.mainloop()
 
