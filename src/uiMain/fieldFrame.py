@@ -51,10 +51,12 @@ class FieldFrame(Frame):
             entry=Entry(campos, textvariable=self._valores[i], state='normal' if self._habilitado[i] else 'disabled',font=("Arial", 15))
             self._entrys.append(entry)
             entry.grid(row=i + 1, column=2, padx=10)
-        def func5():
-            Identidad.identificar_persona(self._entrys)
+            
+        def identi():
+            id=self._entrys[0].get()
+            Identidad.identificar_persona(id)
         # Botones de aceptar y borrar
-        self.aceptar = Button(campos, text="Aceptar", font=("Arial", 15),command=func5)
+        self.aceptar = Button(campos, text="Aceptar", font=("Arial", 15),command=identi)
         self.aceptar.grid(row=len(self._valores) + 1, column=1, padx=10)
         self.borrar = Button(campos, text="Borrar", font=("Arial", 15), command=self.borrar)
         self.borrar.grid(row=len(self._valores) + 1, column=2, padx=10)

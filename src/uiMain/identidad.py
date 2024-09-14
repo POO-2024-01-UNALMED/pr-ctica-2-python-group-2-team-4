@@ -12,19 +12,20 @@ class Identidad:
         pass
 
     @classmethod
-    def identificar_persona(cls):
+    def identificar_persona(cls,entrie):
         from gestorAplicacion.sujetos.administrador import Administrador
         from gestorAplicacion.sujetos.cliente import Cliente
         from gestorAplicacion.servicios.enums import Genero
         from gestorAplicacion.sujetos.persona import Persona
         from .main import Main
         print("Digite su documento: ")
-        p = Main.escaner()
+        #p = Main.escaner()
+        p = entrie
+        print(entrie)
         for persona in Persona.get_personas():
-            if p == persona.get_id():
+            if entrie[0] == persona.get_id():
                 print(f"Bienvenido {persona.get_nombre()}")
                 return persona
-        
         print("No se ha encontrado el usuario", p)
         print("¿Qué desea hacer?")
         print("1. Digitar otra vez mi documento")
@@ -72,10 +73,10 @@ class Identidad:
         return persona
     
     # identificar usuario version tkinter 
-    def identificar_persona(root, frame_func4):
+    """def identificar_persona(root, frame_func4):
     # Limpiar frame_func4
         for widget in frame_func4.winfo_children():
-            widget.destroy()
+            widget.destroy()"""
 
     # Función para procesar el documento ingresado
     def procesar_documento():
@@ -190,11 +191,11 @@ class Identidad:
         boton_confirmar.pack(pady=10)
 
     # Limpiar frame_func4 para mostrar el primer paso (entrada del documento)
-    label_doc = tk.Label(frame_func4, text="Digite su documento:")
+    """label_doc = tk.Label(frame_func4, text="Digite su documento:")
     label_doc.pack(pady=5)
 
     entry_doc = tk.Entry(frame_func4)
     entry_doc.pack(pady=5)
 
     boton_siguiente = tk.Button(frame_func4, text="Siguiente", command=procesar_documento)
-    boton_siguiente.pack(pady=10)
+    boton_siguiente.pack(pady=10)"""
