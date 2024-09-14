@@ -378,6 +378,27 @@ class Funcionalidad2:
         boton2.grid(row=1,column=2)
         frame.pack(fill=BOTH, expand=True)
         tienda = cliente.get_tienda()
+
+        # Botón para descartar compra
+        boton4 = Button(frame.campos, text="Volver y descartar compra")
+        boton4.grid(row=2, column=2)
+
+        if len(cliente.get_carrito().get_productos()) > 0:
+            boton3 = Button(frame.campos, text="Eliminar un producto de mi carrito")
+            boton3.grid(row=2, column=1)
+
+        # Botón para guardar carrito como factura
+        if len(cliente.get_carrito().get_productos()) > 0:
+            boton5 = Button(frame.campos, text="Guardar carrito como factura")
+            boton5.grid(row=3, column=1)
+
+        # Mostrar el monto actual
+        monto_actual = sum([producto.get_precio() for producto in cliente.get_carrito().get_productos()])
+        label_monto = Label(frame.campos,
+                            text=f"Recuerde que el monto que le queda para gastar es {cliente.get_dinero() - monto_actual}$")
+        label_monto.grid(row=4, column=1, columnspan=2)
+
+        frame.pack(fill=BOTH, expand=True)
         if tienda is None:
             #Main.lineas()  # Implementar este método
             print("Debería seleccionar una tienda primero, diríjase a la funcionalidad 1")

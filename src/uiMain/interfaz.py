@@ -8,7 +8,7 @@ from tkinter.font import Font
 from baseDatos.escritorLector import EscritorLector
 
 
-from .identidad import Identidad2
+from identidad import Identidad2
 class FieldFrame_p(Frame):
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado, tipos):
         self._tituloCriterios = tituloCriterios
@@ -267,6 +267,7 @@ def iniciar_ventana_usuario():
                 widget.destroy()
 
         cliente=Cliente("Juan", 123, 18, Genero.H)
+
         funcionalidad2=Funcionalidad2()
         funcionalidad2.elegir_tipo_busqueda(cliente,window)
 
@@ -556,7 +557,7 @@ class FieldFrame_2(Tk):
 
 if __name__ == "__main__":
     EscritorLector.deserializarTodo()
-    from .fieldFrame import FieldFrame
+    from fieldFrame import FieldFrame
     ventana = FieldFrame_2()
     ventana.crearVentana1()
     ventana.mainloop()

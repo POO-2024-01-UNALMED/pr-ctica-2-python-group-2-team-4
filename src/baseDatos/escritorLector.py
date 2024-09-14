@@ -1,5 +1,10 @@
+import os
 import pickle
-class EscritorLector:    
+
+from _pytest import pathlib
+
+
+class EscritorLector:
     @classmethod
     def deserializarTodo(cls):
         from gestorAplicacion.servicios.tienda import Tienda
@@ -12,7 +17,8 @@ class EscritorLector:
 
     @classmethod
     def deserializar(cls,nombre):
-            with open("baseDatos/temp/"+nombre+".txt","rb") as file:
+        path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),"src/baseDatos/temp/" + nombre+ '.txt')
+        with open(path,"rb") as file:
                 data=pickle.load(file)
                 file.close()
                 return data
