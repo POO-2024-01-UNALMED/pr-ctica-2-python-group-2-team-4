@@ -11,7 +11,7 @@ from uiMain.identidad import Identidad
 
 
 class FieldFrame(Frame):
-    from interfaz import FieldFrame_p
+    from uiMain.interfaz import FieldFrame_p
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado,
                  titulo="Proceso o Consulta", descripcion="Descripcion proceso/consulta"):
         super().__init__(master, bg="orange")

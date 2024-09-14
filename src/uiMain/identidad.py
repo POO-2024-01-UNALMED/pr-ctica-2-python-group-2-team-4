@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import Tk, messagebox
 
-from interfaz import FieldFrame_p
+#from interfaz import FieldFrame_p
 # from gestorAplicacion.servicios.enums import Genero
 # from gestorAplicacion.sujetos.administrador import Administrador
 # from gestorAplicacion.sujetos.cliente import Cliente
