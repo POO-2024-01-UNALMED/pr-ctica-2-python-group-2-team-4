@@ -8,7 +8,7 @@ from tkinter import messagebox
 import sys
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 
-from identidad import Identidad
+from .identidad import Identidad, Identidad2
 
 
 class FieldFrame(Frame):
@@ -55,9 +55,9 @@ class FieldFrame(Frame):
             
         def identi():
             id=self._entrys[0].get()
-            Identidad.identificar_persona(id)
+
         # Botones de aceptar y borrar
-        self.aceptar = Button(campos, text="Aceptar", font=("Arial", 15),command=identi)
+        self.aceptar = Button(campos, text="Aceptar", font=("Arial", 15))
         self.aceptar.grid(row=len(self._valores) + 1, column=1, padx=10)
         self.borrar = Button(campos, text="Borrar", font=("Arial", 15), command=self.borrar)
         self.borrar.grid(row=len(self._valores) + 1, column=2, padx=10)

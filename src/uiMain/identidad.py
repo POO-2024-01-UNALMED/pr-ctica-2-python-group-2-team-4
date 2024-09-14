@@ -106,8 +106,10 @@ class Identidad2:
         self.frame_actual.borrar.config(command=self.frame_actual.borrar)
 
     def identificar_persona(self):
+        
         def identificar():
             p = self.frame_actual._entrys[0].get()  # Suponiendo que el ID está en el primer Entry
+            from gestorAplicacion.sujetos.persona import Persona
             for persona in Persona.get_personas():
                 if p == persona.get_id():
                     self.mostrar_mensaje(f"Bienvenido {persona.get_nombre()}")
@@ -126,7 +128,6 @@ class Identidad2:
             habilitado=habilitado,
             callback=identificar
         )
-
     def mostrar_registro(self, id):
         def registrar():
             nombre = self.frame_actual._entrys[0].get()
@@ -135,8 +136,10 @@ class Identidad2:
             decision = self.frame_actual._entrys[3].get()
             
             if decision == "1":
+                from gestorAplicacion.sujetos.cliente import Cliente
                 persona = Cliente(nombre, id, edad, genero)
             else:
+                from gestorAplicacion.sujetos.administrador import Administrador
                 dinero = float(self.frame_actual._entrys[4].get())
                 persona = Administrador(nombre, id, edad, genero, dinero)
             

@@ -4,6 +4,8 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 
+from identidad import Identidad2
+
 def iniciar_ventana_usuario():
 
     def matarloTodo(frameUtilizado):
@@ -18,8 +20,7 @@ def iniciar_ventana_usuario():
 
     def evtClienteManual():
         matarloTodo(cliente_manual)
-    def event_definirRol():
-        matarloTodo(frame_func4)
+
 
     # Abre la pestana de dialogo con los nombres de los integrantes del equipo
     def open_popup():
@@ -99,14 +100,12 @@ def iniciar_ventana_usuario():
     menuprocesos.add_cascade(label="Menu creaciones y destrucciones", menu=submenu)
 
     zona2 = FieldFrame(window, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
-
-    def evtRepararProducto():
+    def func2():
         matarloTodo(zona2)
-    menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
-
+    menuprocesos.add_command(label="Funcionalidad 2", command=func2)
+    menuprocesos.add_command(label="Funcionalidad 4", command=func2)
+    menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
     
-    menuprocesos.add_command(label="Funcionalidad 4", command=event_definirRol)
-
     menuayuda.add_command(label="Acerca de", command=open_popup)
 
     window['menu'] = menubar
@@ -141,7 +140,7 @@ def iniciar_ventana_usuario():
     repararProducto = Frame(window)
     nombreRepararProducto = Label(repararProducto, text="Reparar un producto", bd=10)
     dcrRepararProducto = Label(repararProducto, text="Ingrese el ID del servicio a reparar", bd=10)
-    FFrepararProducto = FieldFrame_p(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
+    #FFrepararProducto = FieldFrame(repararProducto, None, ["ID Servicio"], None, [None], [], [1])
     outputRepararProducto = Text(repararProducto, height=3)
     framesAMatar.append(outputRepararProducto)
 
@@ -153,11 +152,11 @@ def iniciar_ventana_usuario():
             # outputRepararProducto.insert(INSERT, str(e))  # Comentado por error
             pass
 
-    FFrepararProducto.crearBotones(aceptarRepararProducto)
+    #FFrepararProducto.crearBotones(aceptarRepararProducto)
 
     nombreRepararProducto.pack()
     dcrRepararProducto.pack()
-    FFrepararProducto.pack()
+    #FFrepararProducto.pack()
     framesAMatar.append(repararProducto)
     # ------------------------------------------------------------------------------------------------------
     window.mainloop()
