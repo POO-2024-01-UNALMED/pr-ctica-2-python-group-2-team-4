@@ -79,6 +79,7 @@ class Identidad:
         return persona
         
     ## intento version fieldframe #
+#--------------------------------------------------------------------
 class Identidad2:
     def __init__(self, window):
         self.window = window
@@ -131,9 +132,10 @@ class Identidad2:
     def mostrar_registro(self, id):
         def registrar():
             nombre = self.frame_actual._entrys[0].get()
-            edad = self.frame_actual._entrys[1].get()
-            genero = self.frame_actual._entrys[2].get()
-            decision = self.frame_actual._entrys[3].get()
+            id=self.frame_actual._entrys[1].get()
+            edad = self.frame_actual._entrys[2].get()
+            genero = self.frame_actual._entrys[3].get()
+            decision = self.frame_actual._entrys[4].get()
             
             if decision == "1":
                 from gestorAplicacion.sujetos.cliente import Cliente
@@ -148,13 +150,14 @@ class Identidad2:
 
         criterios = [
             "Nombre",
+            "Id",
             "Edad",
             "Género (1: Masculino, 2: Femenino)",
             "Tipo de Usuario (1: Comprar productos, 2: Administrar tiendas)",
             "Dinero (si aplica)"
         ]
-        valores = ["", "", "", "", ""]
-        habilitado = [True, True, True, True, False]  # Solo habilitado el último campo si es necesario
+        valores = ["","", "", "", "", ""]
+        habilitado = [True,True, True, True, True, False]  # Solo habilitado el último campo si es necesario
 
         self.mostrar_frame(
             titulo="Registro de Usuario",
@@ -174,4 +177,4 @@ class Identidad2:
         self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
         Label(self.frame_actual, text=mensaje, font=("Arial", 20), bg="light blue").pack(pady=20, padx=20)
         Button(self.frame_actual, text="Aceptar", command=self.frame_actual.destroy).pack(pady=10)
-        self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
+        

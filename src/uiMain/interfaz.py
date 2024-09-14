@@ -223,18 +223,7 @@ def iniciar_ventana_usuario():
 
     framesAMatar = []
 
-    # Output de Generar cliente
-    outputGenerarCliente = Text(window, height=3)
-    framesAMatar.append(outputGenerarCliente)
-    
-    # Output de Liquidar el periodo
-    outputLiquidarPeriodo = Text(window, height=6)
-    framesAMatar.append(outputLiquidarPeriodo)
-    
-    #frame_a = Frame()  # master = window
-
-    #frame_a.pack()
-    # Barra menu superior
+    # Creacion de la barra de menu------------------------------------------------------
     menubar = Menu()
 
     menuarchivo = Menu(window)
@@ -268,6 +257,19 @@ def iniciar_ventana_usuario():
     from uiMain.funcionalidad5 import Funcionalidad5
     #menuprocesos.add_command(label="Funcionalidad 5", command=Funcionalidad5.ingresar(window))
     menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
+    def funcion2():
+        from uiMain.funcionalidad2 import Funcionalidad2
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from gestorAplicacion.servicios.enums import Genero
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        cliente=Cliente("Juan", 123, 18, Genero.H)
+        funcionalidad2=Funcionalidad2()
+        funcionalidad2.elegir_tipo_busqueda(cliente,window)
+
     
     menuprocesos.add_command(label="Funcionalidad 4", command=event_definirRol)
 
@@ -291,21 +293,6 @@ def iniciar_ventana_usuario():
                         text="Diligenciar la siguiente información para el correcto ingreso del cliente al sistema: ",
                         bd=10)
 
-    # VALOR DE ID = len(Cliente.clientes)
-    #crearCliente = FieldFrame_p(cliente_manual, "Datos cliente", ["ID", "Nombre", "Cedula", "Cartera"], "Valor",
-     #                         [len(Cliente.clientes), None, None, None], ["ID"], [1, 0, 1, 1])
-    #crearCliente.grid_columnconfigure(0, weight=1)
-    #crearCliente.grid_columnconfigure(1, weight=1)
-    #crearCliente.grid_rowconfigure(0, weight=1)
-    #crearCliente.grid_rowconfigure(1, weight=1)
-    #crearCliente.grid_rowconfigure(2, weight=1)
-    #crearCliente.grid_rowconfigure(3, weight=1)
-    #crearCliente.grid_rowconfigure(4, weight=1)
-    #crearCliente.grid_rowconfigure(5, weight=1)
-
-    output = Text(cliente_manual, height=3)
-    framesAMatar.append(output)
-    
     nombre.pack()
     # texto.pack()  # Comentado por error
     interfaz_inicio.pack()
