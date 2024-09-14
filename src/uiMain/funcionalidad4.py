@@ -4,8 +4,8 @@ import tkinter as tk
 from typing import List, Optional
 import sys
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
-import gestorAplicacion
-
+from gestorAplicacion.sujetos.administrador import Administrador
+from uiMain import identidad, interfaz
 
 import gestorAplicacion
 
@@ -45,8 +45,11 @@ class Funcionalidad4:
             print(f"| {i + 1:>2} |{padding_izquierdo}{nombre_producto}{padding_derecho}|")
         print("+------------------------------------+")
 
+    
+
     @staticmethod
-    def seleccionar_tienda(usuario: Administrador):
+    def seleccionar_tienda(usuario):
+
         print("------------------ REVISION DE TIENDA -----------------")
         
         if not usuario.tiendas:
@@ -287,7 +290,7 @@ class Funcionalidad4:
         ventana.geometry("300x150")
 
         # Crear el mensaje
-        mensaje = tk.Label(ventana, text="El usuario no posee ninguna tienda.")
+        mensaje = tk.Label(ventana, text="El usuario no posee ninguna tienda o no es administrador.")
         mensaje.pack(pady=20)
 
         # Crear el botón Aceptar
@@ -297,14 +300,21 @@ class Funcionalidad4:
         # Iniciar el loop de tkinter
         ventana.mainloop()
 
+    @classmethod
+    def ingresar(cls,window):
+        
+        from .identidad import Identidad2
+        usuario =Identidad2(window).identificar_persona()
+        if not isinstance(usuario,Administrador):
+            cls().mostrar_ventana()
+            cls().ingresar()
+        return usuario
+    
     #muestra el frame donde se puede seleccionar la tienda ( aplicar a fieldframe de ser posible)
-    def mostrar_frame(self, usuario):
-        ventana = tk.Tk()
-        ventana.title("Seleccionar Tienda")
-        ventana.geometry("400x300")
+    def mostrar_frame(self, window, usuario ):
 
         # Frame para mostrar las tiendas
-        frame_tiendas = tk.Frame(ventana)
+        frame_tiendas = tk.Frame(window)
         frame_tiendas.pack(pady=20, padx=10, fill=tk.BOTH, expand=True)
 
         # Crear botones para cada tienda
@@ -314,16 +324,16 @@ class Funcionalidad4:
             boton_tienda.grid(row=i, column=0, padx=10, pady=5, sticky="w")
 
         # Botón para confirmar la selección
-        boton_confirmar = tk.Button(ventana, text="Confirmar", command=ventana.destroy)
+        boton_confirmar = tk.Button(window, text="Confirmar")# command confirmar 
         boton_confirmar.pack(pady=10)
 
         # Iniciar el loop de tkinter
-        ventana.mainloop()
+        window.mainloop()
 
     #guarda la seleccion en la variable
     def seleccionar_tienda(self, tienda):
         self.seleccion_tienda = tienda
-        print(f"Tienda seleccionada: {tienda.getNombre()}")
+        
 
     def procesar_seleccion(self, usuario):
         if not usuario.get_tiendas():  # Verifica si la lista de tiendas está vacía
