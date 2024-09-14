@@ -8,9 +8,11 @@ from tkinter import Tk, messagebox
 # from gestorAplicacion.sujetos.persona import Persona
 
 from tkinter import Frame, Label, Entry, Button, Tk
-from gestorAplicacion.sujetos.administrador import Administrador
-from gestorAplicacion.sujetos.cliente import Cliente
-from uiMain.fieldFrame import FieldFrame  
+
+
+#from gestorAplicacion.sujetos.administrador import Administrador
+#from gestorAplicacion.sujetos.cliente import Cliente
+#from uiMain.fieldFrame import FieldFrame  
 
 class Identidad:
     def __init__(self):
@@ -88,6 +90,7 @@ class Identidad2:
             self.frame_actual.destroy()
         
         # Crear un nuevo FieldFrame
+        from fieldFrame import FieldFrame
         self.frame_actual = FieldFrame(
             master=self.window,
             tituloCriterios=titulo,
