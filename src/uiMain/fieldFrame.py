@@ -5,8 +5,12 @@ import tkinter
 from tkinter import*
 from tkinter import messagebox
 
+import sys
+sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+import uiMain
+
 #from uiMain.funcionalidad1 import Funcionalidad1
-from uiMain.funcionalidad1 import Funcionalidad1
+
 from uiMain.identidad import Identidad
 
 
