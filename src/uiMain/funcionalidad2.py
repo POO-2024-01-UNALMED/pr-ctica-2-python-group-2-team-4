@@ -1,4 +1,8 @@
 import sys
+from tkinter import *
+
+from uiMain.fieldFrame import FieldFrame
+
 
 class Funcionalidad2:
     def __init__(self):
@@ -366,23 +370,27 @@ class Funcionalidad2:
 
         self.elegir_tipo_busqueda(cliente)
 
-    def elegir_tipo_busqueda(self,cliente):
-        from main import Main
-        from funcionalidad1 import Funcionalidad1
+    def elegir_tipo_busqueda(self,cliente,window):
+        frame=FieldFrame(window,"La búsqueda de nuestra tienda es"+" lo más accesible para nuestros clientes. ¿Que desea hacer?",[],"Escoja uno de los botones",[],[],"Funcionalidad2","La funcionalidad se basas en darle la posibilidad al cliente de interactuar"+" con los productos de la tienda y con su carrito asociado"+"permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",False)
+        boton1=Button(frame.campos,text="Buscar productos por categoría",command= lambda:self.busqueda_categoria(cliente))
+        boton2=Button(frame.campos,text="Buscar productos por nombre",command= lambda:self.busqueda_nombre(cliente))
+        boton1.grid(row=1,column=1)
+        boton2.grid(row=1,column=2)
+        frame.pack(fill=BOTH, expand=True)
         tienda = cliente.get_tienda()
         if tienda is None:
-            Main.lineas()  # Implementar este método
+            #Main.lineas()  # Implementar este método
             print("Debería seleccionar una tienda primero, diríjase a la funcionalidad 1")
             print("1. Ir a la funcionalidad 1")
             print("2. Ver el menú para escoger otra funcionalidad")
-            decision = Main.escaner_con_rango(2)  # Implementar este método
+            decision = 1#Main.escaner_con_rango(2)  # Implementar este método
             if decision == 1:
-                Funcionalidad1.consultas_eco()  # Implementar este método en Funcionalidad1
+                p=2#Funcionalidad1.consultas_eco()  # Implementar este método en Funcionalidad1
             elif decision == 2:
-                Main.escoger_funcionalidad()  # Implementar este método en Main
+                p=2#Main.escoger_funcionalidad()  # Implementar este método en Main
             return
 
-        Main.lineas()  # Implementar este método
+        #Main.lineas()  # Implementar este método
         print("La búsqueda de nuestra tienda es lo más accesible para nuestros clientes. ¿Desea buscar por"
               "\n" + "una categoría o por nombre del producto?")
         print("")
@@ -399,7 +407,7 @@ class Funcionalidad2:
         print(f"Recuerde que el monto que le queda para gastar es {cliente.get_dinero() - monto_actual}$")
         print("")
 
-        decision = Main.escaner_con_rango(5)  # Implementar este método
+        decision = 2#Main.escaner_con_rango(5)  # Implementar este método
 
         if decision == 1:
             self.busqueda_categoria(cliente)  # Implementar este método
@@ -407,12 +415,12 @@ class Funcionalidad2:
             self.busqueda_nombre(cliente)  # Implementar este método
         elif decision == 3:
             if len(cliente.get_carrito().get_productos()) == 0:
-                Main.lineas()
+                #Main.lineas()
                 print("Usted no puede seleccionar esta opción")
                 self.elegir_tipo_busqueda(cliente)
                 return
 
-            Main.lineas()
+            #Main.lineas()
             print("Estos son los productos de su carrito: \n")
 
             productos = cliente.get_carrito().get_productos()
@@ -485,7 +493,7 @@ class Funcionalidad2:
                     cantidad_actual = cliente.get_carrito().contar_repeticiones(producto_seleccionado)
                     if 0 < cantidad_eliminar <= cantidad_actual:
                         cliente.get_carrito().eliminar_productos(producto_seleccionado, cantidad_eliminar)
-                        Main.lineas()
+                        #Main.lineas()
                         print("Productos actualizados en el carrito:\n")
 
                         # Encabezado de la tabla
@@ -537,11 +545,11 @@ class Funcionalidad2:
                 "Se han descartado todos los productos del carrito y se han devuelto a los pasillos correspondientes.")
             cliente.set_tienda(None)
             cliente.set_carrito(None)
-            Main.escoger_funcionalidad()  # Implementar este método en Main
+            #Main.escoger_funcionalidad()  # Implementar este método en Main
 
         elif decision == 5:
             if len(cliente.get_carrito().get_productos()) == 0:
-                Main.lineas()  # Implementar este método
+                #Main.lineas()  # Implementar este método
                 print("Usted no puede seleccionar esta opción")
                 self.elegir_tipo_busqueda(cliente)
                 return
@@ -549,5 +557,5 @@ class Funcionalidad2:
             cliente.get_facturas().append(cliente.get_carrito())
             cliente.set_carrito(None)
             cliente.set_tienda(None)
-            Main.escoger_funcionalidad()  # Implementar este metodo en Main
+            #Main.escoger_funcionalidad()  # Implementar este metodo en Main
 

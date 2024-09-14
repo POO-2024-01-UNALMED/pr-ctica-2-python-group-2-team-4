@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 
+
 #from numpy.random import random, randint
 
 
@@ -261,11 +262,20 @@ def iniciar_ventana_usuario():
 
     menuprocesos.add_cascade(label="Menu creaciones y destrucciones", menu=submenu)
 
-    zona2 = FieldFrame(window, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
 
-    def evtRepararProducto():
-        matarloTodo(zona2)
-    menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
+    def funcion2():
+        from uiMain.funcionalidad2 import Funcionalidad2
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from gestorAplicacion.servicios.enums import Genero
+        for i in window.winfo_children():
+            print(i)
+            if i is not Menu:
+                i.destroy()
+        cliente=Cliente("Juan", 123, 18, Genero.H)
+        funcionalidad2=Funcionalidad2()
+        funcionalidad2.elegir_tipo_busqueda(cliente,window)
+
+    menuprocesos.add_command(label="Funcionalidad 2", command=funcion2)
 
     
     menuprocesos.add_command(label="Funcionalidad 4", command=event_definirRol)
@@ -448,7 +458,6 @@ class HojaVida(Frame):
         self._text.pack(fill=BOTH, expand=True)
         self._text.bind('<Button>', self.proximo)
 
-        #path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\jhorman.txt'.format(numero))
         if self._next_hv==0:
             txt="jhorman"
         elif self._next_hv==1:
