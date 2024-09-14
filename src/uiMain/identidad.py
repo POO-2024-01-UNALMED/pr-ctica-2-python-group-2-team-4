@@ -201,7 +201,4 @@ class Identidad:
     # boton_siguiente = tk.Button(frame_func4, text="Siguiente", command=procesar_documento)
     # boton_siguiente.pack(pady=10)
 
-    root = Tk()
-    root.title("Ejemplo de FieldFrame")
-    root.geometry("600x400")
-    frem_id=FieldFrame_p(root, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
+    root= Tk()
