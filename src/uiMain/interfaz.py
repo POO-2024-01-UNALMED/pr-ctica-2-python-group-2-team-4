@@ -43,6 +43,9 @@ class FieldFrame_p(Frame):
 
 
 def iniciar_ventana_usuario():
+
+    
+
     def matarloTodo(frameUtilizado):
         for frame in framesAMatar:
             frame.pack_forget()  # Comentado por error
@@ -565,6 +568,10 @@ class FieldFrame_2(Tk):
 
         self.bienvenida = Bienvenida(frame_p1)
         self.hoja_vida = HojaVida(frame_p2)
+
+
+
+
 
 if __name__ == "__main__":
     from fieldFrame import FieldFrame

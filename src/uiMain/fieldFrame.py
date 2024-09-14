@@ -5,11 +5,11 @@ import tkinter
 from tkinter import*
 from tkinter import messagebox
 
-from uiMain.funcionalidad1 import Funcionalidad1
+#from uiMain.funcionalidad1 import Funcionalidad1
 
 
 class FieldFrame(Frame):
-    from uiMain.interfaz import FieldFrame_p
+    from interfaz import FieldFrame_p
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado,
                  titulo="Proceso o Consulta", descripcion="Descripcion proceso/consulta"):
         super().__init__(master, bg="orange")

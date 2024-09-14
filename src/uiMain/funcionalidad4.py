@@ -1,4 +1,9 @@
 from typing import List, Optional
+import sys
+sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+import gestorAplicacion
+
+
 import gestorAplicacion
 
 class Funcionalidad4:
