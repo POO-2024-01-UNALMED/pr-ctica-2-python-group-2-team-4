@@ -13,14 +13,17 @@ class Bienvenida(Frame):
 
         # Divisiones P3 y P4 en P1
         self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         self.frame_p3.pack(fill=X, padx=5, pady=5)
 
         self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         self.frame_p4.pack(fill=BOTH, expand=True, padx=5, pady=(5,0), anchor='s')
 
         self._next_el = 0
 
         saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"),bg="light blue")
+        saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"),bg="#00FF00")
         saludo.pack(pady=5)
 
         self.frame_aux =Frame(self.frame_p3, height=120,bg="light blue")
@@ -58,4 +61,4 @@ class Bienvenida(Frame):
     # Carga la ventana principal del admin y cierra la ventana actual
     def abrir_ventana_principal(self):
         self._window.master.master.destroy()
-        Iniciar_ventana_usuario()
+        iniciar_ventana_usuario()

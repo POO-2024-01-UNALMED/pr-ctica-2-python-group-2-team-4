@@ -10,9 +10,11 @@ class HojaVida(Frame):
         super().__init__(window)
 
         self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         self.frame_p5.pack(fill=X, padx=5, pady=5)
 
         self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         self.frame_p6.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         self._text = None
