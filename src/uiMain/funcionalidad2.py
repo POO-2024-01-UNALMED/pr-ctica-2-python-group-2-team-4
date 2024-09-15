@@ -196,7 +196,7 @@ class Funcionalidad2:
 
             return seleccionado
 
-    def busqueda_categoria(self,cliente, window):
+    def busqueda_categoria(self, cliente, window):
         # Limpieza de cualquier mensaje previo en la ventana
         widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
         for i, widget in enumerate(widgets):
@@ -222,14 +222,14 @@ class Funcionalidad2:
         for tipo in Categoria:
             categoria_dict[enumerado] = tipo
             Button(botones_frame, text=f"{enumerado}. {tipo.get_texto()}",
-                   font=("Arial", 12), bg="light gray", padx=30, pady=15,
+                   font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                    width=35, command=lambda cat=tipo: self.mostrar_productos_por_categoria(cliente, cat, window)).pack(
                 pady=5, anchor=CENTER)
             enumerado += 1
 
         # Añadir la opción de buscar por nombre
         Button(botones_frame, text=f"{enumerado}. Volver",
-               font=("Arial", 12), bg="light gray", padx=30, pady=15,
+               font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                width=35, command=lambda: self.elegir_tipo_busqueda(cliente, window)).pack(pady=5, anchor=CENTER)
 
         # Entrada para seleccionar la categoría
@@ -258,7 +258,7 @@ class Funcionalidad2:
         Button(categorias_frame, text="Confirmar", command=confirmar_seleccion_categoria,
                font=("Arial", 12), bg="#00FF00", fg="black").pack(pady=10)
 
-    def mostrar_productos_por_categoria(self,cliente, categoria, window, page=1):
+    def mostrar_productos_por_categoria(self, cliente, categoria, window, page=1):
         widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
@@ -273,6 +273,9 @@ class Funcionalidad2:
             Label(productos_frame,
                   text="No hay productos disponibles en esta categoría.",
                   font=("Arial", 12), bg="light blue").pack(pady=10)
+            Button(productos_frame, text="Volver a Categorías",
+                   font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
+                   width=35, command=lambda: self.busqueda_categoria(cliente, window)).pack(pady=10, anchor=CENTER)
             return
 
         Label(productos_frame, text=f"Productos en la categoría {categoria.get_texto()}:",
@@ -289,7 +292,7 @@ class Funcionalidad2:
         for i, producto in enumerate(productos):
             Button(botones_frame,
                    text=f"{i + 1}. {producto.get_nombre()} - {producto.get_marca()} - ${producto.get_precio():.2f}",
-                   font=("Arial", 12), bg="light gray", padx=30, pady=15,
+                   font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                    width=35, command=lambda prod=producto: self.seleccionar_producto(cliente, prod, window)).pack(pady=5,
                                                                                                              anchor=CENTER)
 
@@ -297,6 +300,7 @@ class Funcionalidad2:
         paginacion_frame = Frame(productos_frame, bg="light blue")
         paginacion_frame.pack(pady=10)
 
+        # Botones de paginación
         if page > 1:
             Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#00FF00", fg="black",
                    command=lambda: self.mostrar_productos_por_categoria(cliente, categoria, window, page - 1)).pack(
@@ -305,12 +309,12 @@ class Funcionalidad2:
         if page < total_paginas:
             Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#00FF00", fg="black",
                    command=lambda: self.mostrar_productos_por_categoria(cliente, categoria, window, page + 1)).pack(
-                side="left", padx=5)
+                side="right", padx=5)
 
-        Button(productos_frame, text="Volver", font=("Arial", 12), bg="light gray", padx=30, pady=15,
+        Button(productos_frame, text="Volver", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                width=35, command=lambda: self.busqueda_categoria(cliente, window)).pack(pady=10, anchor=CENTER)
 
-    def seleccionar_producto(self,cliente, producto, window):
+    def seleccionar_producto(self, cliente, producto, window):
         cantidad = simpledialog.askinteger("Cantidad", "¿Cuántos productos de este quiere usted?",
                                            minvalue=1, parent=window)
 
@@ -328,7 +332,7 @@ class Funcionalidad2:
             messagebox.showinfo("Resultado", resultado)
             self.elegir_tipo_busqueda(cliente, window)
 
-    def mostrar_productos_recomendados(self,seleccionado, cliente, window):
+    def mostrar_productos_recomendados(self, seleccionado, cliente, window):
         productos_recomendados = cliente.get_tienda().recomendar_productos(seleccionado, cliente)
 
         if not productos_recomendados:
@@ -343,16 +347,16 @@ class Funcionalidad2:
         for i, producto in enumerate(productos_recomendados):
             Button(recomendacion_window,
                    text=f"{i + 1}. {producto.get_nombre()} - {producto.get_marca()} - ${producto.get_precio():.2f}",
-                   font=("Arial", 12), bg="light gray", padx=30, pady=15,
+                   font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                    width=35,
                    command=lambda prod=producto: self.seleccionar_producto(cliente, prod, recomendacion_window)).pack(pady=5,
                                                                                                                  anchor=CENTER)
 
         Button(recomendacion_window, text="Volver",
-               font=("Arial", 12), bg="light gray", padx=30, pady=15,
+               font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                width=35, command=lambda: recomendacion_window.destroy()).pack(pady=10, anchor=CENTER)
 
-    def mostrar_decision_rapida(self,seleccionado, cliente, window):
+    def mostrar_decision_rapida(self, seleccionado, cliente, window):
         decision_window = Toplevel(window)
         decision_window.title("Decisión Rápida")
 

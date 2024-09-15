@@ -263,10 +263,6 @@ class Iniciar_ventana_usuario():
         from uiMain.fieldFrame import FieldFrame
         zona2 = FieldFrame(window, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
 
-        def evtRepararProducto():
-            matarloTodo(zona2)
-        menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
-
         from uiMain.funcionalidad5 import Funcionalidad5
         menuprocesos.add_command(label="Funcionalidad 5", command=lambda: prueba2(window))
 

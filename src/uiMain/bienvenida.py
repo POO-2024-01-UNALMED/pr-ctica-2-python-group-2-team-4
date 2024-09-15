@@ -61,4 +61,4 @@ class Bienvenida(Frame):
     # Carga la ventana principal del admin y cierra la ventana actual
     def abrir_ventana_principal(self):
         self._window.master.master.destroy()
-        iniciar_ventana_usuario()
+        Iniciar_ventana_usuario()
