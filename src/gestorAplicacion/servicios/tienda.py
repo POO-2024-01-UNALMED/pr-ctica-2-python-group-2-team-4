@@ -142,8 +142,8 @@ class Tienda:
 
     @staticmethod
     def buscar_tienda():
-        if len(Tienda.tiendas) > 0:
-            tiendas_revisadas = Tienda.revision_tienda(Tienda.tiendas)
+        if len(Tienda.get_tiendas()) > 0:
+            tiendas_revisadas = Tienda.revision_tienda(Tienda.get_tiendas())
             return len(tiendas_revisadas) > 0
         else:
             return False
@@ -155,8 +155,10 @@ class Tienda:
         return tiendas_disp
 
     @staticmethod
-    def revision_tienda(tienda_disp):
-        return [tienda for tienda in tienda_disp if len(tienda.empleados) > 0 and tienda.disponibilidad_productos()]
+    def revision_tienda(tiendas_disp):
+        tiendas_disp = [Tienda for tienda in tiendas_disp if
+                        len(tienda.get_empleados()) > 0 and tienda.disponibilidad_productos()]
+        return tiendas_disp
 
     @staticmethod
     def tiendas_con_cliente(cliente):
