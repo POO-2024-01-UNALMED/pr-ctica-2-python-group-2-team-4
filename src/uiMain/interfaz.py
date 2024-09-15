@@ -272,6 +272,7 @@ def iniciar_ventana_usuario():
     def prueba(window):
         
         matarloTodo2()
+        
         Funcionalidad4.ingresar(window)
 
     from uiMain.funcionalidad4 import Funcionalidad4

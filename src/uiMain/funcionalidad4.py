@@ -4,7 +4,7 @@ import tkinter as tk
 from typing import List, Optional
 import sys
 
-from uiMain.fieldFrame import FieldFrame
+from fieldFrame import FieldFrame
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from gestorAplicacion.sujetos.administrador import Administrador
 from uiMain import identidad, interfaz
@@ -303,18 +303,15 @@ class Funcionalidad4:
         ventana.mainloop()
 
     @classmethod
-    def ingresar(cls,window):
-        frame_prueba = FieldFrame(window,"mangoCriterios",["criterio1,mangocriterio1"],"valores",["hola"],["normal"] )
-        frame_prueba.pack(pady=20, padx=20, fill='both', expand=True)
+    def ingresar(cls,window):   
         from .identidad import Identidad2
-        # usuario =Identidad2(window).identificar_persona()
-        # if not isinstance(usuario,Administrador):
-        #     cls.mostrar_ventana()
-            
-        #return usuario
+        usuario =Identidad2(window).identificar_persona()
+        if not isinstance(usuario,Administrador):
+            cls.mostrar_ventana()
+            cls.ingresar(window)
+        return usuario
     
-    def ingresar_prueba(cls):
-        print("se dispara")
+    
 
     #muestra el frame donde se puede seleccionar la tienda ( aplicar a fieldframe de ser posible)
     def mostrar_frame(self, window, usuario ):
