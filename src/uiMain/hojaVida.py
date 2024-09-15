@@ -9,12 +9,10 @@ class HojaVida(Frame):
     def __init__(self, window):
         super().__init__(window)
 
-        self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
-        self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
-        self.frame_p5.pack(fill=X, padx=5, pady=5)
+        self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="#015086")
+        self.frame_p5.pack(fill=BOTH, padx=5, pady=5)
 
-        self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
-        self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
+        self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid",bg="#69a0ce")
         self.frame_p6.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         self._text = None
@@ -26,7 +24,7 @@ class HojaVida(Frame):
         for i in range(0, 4):
             label = Label(self.frame_p6)
             (r, c) = HojaVida._posicion_imagen[i]
-            label.grid(row=r, column=c, padx=5, pady=5, sticky="nsew")
+            label.grid(row=r, column=c, padx=5, pady=5)
             self.frame_p6.grid_rowconfigure(r, weight=1)
             self.frame_p6.grid_columnconfigure(c, weight=1)
             self._labels.append(label)
@@ -55,8 +53,8 @@ class HojaVida(Frame):
         self._labels[numero].image = photo
 
     def cargar_hv(self, numero):
-        self._text = Text(self.frame_p5, height=10, width=77)
-        self._text.pack(fill=BOTH, expand=True)
+        self._text = Text(self.frame_p5, height=10, width=77, bg="light blue", font=("Serif", 10, "bold"), wrap="word")
+        self._text.pack(fill=BOTH)
         self._text.bind('<Button>', self.proximo)
 
         #path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\jhorman.txt'.format(numero))

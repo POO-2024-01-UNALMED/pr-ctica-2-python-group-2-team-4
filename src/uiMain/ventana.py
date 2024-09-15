@@ -18,7 +18,7 @@ class Ventana(Tk):
         self.state("zoomed")
 
         # Frame principal
-        frame_principal = Frame(self, padx=10, pady=10, bd=2, relief="solid",bg="orange")
+        frame_principal = Frame(self, padx=10, pady=10, bd=2, relief="solid",bg="#024A86")
         frame_principal.pack(fill=BOTH, expand=True)
 
         self.menubar = Menu(self)
@@ -31,10 +31,10 @@ class Ventana(Tk):
         self.config(menu=self.menubar)
 
         # Divisiones P1 y P2
-        frame_p1 = Frame(frame_principal,padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        frame_p1 = Frame(frame_principal,padx=5, pady=5, bd=2, relief="solid",bg="#1c2951")
         frame_p1.pack(side=LEFT, fill=BOTH, expand=True, padx=5, pady=5)
 
-        frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="#1c2951")
         frame_p2.pack(side=RIGHT, fill=BOTH, expand=True, padx=5, pady=5)
 
         from .bienvenida import Bienvenida

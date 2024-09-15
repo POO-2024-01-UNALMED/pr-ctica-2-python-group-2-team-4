@@ -462,19 +462,21 @@ class Funcionalidad2:
                                         command=lambda p=producto: seleccionar_producto(p))
                 boton_producto.pack(fill=BOTH, expand=True)
 
-            # Mensaje de paginación
+            # Controles de paginación
+            paginacion_frame = Frame(frame1, bg="light blue")
+            paginacion_frame.pack(pady=10, fill=X, padx=20)
+
             if inferior > 0:
-                label_paginacion = Label(frame1,
-                                         text="Escriba 'a' para anterior página",
-                                         font=("Arial", 12), bg="light blue")
-                label_paginacion.pack(pady=5)
+                Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#00FF00", fg="black",
+                       command=lambda: actualizar_pagina(inferior - 4, superior - 4,frame1, entry_seleccion)).pack(side="left", padx=5)
 
             if superior < len(productos):
-                label_paginacion = Label(frame1,
-                                         text="Escriba 's' para siguiente página",
-                                         font=("Arial", 12), bg="light blue")
-                label_paginacion.pack(pady=5)
+                Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#00FF00", fg="black",
+                       command=lambda: actualizar_pagina(inferior + 4, superior + 4,frame1, entry_seleccion)).pack(side="right", padx=5)
 
+            explicacion = Label(frame1, text="Seleccione un producto por su numero o toca el boton correspondiente",
+                                font=("Arial", 12), bg="light blue")
+            explicacion.pack(pady=10)
             entry_seleccion = Entry(frame1, font=("Arial", 12))
             entry_seleccion.pack(pady=10)
 
@@ -488,21 +490,15 @@ class Funcionalidad2:
                 except ValueError:
                     numero = None  # Usar `None` para representar que no es un número
 
-                if numero is None or numero < 1 or numero > 4:
+                if numero is None or numero < 1 or numero > len(productos):
                     if seleccion.lower() == "s":
                         if superior < len(productos):
-                            inferior = superior
-                            superior += 4
-                            actualizar_mostrar_productos(frame1, productos, inferior, superior)
+                            actualizar_pagina(inferior + 4, superior + 4, frame1, entry_seleccion)
                         return
 
                     if seleccion.lower() == "a":
                         if inferior > 0:
-                            superior = inferior
-                            inferior -= 4
-                            if inferior < 0:
-                                inferior = 0
-                            actualizar_mostrar_productos(frame1, productos, inferior, superior)
+                            actualizar_pagina(inferior - 4, superior - 4, frame1, entry_seleccion)
                         return
 
                     productos_busqueda = buscar_productos_por_nombre(seleccion)
@@ -512,10 +508,13 @@ class Funcionalidad2:
                     else:
                         productos.clear()
                         productos.extend(productos_busqueda)
+                        inferior = 0
+                        superior = min(4, len(productos))
+                        actualizar_mostrar_productos(frame1, productos, inferior, superior)
                 else:
                     if 1 <= numero <= len(productos):
                         seleccionado = productos[numero - 1]
-                    elif numero == 5:
+                    elif numero == len(productos) + 1:
                         self.elegir_tipo_busqueda(cliente, window)
                         return
                     else:
@@ -523,23 +522,19 @@ class Funcionalidad2:
                         return
 
                 if seleccionado is not None:
-                    label_seleccionado = Label(frame1, text=f"Producto seleccionado: {seleccionado.get_nombre()}",
-                                               font=("Arial", 12, "bold"), fg="green", bg="light blue", borderwidth=2,
-                                               relief="solid")
-                    label_seleccionado.pack(pady=5)
                     # Llamar a la función donde se agregan productos
                     self.donde_se_agregan_productos(cliente, seleccionado, window)
+
 
             boton_seleccionar = Button(frame1, text="Seleccionar", command=seleccionar,
                                        font=("Arial", 12), bg="#00FF00", fg="black")
             boton_seleccionar.pack(pady=10)
 
+            Button(frame1, text="Volver a Buscar", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
+                   command=lambda: self.busqueda_nombre(cliente, window)).pack(pady=10, anchor=CENTER)
+
             def seleccionar_producto(producto):
                 # Llamar a la función donde se agregan productos
-                label_seleccionado = Label(frame1, text=f"Producto seleccionado: {producto.get_nombre()}",
-                                           font=("Arial", 12, "bold"), fg="green", bg="light blue", borderwidth=2,
-                                           relief="solid")
-                label_seleccionado.pack(pady=5)
                 self.donde_se_agregan_productos(cliente, producto, window)
 
         def buscar_y_mostrar(frame1, entry_nombre):
@@ -549,7 +544,7 @@ class Funcionalidad2:
                 mostrar_error(frame1, "No se encontraron productos. Introduzca otro nombre.")
                 return
             inferior = 0
-            superior = 4
+            superior = min(4, len(productos))
             actualizar_mostrar_productos(frame1, productos, inferior, superior)
 
         def mostrar_productos():
@@ -569,6 +564,13 @@ class Funcionalidad2:
                                   command=lambda: buscar_y_mostrar(frame1, entry_nombre),
                                   font=("Arial", 12), bg="#00FF00", fg="black")
             boton_buscar.pack(pady=10)
+
+        def actualizar_pagina(inferior, superior,frame1, entry_nombre):
+            # Actualiza la vista de productos en la página actual
+            productos = buscar_productos_por_nombre(entry_nombre.get().strip())
+            inferior = max(0, inferior)
+            superior = min(len(productos), superior)
+            actualizar_mostrar_productos(frame1, productos, inferior, superior)
 
         mostrar_productos()
 
