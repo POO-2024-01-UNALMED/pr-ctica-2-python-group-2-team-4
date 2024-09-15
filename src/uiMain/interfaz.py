@@ -276,7 +276,19 @@ class Iniciar_ventana_usuario():
 
         from uiMain.funcionalidad4 import Funcionalidad4
         menuprocesos.add_command(label="Funcionalidad 4", command= lambda: prueba(window))
-        
+
+        # Función para mostrar el frame de Funcionalidad Uno
+        def mostrar_funcionalidad_uno():
+            from uiMain.funcionalidad1 import Funcionalidad1
+            from gestorAplicacion.sujetos.cliente import Cliente
+            from gestorAplicacion.sujetos.persona import Persona
+
+            cliente = None
+            funcionalidad1 = Funcionalidad1()
+            funcionalidad1.consultasEco(cliente, window)
+
+        # Añadir la opción en el menú para activar Funcionalidad Uno
+        menuprocesos.add_command(label="Funcionalidad 1", command=mostrar_funcionalidad_uno)
 
         def funcion2():
             from uiMain.funcionalidad2 import Funcionalidad2
