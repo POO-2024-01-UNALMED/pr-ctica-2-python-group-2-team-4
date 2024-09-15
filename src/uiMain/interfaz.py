@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 import sys
+
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from baseDatos.escritorLector import EscritorLector
 
@@ -260,9 +261,21 @@ def iniciar_ventana_usuario():
 
     zona2 = FieldFrame(window, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
 
-    def evtRepararProducto():
-        matarloTodo(zona2)
-    menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
+    def funcion2():
+        from uiMain.funcionalidad2 import Funcionalidad2
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from gestorAplicacion.servicios.enums import Genero
+        from gestorAplicacion.sujetos.persona import Persona
+
+        cliente=None
+        for persona in Persona.get_personas():
+            if 11001 == persona.get_id():
+                print(f"Bienvenido {persona.get_nombre()}")
+                cliente=persona
+        funcionalidad2 = Funcionalidad2()
+        funcionalidad2.elegir_tipo_busqueda(cliente, window)
+
+    menuprocesos.add_command(label="Funcionalidad 2", command=funcion2)
 
     from uiMain.funcionalidad5 import Funcionalidad5
     menuprocesos.add_command(label="Funcionalidad 5", command=lambda: Funcionalidad5.ingresar(window))
@@ -409,10 +422,10 @@ class HojaVida(Frame):
     def __init__(self, window):
         super().__init__(window)
 
-        self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        self.frame_p5 = Frame(window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         self.frame_p5.pack(fill=X, padx=5, pady=5)
 
-        self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        self.frame_p6 = Frame(window, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         self.frame_p6.pack(fill=BOTH, expand=True, padx=5, pady=5)
 
         self._text = None
@@ -488,15 +501,15 @@ class Bienvenida(Frame):
         self._window = window
 
         # Divisiones P3 y P4 en P1
-        self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         self.frame_p3.pack(fill=X, padx=5, pady=5)
 
-        self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         self.frame_p4.pack(fill=BOTH, expand=True, padx=5, pady=(5,0), anchor='s')
 
         self._next_el = 0
 
-        saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"),bg="light blue")
+        saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"),bg="#00FF00")
         saludo.pack(pady=5)
 
         self.frame_aux =Frame(self.frame_p3, height=120,bg="light blue")
@@ -553,7 +566,7 @@ class FieldFrame_2(Tk):
         self.state("zoomed")
 
         # Frame principal
-        frame_principal = Frame(self, padx=10, pady=10, bd=2, relief="solid",bg="orange")
+        frame_principal = Frame(self, padx=10, pady=10, bd=2, relief="solid",bg="blue")
         frame_principal.pack(fill=BOTH, expand=True)
 
         self.menubar = Menu(self)
@@ -566,10 +579,10 @@ class FieldFrame_2(Tk):
         self.config(menu=self.menubar)
 
         # Divisiones P1 y P2
-        frame_p1 = Frame(frame_principal,padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        frame_p1 = Frame(frame_principal,padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         frame_p1.pack(side=LEFT, fill=BOTH, expand=True, padx=5, pady=5)
 
-        frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="light blue")
+        frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="#00FF00")
         frame_p2.pack(side=RIGHT, fill=BOTH, expand=True, padx=5, pady=5)
 
         self.bienvenida = Bienvenida(frame_p1)
