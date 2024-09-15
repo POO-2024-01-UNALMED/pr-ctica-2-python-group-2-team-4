@@ -6,6 +6,7 @@ import sys
 
 from fieldFrame import FieldFrame
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.sujetos.administrador import Administrador
 from uiMain import identidad, interfaz
 
@@ -15,7 +16,10 @@ class Funcionalidad4:
     from gestorAplicacion.servicios.producto import Producto
     from gestorAplicacion.servicios.tienda import Tienda
     from gestorAplicacion.sujetos.administrador import Administrador
-    tiendaSelecta: Optional[Tienda] = None
+    def __init__(self):
+        self.user_id = None
+        self.tiendaSelecta: Optional[Tienda] = None
+
 
     @staticmethod
     def escaner(max_opcion: int) -> int:
@@ -286,6 +290,7 @@ class Funcionalidad4:
             # ------------------------------------------- # 
 
     # alerta de que el usuario no tiene tiendas 
+    @classmethod
     def mostrar_ventana(cls):
         ventana = tk.Tk()
         ventana.title("Aviso")
@@ -302,16 +307,67 @@ class Funcionalidad4:
         # Iniciar el loop de tkinter
         ventana.mainloop()
 
-    @classmethod
-    def ingresar(cls,window):   
-        from .identidad import Identidad2
-        usuario =Identidad2(window).identificar_persona()
-        if not isinstance(usuario,Administrador):
-            cls.mostrar_ventana()
-            cls.ingresar(window)
-        return usuario
-    
-    
+
+    def mostrar_frame_identificacion(self):
+    # Destruir el frame actual si existe
+        if self.frame_actual:
+            self.frame_actual.destroy()
+
+    # Criterios para el formulario (en este caso, solo pedimos el ID)
+        criterios = ["ID"]
+        valores = [""]  # Campo vacío para el ID
+        habilitado = [True]  # El campo está habilitado para ser llenado
+
+        # Crear un nuevo FieldFrame
+        self.frame_actual = FieldFrame(
+            master=self.window,
+            tituloCriterios="Criterios",
+            criterios=criterios,
+            tituloValores="Valores",
+            valores=valores,
+            habilitado=habilitado,
+            titulo="Identificación",
+            descripcion="Por favor ingrese su ID para identificarse"
+        )
+
+        self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
+        
+        # Asignar el callback al botón aceptar
+        self.frame_actual.aceptar.config(command=self.guardar_id)
+
+    def guardar_id(self):
+        # Obtener el ID del campo de entrada
+        id = self.frame_actual._entrys[0].get()
+        print(f"ID ingresado: {id}")
+        return id
+
+    def ingresar(self, window):
+            from .identidad import Identidad3
+
+            # Limpiar los widgets de la ventana actual si es necesario
+            widgets = window.winfo_children()
+            for i, widget in enumerate(widgets):
+                if i >= 4:
+                    widget.destroy()
+
+            # Crear una instancia de Identidad3
+            identidad = Identidad3(window)
+
+            # Mostrar el frame de identificación
+            identidad.mostrar_frame_identificacion()
+
+            # Callback para guardar el ID ingresado en la variable de la instancia
+            def guardar_id_local():
+                self.user_id = identidad.frame_actual._entrys[0].get()  
+                idActual = self.user_id
+
+                print(f"ID capturado desde ingresar: {self.user_id}")
+                print(idActual)
+                return idActual
+            # Asignar el callback al botón "Aceptar"
+            
+            idnuevo = identidad.frame_actual.aceptar.config(command=guardar_id_local)
+            print(idnuevo)
 
     #muestra el frame donde se puede seleccionar la tienda ( aplicar a fieldframe de ser posible)
     def mostrar_frame(self, window, usuario ):
