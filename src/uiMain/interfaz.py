@@ -48,6 +48,11 @@ def iniciar_ventana_usuario():
             frame.pack_forget()  # Comentado por error
         frameUtilizado.pack(fill=BOTH, expand=True)
 
+    def matarloTodo2():
+        for frame in framesAMatar:
+            frame.pack_forget()  # Comentado por error
+          
+
     def outPut(string, text):
         text.delete("1.0", "end")
         text.insert(INSERT, string)
@@ -240,6 +245,9 @@ def iniciar_ventana_usuario():
     menubar.add_cascade(menu=menuayuda,
                         label='Ayuda',
                         command=evento)
+    
+    # Establecer la barra de menús en la ventana principal
+    window.config(menu=menubar)
 
     # submenu de procesos y consultas
     submenu = Menu(window)
@@ -257,11 +265,17 @@ def iniciar_ventana_usuario():
     menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
 
     from uiMain.funcionalidad5 import Funcionalidad5
-    menuprocesos.add_command(label="Funcionalidad 5", command=Funcionalidad5.ingresar(window))
+    menuprocesos.add_command(label="Funcionalidad 5", command=lambda: Funcionalidad5.ingresar(window))
+
     menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
 
+    def prueba(window):
+        
+        matarloTodo2()
+        Funcionalidad4.ingresar(window)
+
     from uiMain.funcionalidad4 import Funcionalidad4
-    menuprocesos.add_command(label="Funcionalidad 4", command= lambda: Funcionalidad4.ingresar(window))
+    menuprocesos.add_command(label="Funcionalidad 4", command= lambda: prueba(window))
     
 
     def funcion2():

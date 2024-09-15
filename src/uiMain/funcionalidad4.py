@@ -3,6 +3,8 @@ import tkinter
 import tkinter as tk
 from typing import List, Optional
 import sys
+
+from uiMain.fieldFrame import FieldFrame
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from gestorAplicacion.sujetos.administrador import Administrador
 from uiMain import identidad, interfaz
@@ -284,7 +286,7 @@ class Funcionalidad4:
             # ------------------------------------------- # 
 
     # alerta de que el usuario no tiene tiendas 
-    def mostrar_ventana():
+    def mostrar_ventana(cls):
         ventana = tk.Tk()
         ventana.title("Aviso")
         ventana.geometry("300x150")
@@ -300,15 +302,16 @@ class Funcionalidad4:
         # Iniciar el loop de tkinter
         ventana.mainloop()
 
-    
-    def ingresar(window):
-        
+    @classmethod
+    def ingresar(cls,window):
+        frame_prueba = FieldFrame(window,"mangoCriterios",["criterio1,mangocriterio1"],"valores",["hola"],["normal"] )
+        frame_prueba.pack(pady=20, padx=20, fill='both', expand=True)
         from .identidad import Identidad2
-        usuario =Identidad2(window).identificar_persona()
-        if not isinstance(usuario,Administrador):
-            Funcionalidad4.mostrar_ventana()
+        # usuario =Identidad2(window).identificar_persona()
+        # if not isinstance(usuario,Administrador):
+        #     cls.mostrar_ventana()
             
-        return usuario
+        #return usuario
     
     def ingresar_prueba(cls):
         print("se dispara")
