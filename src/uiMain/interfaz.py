@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 import sys
+
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from baseDatos.escritorLector import EscritorLector
 from uiMain.ventana import Ventana
@@ -285,18 +286,17 @@ class Iniciar_ventana_usuario():
             from uiMain.funcionalidad2 import Funcionalidad2
             from gestorAplicacion.sujetos.cliente import Cliente
             from gestorAplicacion.servicios.enums import Genero
-            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
-            for i, widget in enumerate(widgets):
-                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
-                    widget.destroy()
+            from gestorAplicacion.sujetos.persona import Persona
 
-            cliente=Cliente("Juan", 123, 18, Genero.H)
+            cliente=None
+            for persona in Persona.get_personas():
+                if 11001 == persona.get_id():
+                    print(f"Bienvenido {persona.get_nombre()}")
+                    cliente=persona
+            funcionalidad2 = Funcionalidad2()
+            funcionalidad2.elegir_tipo_busqueda(cliente, window)
 
-            funcionalidad2=Funcionalidad2()
-            funcionalidad2.elegir_tipo_busqueda(cliente,window)
-            
-
-        
+        menuprocesos.add_command(label="Funcionalidad 2", command=funcion2)
 
         menuayuda.add_command(label="Acerca de", command=open_popup)
 
@@ -406,7 +406,7 @@ class Inicio(Frame):
         with open(path, "r+") as instrucciones:
             text.insert(INSERT, instrucciones.read())
         text.tag_configure('center', justify='center')
-
+        
 if __name__ == "__main__":
     EscritorLector.deserializarTodo()
     from fieldFrame import FieldFrame
