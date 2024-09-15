@@ -284,7 +284,7 @@ class Funcionalidad4:
             # ------------------------------------------- # 
 
     # alerta de que el usuario no tiene tiendas 
-    def mostrar_ventana(self):
+    def mostrar_ventana():
         ventana = tk.Tk()
         ventana.title("Aviso")
         ventana.geometry("300x150")
@@ -300,16 +300,19 @@ class Funcionalidad4:
         # Iniciar el loop de tkinter
         ventana.mainloop()
 
-    @classmethod
-    def ingresar(cls,window):
+    
+    def ingresar(window):
         
         from .identidad import Identidad2
         usuario =Identidad2(window).identificar_persona()
         if not isinstance(usuario,Administrador):
-            cls().mostrar_ventana()
-            cls().ingresar()
+            Funcionalidad4.mostrar_ventana()
+            
         return usuario
     
+    def ingresar_prueba(cls):
+        print("se dispara")
+
     #muestra el frame donde se puede seleccionar la tienda ( aplicar a fieldframe de ser posible)
     def mostrar_frame(self, window, usuario ):
 

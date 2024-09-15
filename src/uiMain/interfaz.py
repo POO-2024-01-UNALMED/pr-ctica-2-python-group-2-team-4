@@ -255,9 +255,15 @@ def iniciar_ventana_usuario():
     def evtRepararProducto():
         matarloTodo(zona2)
     menuprocesos.add_command(label="Funcionalidad 2", command=evtRepararProducto)
+
     from uiMain.funcionalidad5 import Funcionalidad5
     menuprocesos.add_command(label="Funcionalidad 5", command=Funcionalidad5.ingresar(window))
     menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
+
+    from uiMain.funcionalidad4 import Funcionalidad4
+    menuprocesos.add_command(label="Funcionalidad 4", command= lambda: Funcionalidad4.ingresar(window))
+    
+
     def funcion2():
         from uiMain.funcionalidad2 import Funcionalidad2
         from gestorAplicacion.sujetos.cliente import Cliente
@@ -272,8 +278,7 @@ def iniciar_ventana_usuario():
         funcionalidad2=Funcionalidad2()
         funcionalidad2.elegir_tipo_busqueda(cliente,window)
 
-    from uiMain.funcionalidad4 import Funcionalidad4
-    menuprocesos.add_command(label="Funcionalidad 4", command=Funcionalidad4.ingresar(window))
+    
 
     menuayuda.add_command(label="Acerca de", command=open_popup)
 
