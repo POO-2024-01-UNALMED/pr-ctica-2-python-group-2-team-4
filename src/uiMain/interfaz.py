@@ -7,7 +7,7 @@ from tkinter.font import Font
 import sys
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from baseDatos.escritorLector import EscritorLector
-from .ventana import Ventana
+from uiMain.ventana import Ventana
 
 
 from identidad import Identidad2
@@ -259,7 +259,7 @@ class Iniciar_ventana_usuario():
         menuarchivo.add_command(label="Guardar y salir", command=salir)
 
         menuprocesos.add_cascade(label="Menu creaciones y destrucciones", menu=submenu)
-        from .fieldFrame import FieldFrame
+        from uiMain.fieldFrame import FieldFrame
         zona2 = FieldFrame(window, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
 
         def evtRepararProducto():
