@@ -4,7 +4,8 @@ import tkinter
 from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
-
+import sys
+sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from baseDatos.escritorLector import EscritorLector
 
 
@@ -271,8 +272,8 @@ def iniciar_ventana_usuario():
         funcionalidad2=Funcionalidad2()
         funcionalidad2.elegir_tipo_busqueda(cliente,window)
 
-    
-    menuprocesos.add_command(label="Funcionalidad 4", command=event_definirRol)
+    from uiMain.funcionalidad4 import Funcionalidad4
+    menuprocesos.add_command(label="Funcionalidad 4", command=Funcionalidad4.ingresar(window))
 
     menuayuda.add_command(label="Acerca de", command=open_popup)
 
