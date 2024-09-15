@@ -1,4 +1,120 @@
+import math
+from tkinter import *
+from tkinter import messagebox, simpledialog
+
+from gestorAplicacion.servicios.tienda import Tienda
+from uiMain.fieldFrame import FieldFrame
+
+
 class Funcionalidad1:
+    def __init__(self):
+        pass
+
+    cliente = None
+
+    def consultasEco(self, cliente, window):
+        from gestorAplicacion.servicios.tienda import Tienda
+        widgets = window.winfo_children()
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        # Crear un FieldFrame con el título y descripción correspondiente
+        zona2Fun1 = FieldFrame(window, "", [None], "", [],
+                               [None], "Sistema de Consultas Personalizadas",
+                               "La Funcionalidad 1, permite a los usuarios realizar búsquedas de tiendas y productos en una tienda simulada, ya sea de manera general o por categoría. El sistema filtra tiendas según la disponibilidad de productos y trabajadores, y ajusta el acceso y presupuesto del usuario según su edad. Además, gestiona las membresías, permitiendo actualizar o adquirir una nueva, ofreciendo beneficios adicionales según la categoría de membresía (Básico, Premium, VIP)."
+                               , False, 25, 15, "#243340", "white", "black", "#F2F2F2", 0, 800)
+
+        # Crear un Frame para los botones y añadirlo al `FieldFrame`
+        boton_frame = Frame(zona2Fun1.campos, bg="#F2F2F2")
+        boton_frame.grid(row=0, column=1, columnspan=2, pady=20, padx=10, sticky='nsew')
+
+        # Configurar las columnas y filas del `boton_frame` para que se expandan
+        boton_frame.columnconfigure(0, weight=1)
+        boton_frame.rowconfigure(0, weight=1)
+        boton_frame.rowconfigure(1, weight=1)
+        boton_frame.rowconfigure(2, weight=1)
+        boton_frame.rowconfigure(3, weight=1)
+
+        # Texto Opciones
+        texto_label = Label(boton_frame, text="Ha seleccionado Ecosistema de Consultas Personalizadas",
+                            font=("Arial", 20), bg="#F2F2F2")
+        texto_label.grid(row=0, column=0, sticky='ew', padx=50, pady=10)
+
+        # Botón 1: Consulta general de productos
+        boton1 = Button(boton_frame, text="Consulta general de productos",
+                        font=("Arial", 15), command=lambda: self.consulta_general_productos(cliente, window))
+        boton1.grid(row=1, column=0, sticky='ew', padx=50, pady=10)
+
+        # Botón 2: Consulta de productos por categoría
+        boton2 = Button(boton_frame, text="Consulta de productos por categoría",
+                        font=("Arial", 15),command=print(Tienda.buscar_tienda()))
+        boton2.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
+
+        # Botón 3: Consulta de membresías
+        boton3 = Button(boton_frame, text="Consulta de membresías",
+                        font=("Arial", 15))
+        boton3.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
+
+        # Botón 4: Volver al menú principal
+        boton4 = Button(boton_frame, text="Volver", font=("Arial", 15))
+        boton4.grid(row=4, column=0, sticky='ew', padx=50, pady=10)
+
+        # Ajustar la configuración del grid para que el `boton_frame` ocupe el espacio disponible
+        zona2Fun1.campos.columnconfigure(1, weight=1)
+        zona2Fun1.campos.rowconfigure(1, weight=1)
+
+        # Mostrar el frame con los botones
+        zona2Fun1.pack(fill=BOTH, expand=True)
+
+    def consulta_general_productos(self, cliente, window):
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from uiMain.main import Main
+        from gestorAplicacion.servicios.tienda import Tienda
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        # Crear el marco para las Tiendas
+        tiendasGeneral_frame = Frame(window, bg="#243340")
+        tiendasGeneral_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        # Crear el marco para las Tiendas
+        tiendas_frame = Frame(tiendasGeneral_frame, bg="light blue")
+        tiendas_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        if Tienda.buscar_tienda():
+            tiendas = Tienda.revision_tienda(Tienda.get_tiendas())
+            Label(tiendas_frame, text="Selecciona una de las tiendas que tenemos disponibles para ti:",
+                  font=("Arial", 16), bg="#F2F2F2", fg="black").pack(pady=10)
+
+
+
+
+            # Crear un marco adicional para centrar los botones
+            botones_frame = Frame(tiendas_frame, bg="#F2F2F2")
+            botones_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            indice = 1
+
+            for tienda in tiendas:
+                Button(botones_frame, text=f"{indice}. {tienda.get_nombre()}",
+                       font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
+                       width=35,
+                       #   command=lambda cat=tipo: self.mostrar_productos_por_categoria(cliente, cat, window)
+                       ).pack(
+                    pady=5, anchor=CENTER)
+                indice += 1
+
+                # Añadir la opción de buscar por nombre
+                Button(botones_frame, text=f"{indice}. Volver",
+                       font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
+                       width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=5, anchor=CENTER)
+
+
+
+"""
     @classmethod
     def consultas_eco(cls):
         from uiMain.identidad import Identidad
@@ -368,3 +484,4 @@ class Funcionalidad1:
 
         return opciones.get(seleccion)
 
+"""
