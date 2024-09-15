@@ -2,6 +2,7 @@ import math
 from tkinter import *
 from tkinter import messagebox, simpledialog
 
+from gestorAplicacion.servicios.tienda import Tienda
 from uiMain.fieldFrame import FieldFrame
 
 
@@ -12,6 +13,7 @@ class Funcionalidad1:
     cliente = None
 
     def consultasEco(self, cliente, window):
+        from gestorAplicacion.servicios.tienda import Tienda
         widgets = window.winfo_children()
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
@@ -46,7 +48,7 @@ class Funcionalidad1:
 
         # Botón 2: Consulta de productos por categoría
         boton2 = Button(boton_frame, text="Consulta de productos por categoría",
-                        font=("Arial", 15))
+                        font=("Arial", 15),command=print(Tienda.buscar_tienda()))
         boton2.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 3: Consulta de membresías
@@ -64,7 +66,7 @@ class Funcionalidad1:
 
         # Mostrar el frame con los botones
         zona2Fun1.pack(fill=BOTH, expand=True)
-""""
+
     def consulta_general_productos(self, cliente, window):
         from gestorAplicacion.sujetos.cliente import Cliente
         from uiMain.main import Main
@@ -73,19 +75,22 @@ class Funcionalidad1:
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
+
+        # Crear el marco para las Tiendas
+        tiendasGeneral_frame = Frame(window, bg="#243340")
+        tiendasGeneral_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        # Crear el marco para las Tiendas
+        tiendas_frame = Frame(tiendasGeneral_frame, bg="light blue")
+        tiendas_frame.pack(pady=10, fill=BOTH, expand=True)
+
         if Tienda.buscar_tienda():
             tiendas = Tienda.revision_tienda(Tienda.get_tiendas())
-
-            # Crear el marco para las Tiendas
-            tiendasGeneral_frame = Frame(window, bg="#243340")
-            tiendasGeneral_frame.pack(pady=10, fill=BOTH, expand=True)
-
-            # Crear el marco para las Tiendas
-            tiendas_frame = Frame(window, bg="light blue")
-            tiendas_frame.pack(pady=10, fill=BOTH, expand=True)
-
             Label(tiendas_frame, text="Selecciona una de las tiendas que tenemos disponibles para ti:",
                   font=("Arial", 16), bg="#F2F2F2", fg="black").pack(pady=10)
+
+
+
 
             # Crear un marco adicional para centrar los botones
             botones_frame = Frame(tiendas_frame, bg="#F2F2F2")
@@ -108,7 +113,7 @@ class Funcionalidad1:
                        width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=5, anchor=CENTER)
 
 
-    """
+
 """
     @classmethod
     def consultas_eco(cls):
