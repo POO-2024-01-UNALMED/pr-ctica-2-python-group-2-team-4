@@ -1,8 +1,8 @@
-import sys
+import math
 from tkinter import *
+from tkinter import messagebox, simpledialog
 
 from uiMain.fieldFrame import FieldFrame
-from uiMain.funcionalidad1 import Funcionalidad1
 
 
 class Funcionalidad2:
@@ -19,7 +19,6 @@ class Funcionalidad2:
     @staticmethod
     def cuadricula_productos(cliente, productos, inferior, superior):
         from main import Main
-        from gestorAplicacion.servicios.tienda import Tienda
         # Llamada a la función lineas()
         Main.lineas()
 
@@ -84,7 +83,7 @@ class Funcionalidad2:
 
         print("")
 
-    def impresion_seleccion_categoria(self, cliente, productos, categoria, mal_seleccionado):
+    def impresion_seleccion_categoria(self, cliente, productos, categoria, mal_seleccionado, window):
         inferior = 0
         superior = 4
         seleccionado = None
@@ -138,7 +137,7 @@ class Funcionalidad2:
                         mal_seleccionado = True
                         continue
                 elif numero == 5:
-                    self.busqueda_categoria(cliente)
+                    self.busqueda_categoria(cliente,window)
                     return None
                 else:
                     print("Ese número está fuera del rango")
@@ -148,7 +147,7 @@ class Funcionalidad2:
             if seleccionado is not None:
                 return seleccionado
 
-    def impresion_seleccion_nombre(self, cliente, productos, seleccionado):
+    def impresion_seleccion_nombre(self, cliente, productos, seleccionado,window):
         inferior = 0
         superior = 4
         mal_seleccionado = False
@@ -193,12 +192,189 @@ class Funcionalidad2:
                 if numero in [1, 2, 3, 4]:
                     seleccionado = productos[numero + inferior - 1]
                 elif numero == 5:
-                    self.busqueda_nombre(cliente)  # Llamada a busqueda_nombre()
+                    self.busqueda_nombre(cliente, window)  # Llamada a busqueda_nombre()
 
             return seleccionado
 
-    def busqueda_categoria(self, cliente,window):
-        productos=""
+    def busqueda_categoria(self,cliente, window):
+        # Limpieza de cualquier mensaje previo en la ventana
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        # Recolectar y mostrar las categorías disponibles
+        from gestorAplicacion.servicios.enums import Categoria
+
+        # Crear el marco para las categorías
+        categorias_frame = Frame(window, bg="light blue")
+        categorias_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        Label(categorias_frame, text="Estas son las categorías de los productos de nuestras tiendas:",
+              font=("Arial", 16), bg="light blue").pack(pady=10)
+
+        # Crear un marco adicional para centrar los botones
+        botones_frame = Frame(categorias_frame, bg="light blue")
+        botones_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        enumerado = 1
+        categoria_dict = {}
+        for tipo in Categoria:
+            categoria_dict[enumerado] = tipo
+            Button(botones_frame, text=f"{enumerado}. {tipo.get_texto()}",
+                   font=("Arial", 12), bg="light gray", padx=30, pady=15,
+                   width=35, command=lambda cat=tipo: self.mostrar_productos_por_categoria(cliente, cat, window)).pack(
+                pady=5, anchor=CENTER)
+            enumerado += 1
+
+        # Añadir la opción de buscar por nombre
+        Button(botones_frame, text=f"{enumerado}. Volver",
+               font=("Arial", 12), bg="light gray", padx=30, pady=15,
+               width=35, command=lambda: self.elegir_tipo_busqueda(cliente, window)).pack(pady=5, anchor=CENTER)
+
+        # Entrada para seleccionar la categoría
+        Label(categorias_frame, text="O ingrese el número de la categoría que desea buscar:",
+              font=("Arial", 12), bg="light blue").pack(pady=10)
+
+        seleccion_entry = Entry(categorias_frame, font=("Arial", 12))
+        seleccion_entry.pack(pady=10)
+
+        def confirmar_seleccion_categoria():
+            try:
+                seleccion = int(seleccion_entry.get().strip())
+                if seleccion == enumerado:
+                    self.elegir_tipo_busqueda(cliente, window)
+                    return
+                if seleccion in categoria_dict:
+                    categoria = categoria_dict[seleccion]
+                    self.mostrar_productos_por_categoria(cliente, categoria, window)
+                else:
+                    Label(categorias_frame, text="Selección inválida. Inténtelo de nuevo.",
+                          font=("Arial", 12), bg="light red", fg="black").pack(pady=10)
+            except ValueError:
+                Label(categorias_frame, text="Debe ingresar un número.",
+                      font=("Arial", 12), bg="light red", fg="black").pack(pady=10)
+
+        Button(categorias_frame, text="Confirmar", command=confirmar_seleccion_categoria,
+               font=("Arial", 12), bg="#00FF00", fg="black").pack(pady=10)
+
+    def mostrar_productos_por_categoria(self,cliente, categoria, window, page=1):
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+        productos = cliente.get_tienda().buscar_productos(categoria)
+
+        # Mostrar productos encontrados
+        productos_frame = Frame(window, bg="light blue")
+        productos_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        if not productos:
+            Label(productos_frame,
+                  text="No hay productos disponibles en esta categoría.",
+                  font=("Arial", 12), bg="light blue").pack(pady=10)
+            return
+
+        Label(productos_frame, text=f"Productos en la categoría {categoria.get_texto()}:",
+              font=("Arial", 16), bg="light blue").pack(pady=10)
+
+        # Definir número de productos por página
+        productos_por_pagina = 4
+        total_paginas = math.ceil(len(productos) / productos_por_pagina)
+        productos = productos[(page - 1) * productos_por_pagina: page * productos_por_pagina]
+
+        botones_frame = Frame(productos_frame, bg="light blue")
+        botones_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        for i, producto in enumerate(productos):
+            Button(botones_frame,
+                   text=f"{i + 1}. {producto.get_nombre()} - {producto.get_marca()} - ${producto.get_precio():.2f}",
+                   font=("Arial", 12), bg="light gray", padx=30, pady=15,
+                   width=35, command=lambda prod=producto: self.seleccionar_producto(cliente, prod, window)).pack(pady=5,
+                                                                                                             anchor=CENTER)
+
+        # Controles de paginación
+        paginacion_frame = Frame(productos_frame, bg="light blue")
+        paginacion_frame.pack(pady=10)
+
+        if page > 1:
+            Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#00FF00", fg="black",
+                   command=lambda: self.mostrar_productos_por_categoria(cliente, categoria, window, page - 1)).pack(
+                side="left", padx=5)
+
+        if page < total_paginas:
+            Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#00FF00", fg="black",
+                   command=lambda: self.mostrar_productos_por_categoria(cliente, categoria, window, page + 1)).pack(
+                side="left", padx=5)
+
+        Button(productos_frame, text="Volver", font=("Arial", 12), bg="light gray", padx=30, pady=15,
+               width=35, command=lambda: self.busqueda_categoria(cliente, window)).pack(pady=10, anchor=CENTER)
+
+    def seleccionar_producto(self,cliente, producto, window):
+        cantidad = simpledialog.askinteger("Cantidad", "¿Cuántos productos de este quiere usted?",
+                                           minvalue=1, parent=window)
+
+        if cantidad is None:
+            return  # El usuario canceló el diálogo
+
+        # Agregar el producto al carrito y obtener el resultado como una cadena
+        resultado = cliente.get_carrito().agregar_al_carrito(producto, cantidad)
+
+        if "no tienes dinero" in resultado:
+            self.mostrar_productos_recomendados(producto, cliente, window)
+        elif "Productos no agregados" in resultado and "productos suficientes" in resultado:
+            self.mostrar_decision_rapida(producto, cliente, window)
+        else:
+            messagebox.showinfo("Resultado", resultado)
+            self.elegir_tipo_busqueda(cliente, window)
+
+    def mostrar_productos_recomendados(self,seleccionado, cliente, window):
+        productos_recomendados = cliente.get_tienda().recomendar_productos(seleccionado, cliente)
+
+        if not productos_recomendados:
+            messagebox.showinfo("Recomendación",
+                                "No se encontraron productos recomendados. Volviendo a funcionalidad 2.")
+            self.elegir_tipo_busqueda(cliente, window)
+            return
+
+        recomendacion_window = Toplevel(window)
+        recomendacion_window.title("Productos Recomendados")
+
+        for i, producto in enumerate(productos_recomendados):
+            Button(recomendacion_window,
+                   text=f"{i + 1}. {producto.get_nombre()} - {producto.get_marca()} - ${producto.get_precio():.2f}",
+                   font=("Arial", 12), bg="light gray", padx=30, pady=15,
+                   width=35,
+                   command=lambda prod=producto: self.seleccionar_producto(cliente, prod, recomendacion_window)).pack(pady=5,
+                                                                                                                 anchor=CENTER)
+
+        Button(recomendacion_window, text="Volver",
+               font=("Arial", 12), bg="light gray", padx=30, pady=15,
+               width=35, command=lambda: recomendacion_window.destroy()).pack(pady=10, anchor=CENTER)
+
+    def mostrar_decision_rapida(self,seleccionado, cliente, window):
+        decision_window = Toplevel(window)
+        decision_window.title("Decisión Rápida")
+
+        Label(decision_window,
+              text="¿Desea recibir la cantidad de productos que tenemos o desea escoger otro producto?",
+              font=("Arial", 12), bg="light blue").pack(pady=10)
+
+        def decision1():
+            cliente.get_carrito().agregar_al_carrito(seleccionado, seleccionado.cantidad_producto())
+            decision_window.destroy()
+            self.elegir_tipo_busqueda(cliente, window)
+
+        def decision2():
+            decision_window.destroy()
+            self.elegir_tipo_busqueda(cliente, window)
+
+        Button(decision_window, text="Recibir la cantidad que tienen", command=decision1,
+               font=("Arial", 12), bg="#00FF00", fg="black").pack(pady=5)
+
+        Button(decision_window, text="Escoger otro producto", command=decision2,
+               font=("Arial", 12), bg="#FF0000", fg="white").pack(pady=5)
+    """productos=""
         for pasillo in cliente.get_tienda().get_pasillos():
             for producto in pasillo.get_productos():
                 productos+= producto.get_nombre()+", "
@@ -241,9 +417,9 @@ class Funcionalidad2:
         seleccionado = self.impresion_seleccion_categoria(cliente, productos, categoria, mal_seleccionado)
 
         Main.lineas()
-        self.donde_se_agregan_productos(cliente, seleccionado)
+        self.donde_se_agregan_productos(cliente, seleccionado)"""
 
-    def busqueda_nombre(self,cliente,window):
+    def busqueda_nombre(self, cliente, window):
         def buscar_productos_por_nombre(nombre):
             # Buscar productos por coincidencia parcial (insensible a mayúsculas/minúsculas)
             productos = cliente.get_tienda().buscar_productos_por_nombre(nombre)
@@ -336,7 +512,7 @@ class Funcionalidad2:
                     if 1 <= numero <= len(productos):
                         seleccionado = productos[numero - 1]
                     elif numero == 5:
-                        elegir_tipo_busqueda(cliente, window)
+                        self.elegir_tipo_busqueda(cliente, window)
                         return
                     else:
                         mostrar_error(frame1, "Ese número está fuera del rango")
@@ -348,7 +524,7 @@ class Funcionalidad2:
                                                relief="solid")
                     label_seleccionado.pack(pady=5)
                     # Llamar a la función donde se agregan productos
-                    donde_se_agregan_productos(cliente, seleccionado)
+                    self.donde_se_agregan_productos(cliente, seleccionado, window)
 
             boton_seleccionar = Button(frame1, text="Seleccionar", command=seleccionar,
                                        font=("Arial", 12), bg="#00FF00", fg="black")
@@ -360,7 +536,7 @@ class Funcionalidad2:
                                            font=("Arial", 12, "bold"), fg="green", bg="light blue", borderwidth=2,
                                            relief="solid")
                 label_seleccionado.pack(pady=5)
-                donde_se_agregan_productos(cliente, producto)
+                self.donde_se_agregan_productos(cliente, producto, window)
 
         def buscar_y_mostrar(frame1, entry_nombre):
             nombre = entry_nombre.get().strip()
@@ -373,75 +549,24 @@ class Funcionalidad2:
             actualizar_mostrar_productos(frame1, productos, inferior, superior)
 
         def mostrar_productos():
-            # Eliminar widgets a partir del cuarto en adelante
             widgets = window.winfo_children()
             for i, widget in enumerate(widgets):
-                if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                     widget.destroy()
 
             frame1 = Frame(window, bg="light blue")
             frame1.pack(fill=BOTH, expand=True)
 
             # Entrada inicial
-            entry_nombre = Entry(window, font=("Arial", 12))
+            entry_nombre = Entry(frame1, font=("Arial", 12))
             entry_nombre.pack(pady=10)
 
-            boton_buscar = Button(window, text="Buscar",
+            boton_buscar = Button(frame1, text="Buscar",
                                   command=lambda: buscar_y_mostrar(frame1, entry_nombre),
                                   font=("Arial", 12), bg="#00FF00", fg="black")
             boton_buscar.pack(pady=10)
 
         mostrar_productos()
-        """productos = []
-        seleccionado = None
-        Main.lineas()  # Llamada a la función lineas()
-
-        print("Introduzca el nombre del producto que desea buscar\n" +
-              "O escoja [3]. [Volver] para regresar: ")
-        nombre = input()
-
-        try:
-            number = int(nombre)
-            string = True
-        except ValueError:
-            string = False
-
-        if string:
-            if int(nombre) == 3:
-                self.elegir_tipo_busqueda(cliente)  # Llamada a elegir_tipo_busqueda()
-                return
-
-        if nombre.lower() == "volver":
-            self.elegir_tipo_busqueda(cliente)  # Llamada a elegir_tipo_busqueda()
-            return
-
-        productos = cliente.get_tienda().buscar_productos_por_nombre(nombre)  # Llamada a buscar_productos()
-
-        while len(productos) == 0:
-            print("No hay productos disponibles con ese nombre, escoja otro por favor")
-            print("Introduzca otro nombre: ")
-            nombre = input()
-
-            try:
-                number = int(nombre)
-                string = True
-            except ValueError:
-                string = False
-
-            if string:
-                if int(nombre) == 3:
-                    self.elegir_tipo_busqueda(cliente)  # Llamada a elegir_tipo_busqueda()
-                    return
-
-            if nombre.lower() == "volver":
-                self.elegir_tipo_busqueda(cliente)  # Llamada a elegir_tipo_busqueda()
-                return
-
-            productos = cliente.get_tienda().buscar_productos_por_nombre(nombre)  # Llamada a buscar_productos()
-
-        seleccionado = self.impresion_seleccion_nombre(cliente, productos,
-                                                  seleccionado)  # Llamada a impresion_seleccion_nombre()
-        self.donde_se_agregan_productos(cliente, seleccionado)  # Llamada a donde_se_agregan_productos()"""
 
     @staticmethod
     def ajustar_texto(texto, ancho_celda):
@@ -450,9 +575,27 @@ class Funcionalidad2:
         else:
             return texto
 
-    def donde_se_agregan_productos(self, cliente, seleccionado):
-        from main import Main
-        print("¿Cuántos productos de este quiere usted?\n")
+    def donde_se_agregan_productos(self, cliente, seleccionado,window):
+        cantidad = simpledialog.askinteger("Cantidad", "¿Cuántos productos de este quiere usted?",
+                                           minvalue=1, parent=window)
+
+        if cantidad is None:
+            return  # El usuario canceló el diálogo
+
+        # Agregar el producto al carrito y obtener el resultado como una cadena
+        resultado = cliente.get_carrito().agregar_al_carrito(seleccionado, cantidad)
+
+        # Verifica si el resultado contiene ciertos mensajes
+        if "no tienes dinero" in resultado:
+            self.mostrar_productos_recomendados(seleccionado,cliente, window)
+        elif "Productos no agregados" in resultado and "productos suficientes" in resultado:
+            self.mostrar_decision_rapida(seleccionado,cliente, window)
+        else:
+            messagebox.showinfo("Resultado", resultado)
+            self.elegir_tipo_busqueda(cliente,window)
+
+
+        """print("¿Cuántos productos de este quiere usted?\n")
         cantidad = Main.escaner()
 
         # Agrega el producto al carrito y obtiene el resultado como una cadena
@@ -516,7 +659,7 @@ class Funcionalidad2:
             elif decision == 2:
                 self.elegir_tipo_busqueda(cliente)
 
-        self.elegir_tipo_busqueda(cliente)
+        self.elegir_tipo_busqueda(cliente)"""
 
     @staticmethod
     def redirigir_funcionalidad1(window):
