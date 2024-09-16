@@ -165,65 +165,73 @@ class Funcionalidad1:
                    font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
                    width=35, command=lambda: self.consultasEco(cliente,window)).pack(pady=10, anchor=CENTER)
 
+    def aplicar_presupuesto(self, cliente, tienda, window):
+            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+            for i, widget in enumerate(widgets):
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                    widget.destroy()
+
+            presupuesto_frame = Frame(window, bg="#243340")
+            presupuesto_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            # Crear el marco para los botones
+            presu_frame = Frame(presupuesto_frame, bg="#243340")
+            presu_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            # Label para la pregunta
+            label_pregunta = Label(presu_frame,
+                                      text="¿Deseas usar un presupuesto por defecto o ingresar uno personalizado?",
+                                      font=("Arial", 12))
+            label_pregunta.pack(pady=10)
+
+            # Variable para almacenar la opción seleccionada
 
 
+            # Botón para presupuesto por defecto
+            button_defecto = Button(presu_frame, text="Presupuesto por defecto", font=("Arial", 12),
+                                       command=lambda: self.enlace(cliente, tienda, None, window))
+            button_defecto.pack(pady=5)
+
+            # Label y cuadro de texto para presupuesto personalizado
+            label_personalizado = Label(presu_frame, text="Presupuesto personalizado", font=("Arial", 12))
+            label_personalizado.pack(pady=5)
+            self.entry_presupuesto = Entry(presu_frame, font=("Arial", 12))
+            self.entry_presupuesto.pack(pady=5)
 
 
-    def aplicar_presupuesto(self,cliente,tienda,window):
-        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
-        for i, widget in enumerate(widgets):
-            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
-                widget.destroy()
-        presupuesto_frame = Frame(window, bg="#243340")
-        presupuesto_frame.pack(pady=10, fill=BOTH, expand=True)
-
-        # Crear el marco para los botones
-        presu_frame = Frame(presupuesto_frame, bg="#243340")
-        presu_frame.pack(pady=10, fill=BOTH, expand=True)
-        # Label para la pregunta
-        label_pregunta = Label(presu_frame, text = "¿Deseas usar un presupuesto por defecto o ingresar uno personalizado?",
-        font = ("Arial", 12))
-        label_pregunta.pack(pady=10)
-
-        # Variable para almacenar la opción seleccionada
-        var_presupuesto = IntVar(value=1)
-
-        # Botón para presupuesto por defecto
-        button_defecto =Button(presu_frame, text="Presupuesto por defecto", font=("Arial", 12),
-                                   command=lambda:self.enlace(cliente,tienda,var_presupuesto.get(),window))
-        button_defecto.pack(pady=5)
+            # Botón para aplicar presupuesto personalizado
+            button_personalizado = (Button(presu_frame, text="Aplicar presupuesto personalizado", font=("Arial", 12),
+                                             command=lambda: self.enlace(cliente, tienda,self.entry_presupuesto.get(), window)))
+            button_personalizado.pack(pady=10)
 
 
-        # Label y cuadro de texto para presupuesto personalizado
-        label_personalizado = Label(presu_frame, text="Presupuesto personalizado", font=("Arial", 12))
-        label_personalizado.pack(pady=5)
-        entry_presupuesto = Entry(presu_frame, font=("Arial", 12))
-        entry_presupuesto.pack(pady=5)
+    def enlace(self, cliente, tienda, presupuesto, window):
 
-        # Botón para aplicar presupuesto personalizado
-        button_personalizado = Button(presu_frame, text="Aplicar presupuesto personalizado", font=("Arial", 12),
-                                         command=lambda:self.enlace(cliente,tienda,var_presupuesto.get(),window))
-        button_personalizado.pack(pady=10)
 
-    def enlace(self,cliente,tienda,presupuesto,window):
-        try:
-            # Intenta convertir el valor a float
-            presupuesto = float(presupuesto)
-        except ValueError:
-            # Muestra un error si la conversión falla
-            messagebox.showerror("Error", "Por favor, ingresa un valor numérico válido para el presupuesto.")
-            return
-
-        if float(presupuesto)==1 :
+        numero = presupuesto
+        if presupuesto == None:
+            # Presupuesto por defecto
             cliente.asignaciones(cliente, tienda, 100000, 50000, None)
+            print(cliente.get_dinero())
+            print(cliente.get_tienda().get_nombre())
             self.presupuestoAsignado(cliente, tienda, window)
         else:
-            if float(presupuesto) <= 0:
-                messagebox.showerror("Error", "El presupuesto personalizado debe ser mayor que cero.")
-            else:
-
+            try:
+                numero = float(numero)  # Intentamos convertir el valor a float
+            except ValueError:
+                messagebox.showerror("Error", "Debes ingresar un numero.")
+            if float(presupuesto) > 0 and isinstance(float(presupuesto),float):
                 cliente.asignaciones(cliente, tienda, 100000, 50000, float(presupuesto))
+                print(cliente.get_dinero())
+                print(cliente.get_tienda().get_nombre())
                 self.presupuestoAsignado(cliente, tienda, window)
+            else:
+                messagebox.showinfo("No se asigno el presupuesto","Vuelve a intentarlo")
+                self.aplicar_presupuesto(cliente, tienda, window)
+
+
+
+
 
 
 
@@ -329,7 +337,7 @@ class Funcionalidad1:
         Button(productos_frame, text="Volver", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
 
-   
+
 
 
 
