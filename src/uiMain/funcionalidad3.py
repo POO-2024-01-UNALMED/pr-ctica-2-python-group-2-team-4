@@ -1,7 +1,217 @@
 import sys
+from tkinter import Frame, Label, Entry, Button, messagebox
+
+from gestorAplicacion.servicios.ahorcado import Ahorcado
+from gestorAplicacion.servicios.enums import TipoCaja
+from gestorAplicacion.servicios.tresEnRaya import TresEnRaya
+from gestorAplicacion.sujetos.administrador import Administrador
+from gestorAplicacion.sujetos.cliente import Cliente
+from uiMain.main import Main
+
 
 class Funcionalidad3:
-    @staticmethod
+
+    def impresion_facturas(self,persona, window):
+        from tkinter import Frame, Label, Button, Entry, END, CENTER
+        from uiMain.main import Main
+        from gestorAplicacion.sujetos.administrador import Administrador
+        from gestorAplicacion.sujetos.cliente import Cliente
+
+        # Limpiar la ventana actual
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        # Obtener las tiendas con facturas
+        tiendas = persona.get_tiendas_con_facturas()
+
+        print(persona.get_facturas())
+        print(tiendas)
+
+        if not tiendas:
+            Label(window, text="No tienes facturas en ninguna tienda.",
+                  font=("Arial", 14), bg="light blue").pack(pady=20)
+            return
+
+        # Crear un frame para mostrar las tiendas
+        frame_tiendas = Frame(window, bg="light blue")
+        frame_tiendas.pack(fill='both', expand=True, pady=20)
+
+        # Mostrar tabla de tiendas
+        Label(frame_tiendas, text="Número de Facturas",
+              font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
+
+        Label(frame_tiendas, text="+-----+----------------+-----------------+",
+              font=("Arial", 12), bg="light blue").pack()
+        Label(frame_tiendas, text="| No. | Nombre         | Cantidad        |",
+              font=("Arial", 12), bg="light blue").pack()
+        Label(frame_tiendas, text="+-----+----------------+-----------------+",
+              font=("Arial", 12), bg="light blue").pack()
+
+        conteo_tiendas = {}
+        for tienda in tiendas:
+            nombre_tienda = tienda.get_nombre()
+            if nombre_tienda:
+                cantidad_facturas = len(tienda.get_facturas()) if tienda.get_facturas() else 0
+                conteo_tiendas[nombre_tienda] = cantidad_facturas
+
+        for numero, (nombre, cantidad) in enumerate(conteo_tiendas.items(), start=1):
+            Label(frame_tiendas, text=f"| {numero:<3} | {nombre:<14} | {cantidad:<15} |",
+                  font=("Arial", 12), bg="light blue").pack()
+
+        Label(frame_tiendas, text="+-----+----------------+-----------------+",
+              font=("Arial", 12), bg="light blue").pack()
+
+        # Entry y botón para seleccionar la tienda
+        Label(frame_tiendas, text="Selecciona el número de la tienda:",
+              font=("Arial", 12), bg="light blue").pack(pady=10)
+        entry_tienda = Entry(frame_tiendas, font=("Arial", 12))
+        entry_tienda.pack(pady=5)
+
+        def seleccionar_tienda():
+            try:
+                seleccion = int(entry_tienda.get())
+                tienda_seleccionada = None
+                if 1 <= seleccion <= len(conteo_tiendas):
+                    for numero, tienda in enumerate(tiendas, start=1):
+                        if numero == seleccion:
+                            tienda_seleccionada = tienda
+                            break
+
+                if tienda_seleccionada:
+                    self.mostrar_facturas(tienda_seleccionada, persona, window)
+                else:
+                    mostrar_error("Selección inválida.")
+            except ValueError:
+                mostrar_error("Debes ingresar un número válido.")
+
+        Button(frame_tiendas, text="Seleccionar tienda",
+               font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
+               command=seleccionar_tienda).pack(pady=10)
+
+        def mostrar_error(mensaje):
+            Label(frame_tiendas, text=mensaje, font=("Arial", 12), fg="red", bg="light blue").pack(pady=10)
+
+    def mostrar_facturas(self,tienda_seleccionada, persona, window):
+        # Limpiar la ventana actual
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        mis_facturas = persona.get_facturas1(tienda_seleccionada)
+
+        # Crear un frame para mostrar las facturas
+        frame_facturas = Frame(window, bg="light blue")
+        frame_facturas.pack(fill='both', expand=True, pady=20)
+
+        # Mostrar tabla de facturas
+        Label(frame_facturas, text="Facturas",
+              font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
+
+        Label(frame_facturas,
+              text="+-----+--------------------+------------+-----------------+------------+----------+",
+              font=("Arial", 12), bg="light blue").pack()
+        Label(frame_facturas,
+              text="| No. | Tienda             | Fecha      | Productos        | Precio     | Pagada   |",
+              font=("Arial", 12), bg="light blue").pack()
+        Label(frame_facturas,
+              text="+-----+--------------------+------------+-----------------+------------+----------+",
+              font=("Arial", 12), bg="light blue").pack()
+
+        for numero, factura in enumerate(mis_facturas, start=1):
+            if factura:
+                estado_pago = "Sí" if factura.get_pagado() else "No"
+                precio_total = factura.calcular_total()
+                Label(frame_facturas,
+                      text=f"| {numero:<3} | {factura.get_tienda().get_nombre():<18} | {factura.get_fecha_facturacion():<10} | {len(factura.get_productos()):<15} | {precio_total:<10.2f} | {estado_pago:<8} |",
+                      font=("Arial", 12), bg="light blue").pack()
+
+        Label(frame_facturas,
+              text="+-----+--------------------+------------+-----------------+------------+----------+",
+              font=("Arial", 12), bg="light blue").pack()
+
+        # Entry y botón para seleccionar la factura
+        Label(frame_facturas, text="Selecciona el número de la factura:",
+              font=("Arial", 12), bg="light blue").pack(pady=10)
+        entry_factura = Entry(frame_facturas, font=("Arial", 12))
+        entry_factura.pack(pady=5)
+
+        def seleccionar_factura():
+            try:
+                seleccion = int(entry_factura.get())
+                if 1 <= seleccion <= len(mis_facturas):
+                    factura_seleccionada = mis_facturas[seleccion - 1]
+                    if factura_seleccionada:
+                        self.mostrar_detalle_factura(factura_seleccionada, persona,window)
+                    else:
+                        mostrar_error("Factura seleccionada no encontrada.")
+                else:
+                    mostrar_error("Selección inválida.")
+            except ValueError:
+                mostrar_error("Debes ingresar un número válido.")
+
+        Button(frame_facturas, text="Seleccionar factura",
+               font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
+               command=seleccionar_factura).pack(pady=10)
+
+        def mostrar_error(mensaje):
+            Label(frame_facturas, text=mensaje, font=("Arial", 12), fg="red", bg="light blue").pack(pady=10)
+
+    def mostrar_detalle_factura(self,factura_seleccionada, persona, window):
+        # Limpiar la ventana actual
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        # Mostrar detalles de los productos de la factura seleccionada
+        frame_detalle = Frame(window, bg="light blue")
+        frame_detalle.pack(fill='both', expand=True, pady=20)
+
+        Label(frame_detalle, text="Detalles de la Factura",
+              font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
+
+        Label(frame_detalle, text="+-----+--------------------+---------------+----------+------------+----------+",
+              font=("Arial", 12), bg="light blue").pack()
+        Label(frame_detalle, text="| No. | Producto           | Marca         | Tamaño   | Categoría  | Precio   |",
+              font=("Arial", 12), bg="light blue").pack()
+        Label(frame_detalle, text="+-----+--------------------+---------------+----------+------------+----------+",
+              font=("Arial", 12), bg="light blue").pack()
+
+        for numero_producto, producto in enumerate(factura_seleccionada.get_productos(), start=1):
+            if producto:
+                Label(frame_detalle,
+                      text=f"| {numero_producto:<3} | {producto.get_nombre():<18} | {producto.get_marca():<13} | {producto.get_tamano().get_tamano():<8} | {producto.get_categoria().get_texto():<10} | {producto.get_precio():<8.2f} |",
+                      font=("Arial", 12), bg="light blue").pack()
+
+        Label(frame_detalle, text="+-----+--------------------+---------------+----------+------------+----------+",
+              font=("Arial", 12), bg="light blue").pack()
+
+        # Opciones adicionales
+        if isinstance(persona, Administrador):
+            Label(frame_detalle, text="Opciones:",
+                  font=("Arial", 12, "bold"), bg="light blue").pack(pady=10)
+            Button(frame_detalle, text="Escoger otra factura",
+                   font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
+                   command=lambda: self.impresion_facturas(persona, window)).pack(pady=5)
+            Button(frame_detalle, text="Salir de funcionalidad",
+                   font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
+                   command=lambda: Main.escoger_funcionalidad()).pack(pady=5)
+
+        elif isinstance(persona, Cliente):
+            Label(frame_detalle, text="Opciones:",
+                  font=("Arial", 12, "bold"), bg="light blue").pack(pady=10)
+            Button(frame_detalle, text="Pagar factura",
+                   font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
+                   command=lambda: persona.set_tienda(
+                       factura_seleccionada.get_tienda()) or Funcionalidad3.seleccionar_caja(persona,
+                                                                                             factura_seleccionada)).pack(
+                pady=5)
+            Button(frame_detalle, text="Escoger otra factura",
+                   font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
+                   command=lambda: self.impresion_facturas(persona, window)).pack(pady=5)
+            Button(frame_detalle, text="Salir de funcionalidad",
+                   font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
+                   command=lambda: Main.escoger_funcionalidad()).pack(pady=5)
+
+
+"""
     def impresion_facturas(persona):
         from uiMain.main import Main
         from gestorAplicacion.sujetos.administrador import Administrador
@@ -114,7 +324,6 @@ class Funcionalidad3:
                 print("Selección inválida.")
         else:
             print("Selección inválida.")
-
     @staticmethod
     def seleccionar_caja(cliente,carrito):
         from gestorAplicacion.servicios.enums import TipoCaja
@@ -315,4 +524,4 @@ class Funcionalidad3:
             return True
         else:
             print("¡Perdiste!")
-            return False
+            return False"""
