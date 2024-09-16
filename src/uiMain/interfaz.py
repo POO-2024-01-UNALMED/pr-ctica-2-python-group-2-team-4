@@ -6,6 +6,14 @@ from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 import sys
 
+from gestorAplicacion.servicios.caja import Caja
+from gestorAplicacion.servicios.enums import Genero, Tamano, Edades, Categoria, TipoCaja
+from gestorAplicacion.servicios.pasillo import Pasillo
+from gestorAplicacion.servicios.producto import Producto
+from gestorAplicacion.servicios.tienda import Tienda
+from gestorAplicacion.sujetos.administrador import Administrador
+from gestorAplicacion.sujetos.cajero import Cajero
+
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from baseDatos.escritorLector import EscritorLector
 from uiMain.ventana import Ventana
@@ -285,8 +293,11 @@ class Iniciar_ventana_usuario():
             from uiMain.funcionalidad1 import Funcionalidad1
             from gestorAplicacion.sujetos.cliente import Cliente
             from gestorAplicacion.sujetos.persona import Persona
-
             cliente = None
+            for persona in Persona.get_personas():
+                if 11001 == persona.get_id():
+                    print(f"Bienvenido {persona.get_nombre()}")
+                    cliente = persona
             funcionalidad1 = Funcionalidad1()
             funcionalidad1.consultasEco(cliente, window)
 
@@ -417,9 +428,199 @@ class Inicio(Frame):
         with open(path, "r+") as instrucciones:
             text.insert(INSERT, instrucciones.read())
         text.tag_configure('center', justify='center')
-        
+
+
+
+
 if __name__ == "__main__":
     EscritorLector.deserializarTodo()
+
+    admin1 = Administrador("Beatriz Gómez", 201, 40, Genero.M, 12000.0)
+    admin2 = Administrador("Ricardo Díaz", 202, 45, Genero.H, 15000.0)
+    admin3 = Administrador("Sofía Sánchez", 203, 38, Genero.M, 11000.0)
+    admin4 = Administrador("Miguel Ramírez", 204, 50, Genero.H, 16000.0)
+    tienda1 = Tienda(
+        nombre="Tienda A",
+        pasillos=None,
+        nit="123456789",
+        dueno=admin1,
+        saldo=500,
+        estado="abierta"
+    )
+
+    tienda2 = Tienda(
+        nombre="Tienda B",
+        pasillos=None,
+        nit="987654321",
+        dueno=admin2,
+        saldo=1000,
+        estado="cerrada"
+    )
+
+    tienda3 = Tienda(
+        nombre="Tienda C",
+        pasillos=None,
+        nit="192837465",
+        dueno=admin3,
+        saldo=750,
+        estado="abierta"
+    )
+
+    tienda4 = Tienda(
+        nombre="Tienda D",
+        pasillos=None,
+        nit="564738291",
+        dueno=admin4,
+        saldo=2000,
+        estado="abierta"
+    )
+
+    tienda5 = Tienda(
+        nombre="Tienda E",
+        pasillos=None,
+        nit="374829102",
+        dueno=admin1,  # Puedes reutilizar administradores si es necesario
+        saldo=300,
+        estado="cerrada"
+    )
+
+
+    producto5 = Producto(
+    "Galletas de Avena", "Cerealia", 2.75, Tamano.PEQUENO, Edades.MENORES, Categoria.ALIMENTO,
+    "Galletas de avena y miel, perfectas para un snack saludable.", "05/11/2024", 105
+    )
+
+    producto6 = Producto(
+    "Jugo de Manzana", "Frutas del Valle", 2.50, Tamano.MEDIANO, Edades.MENORES, Categoria.BEBIDA,
+    "Jugo de manzana natural, sin azúcares añadidos.", "01/12/2024", 106
+    )
+
+    producto7 = Producto(
+    "Agua Mineral", "Pureza Total", 1.00, Tamano.GRANDE, Edades.MENORES, Categoria.BEBIDA,
+    "Agua mineral natural, embotellada en origen.", "15/11/2024", 107
+    )
+
+    producto8 = Producto(
+    "Refresco de Cola", "SodaFresca", 1.75, Tamano.MEDIANO, Edades.ADULTOS, Categoria.BEBIDA,
+    "Refresco de cola con gas, sabor intenso y refrescante.", "20/11/2024", 108
+    )
+
+    producto9 = Producto(
+    "Bebida Energética", "PowerUp", 3.00, Tamano.PEQUENO, Edades.ADULTOS, Categoria.BEBIDA,
+    "Bebida energética con vitaminas y cafeína para un impulso rápido.", "10/12/2024", 109
+    )
+
+    producto10 = Producto(
+    "Té Helado", "TeaTime", 2.00, Tamano.MEDIANO, Edades.MENORES, Categoria.BEBIDA,
+    "Té helado con sabor a limón, refrescante y sin calorías.", "30/12/2024", 110
+    )
+
+    producto11 = Producto(
+    "Desodorante Aerosol", "FreshUp", 2.50, Tamano.MEDIANO, Edades.ADULTOS, Categoria.PERSONAL,
+    "Desodorante en aerosol con fragancia duradera y protección antitranspirante.", "01/01/2025", 111
+    )
+
+    producto12 = Producto(
+    "Crema Dental", "WhiteSmile", 1.80, Tamano.PEQUENO, Edades.MENORES, Categoria.PERSONAL,
+    "Crema dental con flúor, para una limpieza completa y protección contra caries.", "15/02/2025", 112
+    )
+
+    producto13 = Producto(
+    "Jabón Líquido", "CleanTouch", 2.00, Tamano.MEDIANO, Edades.ADULTOS, Categoria.PERSONAL,
+    "Jabón líquido para manos con ingredientes naturales y fragancia fresca.", "10/03/2025", 113
+    )
+
+    producto14 = Producto(
+    "Acondicionador Hidratante", "HydraSoft", 3.50, Tamano.MEDIANO, Edades.ADULTOS, Categoria.PERSONAL,
+    "Acondicionador hidratante para cabello seco, con extracto de coco.", "25/04/2025", 114
+    )
+
+    producto15 = Producto(
+    "Gel Antibacterial", "SafeHands", 1.50, Tamano.PEQUENO, Edades.MENORES, Categoria.PERSONAL,
+    "Gel antibacteriano para manos, con un 70% de alcohol y fragancia ligera.", "05/05/2025", 115
+    )
+
+    producto16 = Producto(
+    "Detergente en Polvo", "LimpiaFacil", 4.00, Tamano.GRANDE, Edades.ADULTOS, Categoria.LIMPIEZA,
+    "Detergente en polvo para ropa, eficaz en manchas difíciles.", "01/06/2025", 116
+    )
+
+    producto17 = Producto(
+    "Limpiador Multiusos", "Sparkle", 3.50, Tamano.MEDIANO, Edades.ADULTOS, Categoria.LIMPIEZA,
+    "Limpiador multiusos para superficies, con fragancia cítrica.", "15/07/2025", 117
+    )
+
+    producto18 = Producto(
+    "Desinfectante de Baño", "Sanitex", 2.75, Tamano.PEQUENO, Edades.ADULTOS, Categoria.LIMPIEZA,
+    "Desinfectante para baño, elimina bacterias y malos olores.", "30/08/2025", 118
+    )
+
+    producto19 = Producto(
+    "Esponjas de Cocina", "ScrubPlus", 1.50, Tamano.PEQUENO, Edades.MENORES, Categoria.LIMPIEZA,
+    "Esponjas de cocina, resistentes y eficaces para limpiar utensilios.", "10/09/2025", 119
+    )
+
+    producto20 = Producto(
+    "Toallas de Papel", "CleanTowel", 2.00, Tamano.MEDIANO, Edades.MENORES, Categoria.LIMPIEZA,
+    "Toallas de papel absorbentes, ideales para la limpieza de superficies.", "25/10/2025", 120
+    )
+
+    pasilloBebidas = Pasillo(
+        "Pasillo de Bebidas",
+        [producto6, producto7, producto8, producto9, producto10],
+        Categoria.BEBIDA,
+        None
+    )
+
+    pasilloPersonal = Pasillo(
+        "Pasillo de Personal",
+        [producto11, producto12, producto13, producto14, producto15],
+        Categoria.PERSONAL,
+        None
+    )
+
+    pasilloLimpieza = Pasillo(
+        "Pasillo de Limpieza",
+        [producto16, producto17, producto18, producto19, producto20],
+        Categoria.LIMPIEZA,
+        None
+    )
+
+    pasillos=[pasilloBebidas,pasilloLimpieza]
+    pasillito=[pasilloPersonal]
+    tienda1.set_pasillos(pasillos)
+
+    tienda2.set_pasillos(pasillos)
+
+    tienda3.set_pasillos(pasillos)
+
+
+    tienda4.set_pasillos(pasillito)
+
+    tienda5.set_pasillos(pasillos)
+
+    caja1 = Caja("Caja 1", TipoCaja.RAPIDA, tienda1)
+    caja2 = Caja("Caja 2", TipoCaja.NORMAL, tienda2)
+    caja3 = Caja("Caja 3", TipoCaja.RAPIDA, tienda3)
+    caja4 = Caja("Caja 4", TipoCaja.NORMAL, tienda4)
+    caja5 = Caja("Caja 5", TipoCaja.RAPIDA, tienda1)
+    caja6 = Caja("Caja 6", TipoCaja.RAPIDA, tienda2)
+    caja7 = Caja("Caja 7", TipoCaja.NORMAL, tienda3)
+
+    cajero1 = Cajero("Miguel Ángel", 301, 28, Genero.H, 8000.0, tienda1, True, False, 5, caja1)
+    cajero2 = Cajero("Paola Ruiz", 302, 32, Genero.M, 8500.0, tienda2, True, False, 3, caja2)
+    cajero3 = Cajero("Luis Gómez", 303, 26, Genero.H, 7800.0, tienda3, True, False, 2, caja3)
+    cajero4 = Cajero("Elena Martínez", 304, 29, Genero.M, 8200.0, tienda4, True, False, 4, caja4)
+    cajero5 = Cajero("Javier Fernández", 305, 35, Genero.H, 8300.0, tienda1, True, False, 6, caja5)
+    cajero6 = Cajero("Sofía Sánchez", 306, 30, Genero.M, 8600.0, tienda2, True, False, 5, caja6)
+    cajero7 = Cajero("Andrés Vargas", 307, 33, Genero.H, 8800.0, tienda3, True, False, 3, caja7)
+
+    tienda1.get_empleados().extend([cajero1, cajero5])
+    tienda2.get_empleados().extend([cajero2, cajero6])
+    tienda3.get_empleados().extend([cajero3, cajero7])
+    tienda4.get_empleados().append(cajero4)
+
+
     from fieldFrame import FieldFrame
     ventana = Ventana()
     ventana.crearVentana1()
