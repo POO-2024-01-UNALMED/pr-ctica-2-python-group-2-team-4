@@ -206,6 +206,10 @@ class Identidad2:
 
     def identificar_persona(self):
         def identificar():
+            for entry in self.frame_actual._entrys:
+                if entry.get()=="":
+                    messagebox.showerror("Error","Faltan campos por completar")
+                    return
             p = self.frame_actual._entrys[0].get()  # Suponiendo que el ID está en el primer Entry
             
             from gestorAplicacion.sujetos.persona import Persona
