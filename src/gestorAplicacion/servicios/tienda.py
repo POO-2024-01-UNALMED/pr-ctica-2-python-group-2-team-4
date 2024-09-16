@@ -142,8 +142,8 @@ class Tienda:
 
     @staticmethod
     def buscar_tienda():
-        if len(Tienda.get_tiendas()) > 0:
-            tiendas_revisadas = Tienda.revision_tienda(Tienda.get_tiendas())
+        if len(Tienda.tiendas) > 0:
+            tiendas_revisadas = Tienda.revision_tienda(Tienda.tiendas)
             return len(tiendas_revisadas) > 0
         else:
             return False
@@ -156,9 +156,14 @@ class Tienda:
 
     @staticmethod
     def revision_tienda(tiendas_disp):
-        tiendas_disp = [Tienda for tienda in tiendas_disp if
-                        len(tienda.get_empleados()) > 0 and tienda.disponibilidad_productos()]
-        return tiendas_disp
+        tiendas_validas = []  # Lista para almacenar las tiendas que cumplen las condiciones
+
+        for tienda in tiendas_disp:
+            # Verificar si la tienda tiene empleados y productos disponibles
+            if len(tienda.get_empleados()) > 0 and tienda.disponibilidad_productos():
+                tiendas_validas.append(tienda)  # Agregar la tienda a la lista si cumple con las condiciones
+
+        return tiendas_validas
 
     @staticmethod
     def tiendas_con_cliente(cliente):
@@ -192,7 +197,14 @@ class Tienda:
         return productos
 
     def disponibilidad_productos(self):
-        return any(len(pasillo.productos) > 0 for pasillo in self._pasillos)
+        pasillo_disponible = False
+
+        for pasillo in self.get_pasillos():
+            if len(pasillo.get_productos()) != 0:
+                pasillo_disponible = True
+                break
+
+        return pasillo_disponible
 
     def agregar_producto(self, producto):
         for pasillo in self._pasillos:

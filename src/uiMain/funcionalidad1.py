@@ -48,7 +48,7 @@ class Funcionalidad1:
 
         # Botón 2: Consulta de productos por categoría
         boton2 = Button(boton_frame, text="Consulta de productos por categoría",
-                        font=("Arial", 15),command=print(Tienda.buscar_tienda()))
+                        font=("Arial", 15),command=lambda:self.printTiendas())
         boton2.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 3: Consulta de membresías
@@ -66,6 +66,15 @@ class Funcionalidad1:
 
         # Mostrar el frame con los botones
         zona2Fun1.pack(fill=BOTH, expand=True)
+
+    def printTiendas(self):
+       tienditas=Tienda.revision_tienda(Tienda.get_tiendas())
+       for i in tienditas:
+           c=  isinstance(i,Tienda)
+           print(c)
+
+
+
 
     def consulta_general_productos(self, cliente, window):
         from gestorAplicacion.sujetos.cliente import Cliente
