@@ -308,107 +308,13 @@ class Funcionalidad4:
         ventana.mainloop()
 
 
-    def mostrar_frame_identificacion(self):
-    # Destruir el frame actual si existe
-        if self.frame_actual:
-            self.frame_actual.destroy()
-
-    # Criterios para el formulario (en este caso, solo pedimos el ID)
-        criterios = ["ID"]
-        valores = [""]  # Campo vacío para el ID
-        habilitado = [True]  # El campo está habilitado para ser llenado
-
-        # Crear un nuevo FieldFrame
-        self.frame_actual = FieldFrame(
-            master=self.window,
-            tituloCriterios="Criterios",
-            criterios=criterios,
-            tituloValores="Valores",
-            valores=valores,
-            habilitado=habilitado,
-            titulo="Identificación",
-            descripcion="Por favor ingrese su ID para identificarse"
-        )
-
-        self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
-        
-        # Asignar el callback al botón aceptar
-        self.frame_actual.aceptar.config(command=self.guardar_id)
-
-    def guardar_id(self):
-        # Obtener el ID del campo de entrada
-        id = self.frame_actual._entrys[0].get()
-        print(f"ID ingresado: {id}")
-        return id
-
-    def ingresar(self, window):
-            from .identidad import Identidad3
-
-            # Limpiar los widgets de la ventana actual si es necesario
-            widgets = window.winfo_children()
-            for i, widget in enumerate(widgets):
-                if i >= 4:
-                    widget.destroy()
-
-            # Crear una instancia de Identidad3
-            identidad = Identidad3(window)
-
-            # Mostrar el frame de identificación
-            identidad.mostrar_frame_identificacion()
-
-            # Callback para guardar el ID ingresado en la variable de la instancia
-            def guardar_id_local():
-                self.user_id = identidad.frame_actual._entrys[0].get()  
-                idActual = self.user_id
-
-                print(f"ID capturado desde ingresar: {self.user_id}")
-                print(idActual)
-                return idActual
-            # Asignar el callback al botón "Aceptar"
-            
-            idnuevo = identidad.frame_actual.aceptar.config(command=guardar_id_local)
-            print(idnuevo)
-
-    #muestra el frame donde se puede seleccionar la tienda ( aplicar a fieldframe de ser posible)
-    def mostrar_frame(self, window, usuario ):
-
-        # Frame para mostrar las tiendas
-        frame_tiendas = tk.Frame(window)
-        frame_tiendas.pack(pady=20, padx=10, fill=tk.BOTH, expand=True)
-
-        # Crear botones para cada tienda
-        for i, tienda in enumerate(usuario.get_tiendas()):
-            nombre_tienda = tienda.getNombre()  # Obtener el nombre de la tienda
-            boton_tienda = tk.Button(frame_tiendas, text=nombre_tienda, command=lambda t=tienda: self.seleccionar_tienda(t))
-            boton_tienda.grid(row=i, column=0, padx=10, pady=5, sticky="w")
-
-        # Botón para confirmar la selección
-        boton_confirmar = tk.Button(window, text="Confirmar")# command confirmar 
-        boton_confirmar.pack(pady=10)
-
-        # Iniciar el loop de tkinter
-        window.mainloop()
-
-    #guarda la seleccion en la variable
-    def seleccionar_tienda(self, tienda):
-        self.seleccion_tienda = tienda
-        
-
-    def procesar_seleccion(self, usuario):
-        if not usuario.get_tiendas():  # Verifica si la lista de tiendas está vacía
-            self.mostrar_ventana()
-            return  # Finaliza la ejecución del método si no hay tiendas
-
-        # Muestra la ventana para seleccionar una tienda
-        self.mostrar_frame(usuario)
-
-        # Espera a que el usuario seleccione una tienda
-        # Al finalizar, `self.seleccion_tienda` debería tener la tienda seleccionada
-        if self.seleccion_tienda is not None:
-            self.administrar_tienda(self.seleccion_tienda)
-        else:
-            print("No se ha seleccionado ninguna tienda.")
-
-    def administrar_tienda(self, tienda):
-        # Aquí iría la lógica para administrar la tienda
-        print(f"Administrando la tienda: {tienda.getNombre()}")
+    @classmethod
+    def ingresar(cls,window):
+        def ingresa():
+            from .identidad import Identidad2
+            persona=Identidad2(window).identificar_persona()
+            if  isinstance(persona,Administrador):
+                print("es administrador ")
+            else:
+                cls.ingresar(window)
+        ingresa()
