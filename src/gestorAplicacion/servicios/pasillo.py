@@ -4,7 +4,10 @@ class Pasillo:
         self.nombre = nombre
         self.categoria = categoria
         self.tienda = tienda
-        self.productos = productos if productos is not None else []
+        if productos is None:
+            self.productos = []
+        else:
+            self.productos = productos
 
         if tienda is not None:
             tienda.get_pasillos().append(self)

@@ -271,23 +271,8 @@ class Iniciar_ventana_usuario():
         from uiMain.fieldFrame import FieldFrame
         zona2 = FieldFrame(window, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
 
-        from uiMain.funcionalidad5 import Funcionalidad5
-        menuprocesos.add_command(label="Funcionalidad 5", command=lambda: prueba2(window))
 
-        menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
-        def prueba2(window):
-            matarloTodo2()       
-            Funcionalidad5.ingresar(window)
 
-        def prueba(window):
-            matarloTodo2()       
-            funcionalidad = Funcionalidad4()
-
-    # Llamar al método ingresar en la instancia, pasando la ventana
-            funcionalidad.ingresar(window)
-
-        from uiMain.funcionalidad4 import Funcionalidad4
-        menuprocesos.add_command(label="Funcionalidad 4", command= lambda: prueba(window))
 
         # Función para mostrar el frame de Funcionalidad Uno
         def mostrar_funcionalidad_uno():
@@ -323,6 +308,25 @@ class Iniciar_ventana_usuario():
         menuprocesos.add_command(label="Funcionalidad 2", command=funcion2)
 
         menuayuda.add_command(label="Acerca de", command=open_popup)
+
+        from uiMain.funcionalidad4 import Funcionalidad4
+        menuprocesos.add_command(label="Funcionalidad 4", command=lambda: prueba(window))
+
+        from uiMain.funcionalidad5 import Funcionalidad5
+        menuprocesos.add_command(label="Funcionalidad 5", command=lambda: prueba2(window))
+
+        menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
+
+        def prueba2(window):
+            matarloTodo2()
+            Funcionalidad5.ingresar(window)
+
+        def prueba(window):
+            matarloTodo2()
+            funcionalidad = Funcionalidad4()
+
+            # Llamar al método ingresar en la instancia, pasando la ventana
+            funcionalidad.ingresar(window)
 
         window['menu'] = menubar
 
@@ -487,10 +491,6 @@ if __name__ == "__main__":
     )
 
 
-    producto5 = Producto(
-    "Galletas de Avena", "Cerealia", 2.75, Tamano.PEQUENO, Edades.MENORES, Categoria.ALIMENTO,
-    "Galletas de avena y miel, perfectas para un snack saludable.", "05/11/2024", 105
-    )
 
     producto6 = Producto(
     "Jugo de Manzana", "Frutas del Valle", 2.50, Tamano.MEDIANO, Edades.MENORES, Categoria.BEBIDA,
@@ -571,35 +571,53 @@ if __name__ == "__main__":
         "Pasillo de Bebidas",
         [producto6, producto7, producto8, producto9, producto10],
         Categoria.BEBIDA,
-        None
+        tienda3
     )
 
     pasilloPersonal = Pasillo(
         "Pasillo de Personal",
         [producto11, producto12, producto13, producto14, producto15],
         Categoria.PERSONAL,
-        None
+        tienda5
     )
 
     pasilloLimpieza = Pasillo(
         "Pasillo de Limpieza",
         [producto16, producto17, producto18, producto19, producto20],
         Categoria.LIMPIEZA,
-        None
+        tienda1
     )
 
-    pasillos=[pasilloBebidas,pasilloLimpieza]
+    pasillos=[pasilloLimpieza]
+    pasa=[pasilloBebidas]
     pasillito=[pasilloPersonal]
     tienda1.set_pasillos(pasillos)
 
-    tienda2.set_pasillos(pasillos)
-
-    tienda3.set_pasillos(pasillos)
 
 
-    tienda4.set_pasillos(pasillito)
+    tienda3.set_pasillos(pasa)
+
 
     tienda5.set_pasillos(pasillos)
+
+    producto16.set_tienda(pasilloLimpieza.get_tienda())
+    producto17.set_tienda(pasilloLimpieza.get_tienda())
+    producto18.set_tienda(pasilloLimpieza.get_tienda())
+    producto19.set_tienda(pasilloLimpieza.get_tienda())
+    producto20.set_tienda(pasilloLimpieza.get_tienda())
+    producto11.set_tienda(pasilloPersonal.get_tienda())
+    producto12.set_tienda(pasilloPersonal.get_tienda())
+    producto13.set_tienda(pasilloPersonal.get_tienda())
+    producto14.set_tienda(pasilloPersonal.get_tienda())
+    producto15.set_tienda(pasilloPersonal.get_tienda())
+
+    producto6.set_tienda(pasilloBebidas.get_tienda())
+    producto7.set_tienda(pasilloBebidas.get_tienda())
+    producto8.set_tienda(pasilloBebidas.get_tienda())
+    producto9.set_tienda(pasilloBebidas.get_tienda())
+    producto10.set_tienda(pasilloBebidas.get_tienda())
+
+
 
     caja1 = Caja("Caja 1", TipoCaja.RAPIDA, tienda1)
     caja2 = Caja("Caja 2", TipoCaja.NORMAL, tienda2)
