@@ -323,7 +323,7 @@ class Funcionalidad4:
 
         # Proceso de identificación del usuario
         def ingresa():
-            from .identidad import Identidad2
+            from uiMain.identidad import Identidad2
             identidad = Identidad2(window)
             identidad.identificar_persona()
 

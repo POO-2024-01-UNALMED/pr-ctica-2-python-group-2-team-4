@@ -1,16 +1,34 @@
 from uiMain.fieldFrame import FieldFrame
 from gestorAplicacion.sujetos.administrador import Administrador
-
+from tkinter import*
 class Funcionalidad5:
     @classmethod
-    def ingresar(cls,window):
+    def ingresar(self, window):
+        # Limpiar los widgets de la ventana
+        widgets = window.winfo_children()
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        # Proceso de identificación del usuario
         def ingresa():
-            from .identidad import Identidad2
-            persona=Identidad2(window).identificar_persona()
-            if not isinstance(persona,Administrador):
-                cls.personalizar_tienda(persona,window)
-            else:
-                cls.ingresar(window)
+            from uiMain.identidad import Identidad2
+            identidad = Identidad2(window)
+            identidad.identificar_persona()
+
+            # Usamos un after para esperar y verificar hasta que identidad.resultado esté definido
+            def check_identificacion():
+                if identidad.resultado is not None:
+                    usuario = identidad.resultado
+                    # Llama al frame de usuario solo si el usuario ha sido identificado
+                    self.personalizar_tienda(usuario,window)
+                else:
+                    # Si aún no se ha identificado, verificar de nuevo
+                    window.after(100, check_identificacion)
+
+            # Iniciar la espera para que el resultado se procese
+            window.after(100, check_identificacion)
+
         ingresa()
     @classmethod
     def personalizar_tienda(cls, admin,window):
@@ -34,14 +52,37 @@ class Funcionalidad5:
             titulo="Personalizar Tienda",
             descripcion="Para adaptar tu tienda a tu diseño"
             )
-        func5.pack()
-        for i, tienda in enumerate(tiendas):
-            nombre_tienda = tienda.get_nombre()
-            precio_tienda = f"${tienda.get_saldo():,.2f}"
-            print(f"| {i+1:2d} | {nombre_tienda:<28} | {precio_tienda:>8} |")
+        func5.pack(fill="both", expand=True)
+        from gestorAplicacion.servicios.tienda import Tienda
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
-        print("+----+------------------------------+----------+")
-        #eleccion = Main.escaner() - 1
+        # Crear el marco para las Tiendas
+        tiendasGeneral_frame = Frame(window, bg="#243340")
+        tiendasGeneral_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        # Crear el marco para las Tiendas
+        tiendas_frame = Frame(tiendasGeneral_frame, bg="#243340")
+        tiendas_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        tiendas = Tienda.revision_tienda(Tienda.get_tiendas())
+        Label(tiendas_frame, text="Selecciona una de las tiendas que tenemos disponibles para ti:",font=("Arial", 16), bg="#F2F2F2", fg="black").pack(pady=10)
+            # Crear un marco adicional para centrar los botones
+        botones_frame = Frame(tiendas_frame, bg="#243340")
+        botones_frame.pack(padx=100, pady=20, fill=BOTH, expand=True)
+
+            # Mostrar las tiendas en la página actual
+            #indice = 1 + (page - 1) * tiendas_por_pagina
+
+            # Controles de paginación
+        paginacion_frame = Frame(tiendas_frame, bg="#243340")
+        paginacion_frame.pack(pady=10)
+        if Tienda.get_tiendas()==0:
+            Label(tiendas_frame,
+                  text="No hay tiendas disponibles en el momento.",
+                  font=("Arial", 44), bg="#F2F2F2").pack(pady=10)
         eleccion=0
         
 
