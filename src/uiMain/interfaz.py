@@ -698,10 +698,11 @@ if __name__ == "__main__":
             cliente.get_facturas().append(carrito)
             tienda.get_facturas().append(carrito)
 
+            print(cliente.get_facturas())
+            print(tienda.get_facturas())
             # El carrito ya se ha agregado a la lista de facturas del cliente y de la tienda
             print("Carrito creado y productos añadidos con éxito.")
             print(f"Total del carrito: {carrito.calcular_total()}")
-
     ventana = Ventana()
     ventana.crearVentana1()
     ventana.mainloop()

@@ -1,9 +1,10 @@
 import sys
-from tkinter import Frame, Label, Entry, Button, messagebox
+from tkinter import Frame, Label, Entry, Button, messagebox, simpledialog
 
 from gestorAplicacion.servicios.ahorcado import Ahorcado
 from gestorAplicacion.servicios.enums import TipoCaja
 from gestorAplicacion.servicios.tresEnRaya import TresEnRaya
+from gestorAplicacion.sujetos import cliente
 from gestorAplicacion.sujetos.administrador import Administrador
 from gestorAplicacion.sujetos.cliente import Cliente
 from uiMain.main import Main
@@ -201,7 +202,7 @@ class Funcionalidad3:
                    font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
                    command=lambda: persona.set_tienda(
                        factura_seleccionada.get_tienda()) or Funcionalidad3.seleccionar_caja(persona,
-                                                                                             factura_seleccionada)).pack(
+                                                                                             factura_seleccionada,persona.get_carrito())).pack(
                 pady=5)
             Button(frame_detalle, text="Escoger otra factura",
                    font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
@@ -210,6 +211,172 @@ class Funcionalidad3:
                    font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
                    command=lambda: Main.escoger_funcionalidad()).pack(pady=5)
 
+    def seleccionar_caja(self, cliente, carrito):
+        self.cliente = cliente
+        self.carrito = carrito
+
+        cajas = cliente.get_tienda().cajas_disponibles()
+        if not cajas:
+            opcion = messagebox.askquestion(
+                "No hay cajas disponibles",
+                "No hay cajas disponibles.\n¿Desea esperar a que una caja esté disponible o salir?"
+            )
+            if opcion == 'yes':
+                # Aquí podrías implementar la lógica para esperar a un cajero disponible
+                cliente.get_tienda().asignar_cajero(
+                    cliente.get_tienda().encontrar_cajero(cliente.get_tienda().empleados))
+                self.seleccionar_caja(cliente, carrito)
+                return
+            else:
+                Main.escoger_funcionalidad()
+                return
+
+        # Mostrar cajas disponibles
+        cajas_str = "\n".join(
+            f"{i + 1}. Caja: {caja.get_nombre()}, Tipo: {caja.get_tipo()}, Empleado: {caja.get_cajero().get_nombre()}"
+            for i, caja in enumerate(cajas)
+        )
+        seleccion = simpledialog.askinteger("Seleccionar Caja", f"Seleccione una caja para pagar:\n{cajas_str}")
+
+        if not seleccion or seleccion < 1 or seleccion > len(cajas):
+            messagebox.showwarning("Selección inválida", "Opción no válida. Inténtelo de nuevo.")
+            return
+
+        self.caja_seleccionada = cajas[seleccion - 1]
+
+        if self.caja_seleccionada.get_tipo() == TipoCaja.RAPIDA and len(carrito.get_productos()) > 5:
+            messagebox.showwarning("Caja rápida no disponible",
+                                   "No puede usar la caja rápida porque tiene más de 5 productos.")
+            return
+
+        self.caja_seleccionada.cliente = cliente
+        self.mostrar_factura()
+
+    def mostrar_factura(self):
+        descuento_membresia = self.cliente.calcular_descuento_por_membresia()
+        precio_total = self.carrito.calcular_total()
+        precio_con_descuento = precio_total * (1 - descuento_membresia)
+
+        detalles_factura = self.carrito.generar_detalles_factura(descuento_membresia, False)
+        detalles_factura += f"\nTotal con descuento: {precio_con_descuento:.2f}"
+
+        respuesta = messagebox.askquestion("Factura", f"{detalles_factura}\n\n¿Desea borrar esta factura y no pagarla?")
+        if respuesta == 'yes':
+            self.carrito.eliminar_carrito()
+            self.cliente.set_tienda(None)
+            self.cliente.set_carrito(None)
+            self.caja_seleccionada.set_cliente(None)
+            self.carrito.set_caja(None)
+            messagebox.showinfo("Factura eliminada", "Factura eliminada y productos devueltos al inventario.")
+            return
+
+        respuesta_juego = messagebox.askquestion("Descuento Adicional",
+                                                 "¿Desea intentar obtener un descuento adicional jugando?")
+        if respuesta_juego == 'yes':
+            self.jugar_para_descuento(precio_total, descuento_membresia)
+        else:
+            self.confirmar_pago(precio_con_descuento)
+
+    def jugar_para_descuento(self, precio_total, descuento_membresia):
+        tiene_membresia = self.cliente.get_membresia() is not None
+        costo_juego = 0
+        if not tiene_membresia:
+            costo_juego = 10000
+            self.carrito.incrementar_costo(costo_juego)
+            precio_total += costo_juego
+
+        seleccion_juego = simpledialog.askinteger(
+            "Seleccionar Juego",
+            "Seleccione un juego:\n1. Tres en Raya\n2. Ahorcado"
+        )
+
+        gano_juego = False
+        if seleccion_juego == 1:
+            gano_juego = self.jugar_tres_en_raya()
+        elif seleccion_juego == 2:
+            gano_juego = self.jugar_ahorcado()
+
+        precio_con_descuento = precio_total * (1 - descuento_membresia)
+        if gano_juego:
+            precio_con_descuento *= 0.9
+            messagebox.showinfo("Ganaste", "¡Felicidades! Has ganado un descuento adicional del 10%.")
+        else:
+            messagebox.showinfo("Perdiste", "Lo sentimos, no has ganado el juego.")
+
+        self.confirmar_pago(precio_con_descuento)
+
+    def jugar_tres_en_raya(self):
+        juego_tres_en_raya = TresEnRaya()
+        juego_tres_en_raya.iniciar()
+
+        while not juego_tres_en_raya.ha_ganado() and not juego_tres_en_raya.ha_perdido():
+            estado = juego_tres_en_raya.obtener_estado()
+            posicion = simpledialog.askinteger("Tres en Raya", f"{estado}\nElige una posición (1-9): ")
+            if not juego_tres_en_raya.jugar(posicion):
+                messagebox.showwarning("Posición inválida", "Posición inválida. Intenta de nuevo.")
+                continue
+
+        estado = juego_tres_en_raya.obtener_estado()
+        messagebox.showinfo("Resultado Tres en Raya", estado)
+        return juego_tres_en_raya.ha_ganado()
+
+    def jugar_ahorcado(self):
+        juego_ahorcado = Ahorcado("java")
+        while not juego_ahorcado.ha_ganado() and not juego_ahorcado.ha_perdido():
+            estado = juego_ahorcado.obtener_estado()
+            letra = simpledialog.askstring("Ahorcado", f"{estado}\nIntroduce una letra: ").lower()
+            juego_ahorcado.jugar(letra)
+
+        estado = juego_ahorcado.obtener_estado()
+        messagebox.showinfo("Resultado Ahorcado", estado)
+        return juego_ahorcado.ha_ganado()
+
+    def confirmar_pago(self, precio_con_descuento):
+        opcion_pago = simpledialog.askinteger(
+            "Confirmar Pago",
+            f"¿Desea pagar la factura?\nTotal con descuento: {precio_con_descuento:.2f}\n1. Sí\n2. No"
+        )
+
+        if opcion_pago == 2:
+            messagebox.showinfo("No Pago", "Ha decidido no pagar la factura. Regresando a la tienda...")
+            self.cliente.set_tienda(None)
+            self.cliente.set_carrito(None)
+            self.caja_seleccionada.set_cliente(None)
+            self.carrito.set_caja(None)
+            return
+        elif opcion_pago == 1:
+            if self.cliente.get_dinero() < precio_con_descuento:
+                messagebox.showwarning("Saldo Insuficiente",
+                                       "No tiene suficiente saldo para pagar la factura. Regresando a la tienda...")
+                self.cliente.set_tienda(None)
+                self.cliente.set_carrito(None)
+                self.caja_seleccionada.set_cliente(None)
+                self.carrito.set_caja(None)
+                return
+
+            # Marcar la factura como pagada
+            self.carrito.set_pagado(True)
+            self.cliente.get_facturas().append(self.carrito)
+            self.cliente.get_tienda().subir_saldo(precio_con_descuento)
+            self.cliente.bajar_dinero(precio_con_descuento)
+
+            # Calcular y descontar el pago del cajero
+            cajero = self.caja_seleccionada.get_cajero()
+            pago_cajero = 20000
+            if cajero.get_prestacion_pension():
+                pago_cajero += 5000
+            if cajero.get_prestacion_salud():
+                pago_cajero += 5000
+            self.cliente.get_tienda().bajar_saldo(pago_cajero)
+
+            # Desasignar referencias
+            self.cliente.set_tienda(None)
+            self.cliente.set_carrito(None)
+            self.caja_seleccionada.set_cliente(None)
+            self.carrito.set_caja(None)
+
+            messagebox.showinfo("Pago Exitoso", "La factura ha sido pagada exitosamente.")
+            Main.escoger_funcionalidad()
 
 """
     def impresion_facturas(persona):
