@@ -19,7 +19,7 @@ from baseDatos.escritorLector import EscritorLector
 from uiMain.ventana import Ventana
 
 
-from identidad import Identidad2
+from uiMain.identidad import Identidad2
 class FieldFrame_p(Frame):
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado, tipos):
         self._tituloCriterios = tituloCriterios
@@ -233,8 +233,8 @@ class Iniciar_ventana_usuario():
         window.title("My_Tiendita_2.0")
 
         # Icono de la ventana
-        window.iconbitmap(os.path.join(pathlib.Path(__file__).parent.parent, 'assets', 'jhorman.ico'))
-        window.option_add("*tearOff", FALSE)
+        #window.iconbitmap(os.path.join(pathlib.Path(__file__).parent.parent, 'assets', 'jhorman.ico'))
+        #window.option_add("*tearOff", FALSE)
 
         # Métodos sin argumentos para poder ejecutarlos-------------------------------------
 
@@ -319,13 +319,19 @@ class Iniciar_ventana_usuario():
 
         def prueba2(window):
             matarloTodo2()
+            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+            for i, widget in enumerate(widgets):
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                    widget.destroy()
             Funcionalidad5.ingresar(window)
 
         def prueba(window):
             matarloTodo2()
             funcionalidad = Funcionalidad4()
-
-            # Llamar al método ingresar en la instancia, pasando la ventana
+            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+            for i, widget in enumerate(widgets):
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                    widget.destroy()
             funcionalidad.ingresar(window)
 
         window['menu'] = menubar
@@ -641,8 +647,8 @@ if __name__ == "__main__":
     tienda4.get_empleados().append(cajero4)
 
 
-    from fieldFrame import FieldFrame
     ventana = Ventana()
     ventana.crearVentana1()
     ventana.mainloop()
+    from uiMain.fieldFrame import FieldFrame
 

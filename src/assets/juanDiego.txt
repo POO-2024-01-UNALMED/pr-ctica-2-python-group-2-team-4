@@ -5,7 +5,7 @@ Perfil Personal
 Soy un estudiante de Ingenieria en Sistemas en la Universidad Nacional de Colombia, sede Medellin, apasionado por la aventura, los deportes acuaticos y los videojuegos. Me destaco por mi creatividad y capacidad de resolver problemas en proyectos tecnologicos.
 
 Formacion Academica
-Ingenieria en Sistemas – Universidad Nacional de Colombia, sede Medellin
+Ingenieria en Sistemas Universidad Nacional de Colombia, sede Medellin
 Actualmente cursando tercer semestre (2024).
 Experiencia en Proyectos
 Estudiante colaborador en el proyecto My_Tiendita_2.0
@@ -15,4 +15,4 @@ Programacion en Java y Python
 Desarrollo de proyectos en equipos multidisciplinarios
 Logica de programacion y resolucion de problemas
 Conocimientos basicos en bases de datos y algoritmos
-Trabajo en equipo y habilidades de comunicación
+Trabajo en equipo y habilidades de comunicacion
