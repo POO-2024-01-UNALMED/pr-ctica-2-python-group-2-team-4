@@ -179,7 +179,7 @@ class Identidad:
 #         self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
 #         Label(self.frame_actual, text=mensaje, font=("Arial", 20), bg="light blue").pack(pady=20, padx=20)
 #         Button(self.frame_actual, text="Aceptar", command=self.frame_actual.destroy).pack(pady=10)
-class Identidad2: 
+class Identidad2:
     def __init__(self, window):
         self.window = window
         self.frame_actual = None
@@ -189,9 +189,6 @@ class Identidad2:
         # Destruir el frame actual si existe
         if self.frame_actual:
             self.frame_actual.destroy()
-        
-        # Importar FieldFrame solo cuando sea necesario
-        from fieldFrame import FieldFrame
         
         # Crear un nuevo FieldFrame
         self.frame_actual = FieldFrame(
@@ -211,21 +208,15 @@ class Identidad2:
         def identificar():
             p = self.frame_actual._entrys[0].get()  # Suponiendo que el ID está en el primer Entry
             
-            # Importar Persona solo cuando sea necesario
             from gestorAplicacion.sujetos.persona import Persona
             personas = Persona.get_personas()
-            persona_encontrada = None
-            for persona in personas:
-                if p == persona.get_id():
-                    persona_encontrada = persona
-                    break
+            persona_encontrada = next((p for p in personas if p.get_id() == p), None)
 
             if persona_encontrada:
                 self.resultado = persona_encontrada
-                return persona_encontrada
-            
-            # Mostrar ventana de alerta antes de ir a mostrar_registro
-            self.mostrar_alerta(p)
+                self.mostrar_mensaje(f"Bienvenido {persona_encontrada.get_nombre()}")
+            else:
+                self.mostrar_alerta(p)
 
         criterios = ["ID"]
         valores = [""]
@@ -277,20 +268,20 @@ class Identidad2:
                 # Importar Cliente solo cuando sea necesario
                 from gestorAplicacion.sujetos.cliente import Cliente
                 persona = Cliente(nombre, id, edad, genero)
+                self.resultado = persona
+                self.mostrar_mensaje(f"Usuario Cliente creado con éxito. Bienvenido {nombre}")
             else:
                 # Importar Administrador solo cuando sea necesario
                 from gestorAplicacion.sujetos.administrador import Administrador
                 dinero = float(dinero) if dinero else 0.0
                 persona = Administrador(nombre, id, edad, genero, dinero)
-            
-            # Mostrar mensaje de éxito en la ventana
-            self.mostrar_mensaje(f"Usuario creado con éxito. Bienvenido {nombre}")
+                self.resultado = persona
+                self.mostrar_mensaje(f"Usuario Admin creado con éxito. Bienvenido {nombre}")
+            # Mostrar mensaje de éxito y actualizar resultado
+           
             
             # Print en consola para verificar
             print(f"Persona registrada exitosamente: ID = {id}, Nombre = {nombre}")
-
-            self.resultado = persona  # Guarda la persona creada
-            return persona
 
         criterios = [
             "Nombre",
@@ -323,41 +314,5 @@ class Identidad2:
         Button(self.frame_actual, text="Aceptar", command=self.frame_actual.destroy).pack(pady=10)
 
 
-class Identidad3: 
-    def __init__(self, window):
-        self.window = window
-        self.user_id = None  # Cambié de 'id' a 'user_id'
-        self.frame_actual = None
 
-    def mostrar_frame_identificacion(self):
-        # Destruir el frame actual si existe
-        if self.frame_actual:
-            self.frame_actual.destroy()
-
-        # Criterios para el formulario (en este caso, solo pedimos el ID)
-        criterios = ["ID"]
-        valores = [""]  # Campo vacío para el ID
-        habilitado = [True]  # El campo está habilitado para ser llenado
-
-        # Crear un nuevo FieldFrame
-        self.frame_actual = FieldFrame(
-            master=self.window,
-            tituloCriterios="Criterios",
-            criterios=criterios,
-            tituloValores="Valores",
-            valores=valores,
-            habilitado=habilitado,
-            titulo="Identificación",
-            descripcion="Por favor ingrese su ID para identificarse"
-        )
-
-        self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
-        
-        # Asignar el callback al botón aceptar
-        self.frame_actual.aceptar.config(command=self.guardar_id)
-
-    def guardar_id(self):
-        # Obtener el ID del campo de entrada y asignarlo a la variable user_id
-        self.user_id = self.frame_actual._entrys[0].get()
-        print(f"ID ingresado: {self.user_id}")  # Imprime el ID ingresado
         

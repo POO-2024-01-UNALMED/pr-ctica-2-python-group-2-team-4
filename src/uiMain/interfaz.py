@@ -282,6 +282,7 @@ class Iniciar_ventana_usuario():
         def prueba(window):
             matarloTodo2()       
             funcionalidad = Funcionalidad4()
+
     # Llamar al método ingresar en la instancia, pasando la ventana
             funcionalidad.ingresar(window)
 
@@ -303,6 +304,7 @@ class Iniciar_ventana_usuario():
 
         # Añadir la opción en el menú para activar Funcionalidad Uno
         menuprocesos.add_command(label="Funcionalidad 1", command=mostrar_funcionalidad_uno)
+
 
         def funcion2():
             from uiMain.funcionalidad2 import Funcionalidad2
