@@ -647,8 +647,8 @@ if __name__ == "__main__":
     tienda4.get_empleados().append(cajero4)
 
 
-    from fieldFrame import FieldFrame
     ventana = Ventana()
     ventana.crearVentana1()
     ventana.mainloop()
+    from uiMain.fieldFrame import FieldFrame
 
