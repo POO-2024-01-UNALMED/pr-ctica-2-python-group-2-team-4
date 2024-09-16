@@ -1,6 +1,6 @@
 from gestorAplicacion.sujetos.persona import Persona
 from gestorAplicacion.servicios.carrito import Carrito
-from gestorAplicacion.servicios.enums import Genero
+from gestorAplicacion.servicios.enums import Genero, Edades
 from gestorAplicacion.servicios.enums import Membresia
 
 class Cliente(Persona):
@@ -59,18 +59,21 @@ class Cliente(Persona):
     def mayor_edad(self):
         return self.edad >= 18
 
-    @staticmethod
-    def asignaciones(cliente, tienda, dinero=None):
+    def asignaciones(self,cliente, tienda, presupuesto_predeterminadoA,presupuesto_predeterminadoN, presupuesto_personalizado=None):
         if cliente.mayor_edad():
-            carrito = Carrito(cliente, tienda, "ADULTOS")
-            cliente.set_carrito(carrito)
+            carrito = Carrito(cliente, tienda, Edades.ADULTOS)
             cliente.set_tienda(tienda)
-            cliente.set_dinero(dinero if dinero else 100000)
+            cliente.set_carrito(carrito)
+            carrito.set_cliente(cliente)
+            cliente.set_dinero(
+                presupuesto_personalizado if presupuesto_personalizado is not None else presupuesto_predeterminadoA)
         else:
-            carrito = Carrito(cliente, tienda, "MENORES")
-            cliente.set_carrito(carrito)
+            carrito = Carrito(cliente, tienda, Edades.MENORES)
             cliente.set_tienda(tienda)
-            cliente.set_dinero(dinero if dinero else 50000)
+            cliente.set_carrito(carrito)
+            carrito.set_cliente(cliente)
+            cliente.set_dinero(
+                presupuesto_personalizado if presupuesto_personalizado is not None else presupuesto_predeterminadoN)
 
     @staticmethod
     def perfil_demografico(cliente):

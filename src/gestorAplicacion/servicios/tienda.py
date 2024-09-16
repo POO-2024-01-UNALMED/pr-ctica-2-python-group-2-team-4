@@ -170,8 +170,14 @@ class Tienda:
         tiendas_con_cliente = {tienda for tienda in Tienda.tiendas for carrito in tienda.facturas if carrito.cliente == cliente}
         return list(tiendas_con_cliente)
 
-    def buscar_producto(self, n):
-        return "\n".join(f"{n}.{producto}" for pasillo in self._pasillos for producto in pasillo.productos)
+    def buscar_producto(self):
+        productos = []
+        ids = []
+        for pasillo in self.get_pasillos():
+            for producto in pasillo.productos:
+                if producto.get_id() not in ids:
+                    productos.append(producto)
+        return productos
 
     def buscar_productos(self,categoria):
         productos=[]
