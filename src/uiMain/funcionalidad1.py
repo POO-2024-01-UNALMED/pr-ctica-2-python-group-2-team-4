@@ -211,7 +211,7 @@ class Funcionalidad1:
         numero = presupuesto
         if presupuesto == None:
             # Presupuesto por defecto
-            cliente.asignaciones(cliente, tienda, 100000, 50000, None)
+            cliente.asignaciones(cliente, tienda, 100000, 50000)
             print(cliente.get_dinero())
             print(cliente.get_tienda().get_nombre())
             self.presupuestoAsignado(cliente, tienda, window)
@@ -261,7 +261,7 @@ class Funcionalidad1:
 
         # Botón 1: Consulta general de productos
         boton1 = Button(boton_frame, text="Desea ver la descripcion de productos en la tienda",
-                        font=("Arial", 15))
+                        font=("Arial", 15),command=lambda:self.mostrar_productos_general(cliente,tienda,window))
         boton1.grid(row=1, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 2: Consulta de productos por categoría
@@ -286,51 +286,53 @@ class Funcionalidad1:
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
-        productos = tienda.buscar_productos()
+
+
+        productos = tienda.buscar_productos1()
 
         # Mostrar productos encontrados
-        productos_frame = Frame(window, bg="light blue")
+        productos_frame = Frame(window, bg="#243340")
         productos_frame.pack(pady=10, fill=BOTH, expand=True)
 
         if not productos:
             Label(productos_frame,
                   text="No hay productos disponibles",
-                  font=("Arial", 12), bg="light blue").pack(pady=10)
+                  font=("Arial", 12), bg="F2F2F2").pack(pady=10)
             Button(productos_frame, text="Volver a Consulta",
-                   font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
+                   font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
                    width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
             return
 
-        Label(productos_frame, text=f"Productos de  {tienda.get_nombre}:",
-              font=("Arial", 16), bg="light blue").pack(pady=10)
+        Label(productos_frame, text=f"Productos de  {tienda.get_nombre()}:",
+              font=("Arial", 16), bg="#F2F2F2").pack(pady=10)
 
         # Definir número de productos por página
         productos_por_pagina = 4
         total_paginas = math.ceil(len(productos) / productos_por_pagina)
         productos = productos[(page - 1) * productos_por_pagina: page * productos_por_pagina]
 
-        botones_frame = Frame(productos_frame, bg="light blue")
+        botones_frame = Frame(productos_frame, bg="#F2F2F2")
         botones_frame.pack(pady=10, fill=BOTH, expand=True)
 
         for i, producto in enumerate(productos):
             Button(botones_frame,
                    text=f"{i + 1}. {producto.get_nombre()} ",
-                   font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
+                   font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
                    width=35, command=lambda prod=producto: self.mostrar_productos_general(cliente, prod, window)).pack(pady=5,
                                                                                                              anchor=CENTER)
 
         # Controles de paginación
-        paginacion_frame = Frame(productos_frame, bg="light blue")
+        paginacion_frame = Frame(productos_frame, bg="#243340")
         paginacion_frame.pack(pady=10)
 
         # Botones de paginación
         if page > 1:
-            Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#00FF00", fg="black",
+            Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#F2F2F2", fg="black",
                    command=lambda: self.mostrar_productos_general(cliente, tienda, window, page - 1)).pack(
                 side="left", padx=5)
 
         if page < total_paginas:
-            Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#00FF00", fg="black",
+            Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#F2F2F2", fg="black",
                    command=lambda: self.mostrar_productos_general(cliente, tienda, window, page + 1)).pack(
                 side="right", padx=5)
 

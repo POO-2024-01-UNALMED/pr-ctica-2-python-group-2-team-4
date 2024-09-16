@@ -170,13 +170,14 @@ class Tienda:
         tiendas_con_cliente = {tienda for tienda in Tienda.tiendas for carrito in tienda.facturas if carrito.cliente == cliente}
         return list(tiendas_con_cliente)
 
-    def buscar_producto(self):
+    def buscar_productos1(self):
         productos = []
-        ids = []
+        ids = []  # Lista para almacenar los IDs de productos ya agregados, evitando duplicados
         for pasillo in self.get_pasillos():
-            for producto in pasillo.productos:
-                if producto.get_id() not in ids:
-                    productos.append(producto)
+            for producto in pasillo.get_productos():
+                if producto.get_id() not in ids:  # Evita agregar productos duplicados
+                    productos.append(producto)  # Agregar producto a la lista
+                    ids.append(producto.get_id())  # Guardar el ID del producto para evitar duplicados
         return productos
 
     def buscar_productos(self,categoria):
