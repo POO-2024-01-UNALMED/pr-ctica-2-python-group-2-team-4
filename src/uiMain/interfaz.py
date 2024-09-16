@@ -319,13 +319,19 @@ class Iniciar_ventana_usuario():
 
         def prueba2(window):
             matarloTodo2()
+            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+            for i, widget in enumerate(widgets):
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                    widget.destroy()
             Funcionalidad5.ingresar(window)
 
         def prueba(window):
             matarloTodo2()
             funcionalidad = Funcionalidad4()
-
-            # Llamar al método ingresar en la instancia, pasando la ventana
+            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+            for i, widget in enumerate(widgets):
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                    widget.destroy()
             funcionalidad.ingresar(window)
 
         window['menu'] = menubar

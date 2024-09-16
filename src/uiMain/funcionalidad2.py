@@ -423,8 +423,44 @@ class Funcionalidad2:
         Main.lineas()
         self.donde_se_agregan_productos(cliente, seleccionado)"""
 
-
     def busqueda_nombre(self, cliente, window):
+        def buscar():
+            widgets = window.winfo_children()
+            for i, widget in enumerate(widgets):
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                    widget.destroy()
+
+            frame1 = Frame(window, bg="light blue")
+            frame1.pack(fill=BOTH, expand=True)
+
+            # Añadir los Entry y Labels
+            frame_entries = Frame(frame1, bg="light blue")
+            frame_entries.pack(pady=10, fill=X, padx=10)
+
+            label_seleccion = Label(frame_entries, text="Nombre del Producto:", font=("Arial", 12), bg="light blue")
+            label_seleccion.pack(side="top", padx=5)
+
+            entry_seleccion = Entry(frame_entries, font=("Arial", 12))
+            entry_seleccion.pack(side="top", pady=5)
+
+            def on_buscar():
+                nombre = entry_seleccion.get()
+                if not nombre:
+                    mostrar_error(frame1, "Debe ingresar un nombre para buscar.")
+                    return
+
+                productos = buscar_productos_por_nombre(nombre)
+                if not productos:
+                    mostrar_error(frame1, "No se encontraron productos con ese nombre.")
+                    return
+
+                actualizar_mostrar_productos(frame1, productos, 0, 4)
+
+            boton_buscar = Button(frame1, text="Buscar",
+                                  command=on_buscar,
+                                  font=("Arial", 12), bg="#00FF00", fg="black")
+            boton_buscar.pack(pady=10)
+
         def buscar_productos_por_nombre(nombre):
             # Buscar productos por coincidencia parcial (insensible a mayúsculas/minúsculas)
             productos = cliente.get_tienda().buscar_productos_por_nombre(nombre)
@@ -433,7 +469,7 @@ class Funcionalidad2:
         def mostrar_error(frame, mensaje):
             # Limpiar errores anteriores
             for widget in frame.winfo_children():
-                if widget.cget('fg') == 'red':
+                if hasattr(widget, 'error_widget') and widget.error_widget:
                     widget.destroy()
 
             label_error = Label(frame, text=mensaje, font=("Arial", 12), fg="red", bg="light blue", borderwidth=2,
@@ -444,8 +480,9 @@ class Funcionalidad2:
             # Mostrar una ventana emergente con un mensaje de confirmación
             messagebox.showinfo("Confirmación", mensaje)
 
-        def actualizar_mostrar_productos(frame1, productos, inferior, superior, entry_seleccion, actualizar_pagina):
+        def actualizar_mostrar_productos(frame1, productos, inferior, superior, p=None):
             # Limpiar los widgets existentes en el frame
+            superiors=superior
             for widget in frame1.winfo_children():
                 widget.destroy()
 
@@ -454,14 +491,27 @@ class Funcionalidad2:
             label_instrucciones.pack(pady=10)
 
             # Mostrar los productos
+            if superior>len(productos):
+                superiors=len(productos)-1
+
+            self.producto_seleccionado=None
+            def seleccionar_producto(producto, entry_producto):
+                # Establecer el producto seleccionado en el Entry correspondiente
+                entry_producto.config(state="normal")  # Hacer que el Entry sea editable
+                entry_producto.delete(0, END)
+                entry_producto.insert(0,
+                                      f"{producto.get_nombre()} - {producto.get_marca()} - ${producto.get_precio():.2f}")
+                entry_producto.config(state="readonly")  # Hacer que el Entry sea solo lectura
+                self.producto_seleccionado=producto
+
             for i, producto in enumerate(productos[inferior:superior], start=1):
                 frame_producto = Frame(frame1, bg="light gray", padx=10, pady=5, borderwidth=2, relief="ridge")
                 frame_producto.pack(pady=5, fill=BOTH, expand=True)
 
                 boton_producto = Button(frame_producto,
-                                        text=f"{i}. {producto.get_nombre()} - {producto.get_marca()} - ${producto.get_precio():.2f}",
+                                        text=f"{i}. {producto.get_nombre()} - {producto.get_marca()} - ${producto.get_precio():.2f} - Cantidad disponible: {producto.cantidad_producto()}",
                                         font=("Arial", 12, "italic"), bg="light gray", anchor='w',
-                                        command=lambda p=producto: seleccionar_producto(p))
+                                        command=lambda p=producto:seleccionar_producto(p, entry_producto))
                 boton_producto.pack(fill=BOTH, expand=True)
 
             # Controles de paginación
@@ -470,119 +520,47 @@ class Funcionalidad2:
 
             if inferior > 0:
                 Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#00FF00", fg="black",
-                       command=lambda: actualizar_pagina(frame1, productos, inferior - 4, superior - 4,entry_seleccion)).pack(
-                    side="left", padx=5)
+                       command=lambda: actualizar_mostrar_productos(frame1, productos, inferior - 4, superior - 4)).pack(side="left", padx=5)
 
             if superior < len(productos):
                 Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#00FF00", fg="black",
-                       command=lambda: actualizar_pagina(frame1, productos, inferior + 4, superior + 4, entry_seleccion)).pack(
+                       command=lambda: actualizar_mostrar_productos(frame1, productos, inferior + 4, superior + 4)).pack(
                     side="right", padx=5)
 
+            # Añadir el botón para volver a buscar
+            label_producto = Label(frame1, text="Producto Seleccionado:", font=("Arial", 12), bg="light blue")
+            label_producto.pack(side="top", padx=5)
 
-            # Añadir el botón para seleccionar el producto
+            entry_producto = Entry(frame1, font=("Arial", 12), width=60)
+            entry_producto.pack(side="top", pady=5)
+            entry_producto.config(state="readonly")  # Solo lectura
+
+            label_cantidad = Label(frame1, text="Cantidad Deseada:", font=("Arial", 12), bg="light blue")
+            label_cantidad.pack(side="top", padx=5)
+
+            entry_cantidad = Entry(frame1, font=("Arial", 12))
+            entry_cantidad.pack(side="top", pady=5)
+
+            boton_agregar = Button(frame1, text="Agregar al carrito",
+                                   command=lambda: seleccionar(entry_producto, entry_cantidad,self.producto_seleccionado),
+                                   font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15)
+            boton_agregar.pack(pady=10, anchor=CENTER)
 
             Button(frame1, text="Volver a Buscar", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
-                   command=lambda: self.busqueda_nombre(cliente, window)).pack(pady=10, anchor=CENTER)
+                   command=lambda: buscar()).pack(pady=10, anchor=CENTER)
 
-        def seleccionar_producto(producto):
-            # Mostrar confirmación
-            mostrar_confirmacion(f"Producto '{producto.get_nombre()}' agregado correctamente.")
-            # Llamar a la función donde se agregan productos
-            self.donde_se_agregan_productos(cliente, producto, window)
-
-        def seleccionar(entry_seleccion, page_inferior, page_superior):
-            seleccion = entry_seleccion.get().strip()
-            seleccionado = None
-
+        def seleccionar(entry_producto, entry_cantidad,producto):
+            # Añade depuración para verificar el estado del widget
             try:
-                numero = int(seleccion)
-            except ValueError:
-                numero = None  # Usar `None` para representar que no es un número
-
-            productos = buscar_productos_por_nombre(search_name)
-
-            if numero is None or numero < 1 or numero > len(productos):
-                if seleccion.lower() == "s":
-                    if page_superior < len(productos):
-                        actualizar_pagina(frame1, productos, page_inferior + 4, page_superior + 4, entry_seleccion)
-                    return
-
-                if seleccion.lower() == "a":
-                    if page_inferior > 0:
-                        actualizar_pagina(frame1, productos, page_inferior - 4, page_superior - 4, entry_seleccion)
-                    return
-
-                productos_busqueda = buscar_productos_por_nombre(seleccion)
-                if not productos_busqueda:
-                    mostrar_error(frame1, "No hay productos disponibles con ese nombre. Escoja otro por favor.")
-                    return
-                else:
-                    productos.clear()
-                    productos.extend(productos_busqueda)
-                    page_inferior = 0
-                    page_superior = 4
-                    actualizar_mostrar_productos(frame1, productos, page_inferior, page_superior, entry_seleccion,
-                                                 actualizar_pagina)
-            else:
-                if 1 <= numero <= len(productos):
-                    seleccionado = productos[numero - 1]
-                elif numero == len(productos) + 1:
-                    self.elegir_tipo_busqueda(cliente, window)
-                    return
-                else:
-                    mostrar_error(frame1, "Ese número está fuera del rango")
-                    return
-
-            if seleccionado is not None:
-                # Llamar a la función donde se agregan productos
-                self.donde_se_agregan_productos(cliente, seleccionado, window)
-
-        def actualizar_pagina(frame1, productos, inferior, superior,entry_seleccion):
-            # Actualiza la vista de productos en la página actual
-            inferior = max(0, inferior)
-            superior = min(len(productos), superior)
-            actualizar_mostrar_productos(frame1, productos, inferior, superior, entry_seleccion, actualizar_pagina)
-
-        def buscar_y_mostrar(frame1, entry_seleccion):
-            global search_name, page_inferior, page_superior
-            search_name = entry_seleccion.get().strip()
-            productos = buscar_productos_por_nombre(search_name)
-            if not productos:
-                mostrar_error(frame1, "No se encontraron productos. Introduzca otro nombre.")
+                seleccion = entry_producto.get().strip()
+                cantidad=int(entry_cantidad.get())
+            except Exception:
+                print("Debes llenar ambos espacios")
                 return
-            page_inferior = 0
-            page_superior = min(4, len(productos))
-            actualizar_mostrar_productos(frame1, productos, page_inferior, page_superior, entry_seleccion,
-                                         actualizar_pagina)
 
-        def mostrar_productos():
-            widgets = window.winfo_children()
-            for i, widget in enumerate(widgets):
-                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
-                    widget.destroy()
+            self.donde_se_agregan_productos(cliente, producto,cantidad,window)
 
-            frame1 = Frame(window, bg="light blue")
-            frame1.pack(fill=BOTH, expand=True)
-
-            # Entrada inicial
-            entry_seleccion = Entry(frame1, font=("Arial", 12))
-            entry_seleccion.pack(pady=10)
-
-            def on_buscar():
-                buscar_y_mostrar(frame1, entry_seleccion)
-
-            boton_buscar = Button(frame1, text="Buscar",
-                                  command=on_buscar,
-                                  font=("Arial", 12), bg="#00FF00", fg="black")
-            boton_buscar.pack(pady=10)
-
-            return frame1
-
-        # Inicializar el estado de la paginación
-        page_inferior = 0
-        page_superior = 4
-
-        frame1 = mostrar_productos()
+        buscar()
 
     @staticmethod
     def ajustar_texto(texto, ancho_celda):
@@ -591,12 +569,7 @@ class Funcionalidad2:
         else:
             return texto
 
-    def donde_se_agregan_productos(self, cliente, seleccionado,window):
-        cantidad = simpledialog.askinteger("Cantidad", "¿Cuántos productos de este quiere usted?",
-                                           minvalue=1, parent=window)
-
-        if cantidad is None:
-            return  # El usuario canceló el diálogo
+    def donde_se_agregan_productos(self, cliente, seleccionado,cantidad,window):
 
         # Agregar el producto al carrito y obtener el resultado como una cadena
         resultado = cliente.get_carrito().agregar_al_carrito(seleccionado, cantidad)
@@ -726,6 +699,83 @@ class Funcionalidad2:
         cliente.set_tienda(None)
         cliente.set_carrito(None)
 
+    def mostrar_carrito(self, cliente, window):
+        def actualizar_productos(frame_productos, productos_map, productos_cantidad):
+            for widget in frame_productos.winfo_children():
+                widget.destroy()
+
+            # Encabezado de la tabla
+            encabezado = Label(frame_productos, text="| No | Nombre             | Marca         | Tamaño   | Precio   | Cantidad |", font=("Arial", 12))
+            encabezado.pack()
+
+            # Imprimir los productos sin duplicados con la cantidad total
+            contador = 1
+            for id_producto, producto in productos_map.items():
+                cantidad_total = productos_cantidad[id_producto]
+
+                nombre_producto = producto.get_nombre()
+                marca_producto = producto.get_marca()
+                tamano_producto = producto.get_tamano().get_tamano()
+                precio_producto = f"{producto.get_precio():.2f}"  # Precio formateado a dos decimales
+
+                # Imprimir cada producto en la tabla
+                producto_info = Label(frame_productos, text=f"| {contador:<2} | {nombre_producto:<18} | {marca_producto:<13} | {tamano_producto:<8} | {precio_producto:<8} | {cantidad_total:<8} |", font=("Arial", 10))
+                producto_info.pack()
+                contador += 1
+
+        def eliminar_producto(id_producto, frame_productos, productos_map, productos_cantidad):
+            producto_seleccionado = productos_map[id_producto]
+            cantidad_actual = cliente.get_carrito().contar_repeticiones(producto_seleccionado)
+
+            cantidad_eliminar = simpledialog.askinteger("Eliminar Producto", f"Ingrese la cantidad a eliminar (máximo {cantidad_actual}):", minvalue=1, maxvalue=cantidad_actual)
+            if cantidad_eliminar is not None and 0 < cantidad_eliminar <= cantidad_actual:
+                cliente.get_carrito().eliminar_productos(producto_seleccionado, cantidad_eliminar)
+                messagebox.showinfo("Éxito", "Productos actualizados en el carrito.")
+                actualizar_productos(frame_productos, productos_map, productos_cantidad)
+            else:
+                messagebox.showerror("Error", "Cantidad inválida.")
+
+        # Limpiar la ventana
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        frame = Frame(window)
+        frame.pack(fill=BOTH, expand=True)
+
+        productos = cliente.get_carrito().get_productos()
+
+        if len(productos) == 0:
+            messagebox.showinfo("Carrito Vacío", "Usted no puede seleccionar esta opción")
+            self.elegir_tipo_busqueda(cliente, window)
+            return
+
+        productos_cantidad = {}
+        productos_map = {}
+
+        for producto in productos:
+            id_producto = producto.get_id()
+            productos_map[id_producto] = producto  # Guardar referencia del producto
+            productos_cantidad[id_producto] = productos_cantidad.get(id_producto, 0) + 1
+
+        frame_productos = Frame(frame)
+        frame_productos.pack(fill=BOTH, expand=True)
+
+        actualizar_productos(frame_productos, productos_map, productos_cantidad)
+
+        def seleccionar_producto():
+            seleccion = simpledialog.askinteger("Seleccionar Producto", "Seleccione el número del producto que desea eliminar del carrito:")
+            if seleccion is not None and 1 <= seleccion <= len(productos_map):
+                id_producto = list(productos_map.keys())[seleccion - 1]
+                eliminar_producto(id_producto, frame_productos, productos_map, productos_cantidad)
+            else:
+                messagebox.showerror("Error", "Selección inválida.")
+
+        boton_seleccionar = Button(frame, text="Seleccionar Producto", command=seleccionar_producto)
+        boton_seleccionar.pack(pady=10)
+
+        boton_volver = Button(frame, text="Volver", command=lambda: self.elegir_tipo_busqueda(cliente, window))
+        boton_volver.pack(pady=10)
+
     def elegir_tipo_busqueda(self,cliente,window):
         widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
         for i, widget in enumerate(widgets):
@@ -744,7 +794,7 @@ class Funcionalidad2:
         boton4.grid(row=2, column=2)
 
         if len(cliente.get_carrito().get_productos()) > 0:
-            boton3 = Button(frame.campos, text="Eliminar un producto de mi carrito")
+            boton3 = Button(frame.campos, text="Eliminar un producto de mi carrito",command= lambda:self.mostrar_carrito(cliente,window))
             boton3.grid(row=2, column=1)
 
         # Botón para guardar carrito como factura
