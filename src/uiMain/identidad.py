@@ -207,14 +207,14 @@ class Identidad2:
     def identificar_persona(self):
         def identificar():
             for entry in self.frame_actual._entrys:
-                if entry.get()=="":
-                    messagebox.showerror("Error","Faltan campos por completar")
+                if entry.get() == "":
+                    messagebox.showerror("Error", "Faltan campos por completar")
                     return
             p = self.frame_actual._entrys[0].get()  # Suponiendo que el ID está en el primer Entry
-            
+
             from gestorAplicacion.sujetos.persona import Persona
             personas = Persona.get_personas()
-            persona_encontrada = next((p for p in personas if p.get_id() == p), None)
+            persona_encontrada = next((persona for persona in personas if isinstance(persona, Persona) and persona.get_id() == int(p)), None)
 
             if persona_encontrada:
                 self.resultado = persona_encontrada
@@ -233,6 +233,7 @@ class Identidad2:
             habilitado=habilitado,
             callback=identificar
         )
+
         return self.resultado  # Retorna la persona identificada si existe
 
     def mostrar_alerta(self, id):
@@ -272,7 +273,7 @@ class Identidad2:
                 # Importar Cliente solo cuando sea necesario
                 from gestorAplicacion.sujetos.cliente import Cliente
                 persona = Cliente(nombre, id, edad, genero)
-                self.resultado = persona
+                self.resultado = persona              
                 self.mostrar_mensaje(f"Usuario Cliente creado con éxito. Bienvenido {nombre}")
             else:
                 # Importar Administrador solo cuando sea necesario
