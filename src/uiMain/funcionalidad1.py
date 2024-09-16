@@ -1,4 +1,6 @@
 import math
+from codeop import compile_command
+from idlelib.editor import keynames
 from tkinter import *
 from tkinter import messagebox, simpledialog
 
@@ -318,7 +320,7 @@ class Funcionalidad1:
             Button(botones_frame,
                    text=f"{i + 1}. {producto.get_nombre()} ",
                    font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
-                   width=35, command=lambda prod=producto: self.mostrar_productos_general(cliente, prod, window)).pack(pady=5,
+                   width=35, command=lambda prod=producto: self.detalles(cliente,tienda,producto, window)).pack(pady=5,
                                                                                                              anchor=CENTER)
 
         # Controles de paginación
@@ -327,18 +329,55 @@ class Funcionalidad1:
 
         # Botones de paginación
         if page > 1:
-            Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#F2F2F2", fg="black",
+            Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#243340", fg="white",
                    command=lambda: self.mostrar_productos_general(cliente, tienda, window, page - 1)).pack(
                 side="left", padx=5)
 
         if page < total_paginas:
-            Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#F2F2F2", fg="black",
+            Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#243340", fg="white",
                    command=lambda: self.mostrar_productos_general(cliente, tienda, window, page + 1)).pack(
                 side="right", padx=5)
 
-        Button(productos_frame, text="Volver", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
+        Button(productos_frame, text="Volver", font=("Arial", 12), bg="#243340", padx=30, pady=15,fg="white",
                width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
 
+    def detalles(self,cliente,tienda,producto, window):
+        widgets = window.winfo_children()
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        # Crear un FieldFrame con el título y descripción correspondiente
+        zona2Fun1 = FieldFrame(window, "Caracteristicas", ["Marca","Precio","Tamano"], "", [f"{producto.get_marca()}",f"$ {producto.get_precio()}",f"{producto.get_tamano().value}"],
+                               [None, None, None], f"{producto.get_nombre()}",
+                               f"{producto.get_descripcion()}"
+                               , False, 25, 15, "#243340", "white", "black", "#F2F2F2", 0, 800)
+
+        # Crear un Frame para los botones y añadirlo al `FieldFrame`
+        boton_frame = Frame(zona2Fun1.campos, bg="#F2F2F2")
+        boton_frame.grid(row=0, column=1, columnspan=2, pady=20, padx=10, sticky='nsew')
+
+        # Configurar las columnas y filas del `boton_frame` para que se expandan
+        boton_frame.columnconfigure(0, weight=1)
+        boton_frame.rowconfigure(0, weight=1)
+        boton_frame.rowconfigure(1, weight=1)
+        boton_frame.rowconfigure(2, weight=1)
+        boton_frame.rowconfigure(3, weight=1)
+
+        # Botón 3: Consulta de membresías
+        boton3 = Button(boton_frame, text="Mirar otro Producto", font=("Arial", 15),command=lambda:self.mostrar_productos_general(cliente,tienda,window))
+        boton3.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
+
+        # Botón 4: Volver al menú principal
+        boton4 = Button(boton_frame, text="Volver al Ecosistema de consultas", font=("Arial", 15),command=lambda:self.consultasEco(cliente,window))
+        boton4.grid(row=4, column=0, sticky='ew', padx=50, pady=10)
+
+        # Ajustar la configuración del grid para que el `boton_frame` ocupe el espacio disponible
+        zona2Fun1.campos.columnconfigure(1, weight=1)
+        zona2Fun1.campos.rowconfigure(1, weight=1)
+
+        # Mostrar el frame con los botones
+        zona2Fun1.pack(fill=BOTH, expand=True)
 
 
 

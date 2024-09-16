@@ -57,7 +57,7 @@ class FieldFrame(Frame):
             Label(self.campos, text=self._criterios[i], font=("Arial", 15), fg="black", bg=bgForm).grid(row=i + 1,
                                                                                                         column=1,
                                                                                                         padx=5)
-            entry = Entry(self.campos, textvariable=self._valores[i],
+            entry = Entry(self.campos, textvariable=StringVar(self.campos,valores[i]),
                           state='normal' if self._habilitado[i] else 'disabled', font=("Arial", 15))
             self._entrys.append(entry)
             entry.grid(row=i + 1, column=2, padx=5)

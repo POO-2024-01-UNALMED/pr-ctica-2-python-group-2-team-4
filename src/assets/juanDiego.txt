@@ -13,6 +13,6 @@ Mi rol en este proyecto involucra el desarrollo de funcionalidades para la gesti
 Habilidades
 Programacion en Java y Python
 Desarrollo de proyectos en equipos multidisciplinarios
-Lógica de programacion y resolución de problemas
+Logica de programacion y resolucion de problemas
 Conocimientos basicos en bases de datos y algoritmos
 Trabajo en equipo y habilidades de comunicación
