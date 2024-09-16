@@ -9,6 +9,8 @@ from tkinter import Tk, messagebox
 
 from tkinter import Frame, Label, Entry, Button, Tk
 
+from fieldFrame import FieldFrame
+
 
 #from gestorAplicacion.sujetos.administrador import Administrador
 #from gestorAplicacion.sujetos.cliente import Cliente
@@ -319,3 +321,43 @@ class Identidad2:
         self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
         Label(self.frame_actual, text=mensaje, font=("Arial", 20), bg="light blue").pack(pady=20, padx=20)
         Button(self.frame_actual, text="Aceptar", command=self.frame_actual.destroy).pack(pady=10)
+
+
+class Identidad3: 
+    def __init__(self, window):
+        self.window = window
+        self.user_id = None  # Cambié de 'id' a 'user_id'
+        self.frame_actual = None
+
+    def mostrar_frame_identificacion(self):
+        # Destruir el frame actual si existe
+        if self.frame_actual:
+            self.frame_actual.destroy()
+
+        # Criterios para el formulario (en este caso, solo pedimos el ID)
+        criterios = ["ID"]
+        valores = [""]  # Campo vacío para el ID
+        habilitado = [True]  # El campo está habilitado para ser llenado
+
+        # Crear un nuevo FieldFrame
+        self.frame_actual = FieldFrame(
+            master=self.window,
+            tituloCriterios="Criterios",
+            criterios=criterios,
+            tituloValores="Valores",
+            valores=valores,
+            habilitado=habilitado,
+            titulo="Identificación",
+            descripcion="Por favor ingrese su ID para identificarse"
+        )
+
+        self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
+        
+        # Asignar el callback al botón aceptar
+        self.frame_actual.aceptar.config(command=self.guardar_id)
+
+    def guardar_id(self):
+        # Obtener el ID del campo de entrada y asignarlo a la variable user_id
+        self.user_id = self.frame_actual._entrys[0].get()
+        print(f"ID ingresado: {self.user_id}")  # Imprime el ID ingresado
+        

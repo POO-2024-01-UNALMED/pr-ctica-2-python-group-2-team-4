@@ -270,9 +270,12 @@ class Iniciar_ventana_usuario():
         def prueba2(window):
             matarloTodo2()       
             Funcionalidad5.ingresar(window)
+
         def prueba(window):
             matarloTodo2()       
-            Funcionalidad4.ingresar(window)
+            funcionalidad = Funcionalidad4()
+    # Llamar al método ingresar en la instancia, pasando la ventana
+            funcionalidad.ingresar(window)
 
         from uiMain.funcionalidad4 import Funcionalidad4
         menuprocesos.add_command(label="Funcionalidad 4", command= lambda: prueba(window))

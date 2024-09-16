@@ -8,7 +8,7 @@ from tkinter import messagebox
 import sys
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 
-from identidad import Identidad, Identidad2
+
 
 
 class FieldFrame(Frame):
