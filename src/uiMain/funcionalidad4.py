@@ -1,4 +1,4 @@
-from tkinter import Tk, TkVersion
+from tkinter import Button, Frame, Label, Tk, TkVersion
 import tkinter
 import tkinter as tk
 from typing import List, Optional
@@ -13,12 +13,14 @@ from uiMain import identidad, interfaz
 import gestorAplicacion
 
 class Funcionalidad4:
+     
     from gestorAplicacion.servicios.producto import Producto
     from gestorAplicacion.servicios.tienda import Tienda
     from gestorAplicacion.sujetos.administrador import Administrador
+    tienda_selecta = None
     def __init__(self):
         self.user_id = None
-        self.tiendaSelecta: Optional[Tienda] = None
+        #self.tiendaSelecta: Optional[Tienda] = None
 
 
     @staticmethod
@@ -310,11 +312,65 @@ class Funcionalidad4:
 
     @classmethod
     def ingresar(cls,window):
+
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
         def ingresa():
             from .identidad import Identidad2
-            persona=Identidad2(window).identificar_persona()
-            if  isinstance(persona,Administrador):
+            identidad=Identidad2(window)
+            identidad.identificar_persona()
+            usuario = identidad.resultado
+            if isinstance(usuario, Administrador):
                 print("es administrador ")
-            else:
-                cls.ingresar(window)
+                frame = Frame(window, bg="red")
+                frame.pack(fill=tk.BOTH, expand=True)
+                # funcionalidad = Funcionalidad4(window)
+                # funcionalidad.seleccionar_tienda(window, usuario)
+            else :
+                frame = Frame(window, bg="blue")
+                frame.pack(fill=tk.BOTH, expand=True)
+
         ingresa()
+    
+    def seleccionar_tienda(self, window, usuario):
+        """Método para seleccionar una tienda"""
+        # Limpiar la ventana de widgets anteriores
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        # Si no hay tiendas registradas
+        if len(usuario.get_tiendas()) == 0:
+            Label(window, text="No tienes ninguna tienda registrada", font=("Arial", 15)).pack(pady=10)
+            Label(window, text="¿Qué desea hacer?", font=("Arial", 12)).pack(pady=5)
+
+            # Botones para cambiar de usuario o volver al menú principal
+            opciones_frame = Frame(window)
+            opciones_frame.pack(pady=10)
+
+            Button(opciones_frame, text="Cambiar de usuario", font=("Arial", 12), command=self.cambiar_usuario).pack(side="left", padx=10)
+            Button(opciones_frame, text="Volver al menú principal", font=("Arial", 12), command=self.volver_menu_principal).pack(side="left", padx=10)
+        else:
+            Label(window, text="Tiendas disponibles:", font=("Arial", 15)).pack(pady=10)
+
+            tiendas_frame = Frame(window)
+            tiendas_frame.pack(pady=10)
+
+            # Listar las tiendas disponibles
+            for idx, tienda in enumerate(usuario.get_tiendas(), start=1):
+                Button(tiendas_frame, text=f"{idx}. {tienda.get_nombre()}", font=("Arial", 12), command=lambda t=tienda: self.administrar_tienda(window, t)).pack(pady=5)
+
+    def administrar_tienda(self, window, tienda):
+        """Método para administrar la tienda seleccionada"""
+        Funcionalidad4.tienda_selecta = tienda
+        # Limpiar la ventana de widgets anteriores
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        Label(window, text=f"Has seleccionado la tienda: {tienda.get_nombre()}", font=("Arial", 15)).pack(pady=10)
+
+        # Botones para administrar la tienda
+        Button(window, text="Administrar Productos", font=("Arial", 12), command=self.administrar_productos).pack(pady=5)
+        Button(window, text="Administrar Proveedores", font=("Arial", 12), command=self.administrar_proveedores).pack(pady=5)
