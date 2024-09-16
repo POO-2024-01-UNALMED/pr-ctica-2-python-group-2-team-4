@@ -333,7 +333,7 @@ class Funcionalidad4:
             else :
                 frame = Frame(window, bg="blue")
                 frame.pack(fill=tk.BOTH, expand=True)
-                cls.funcionalidad()
+                cls.funcionalidad(window)
 
         ingresa()
 
@@ -372,7 +372,7 @@ class Funcionalidad4:
         
         seleccionar_tienda( usuario1)
     
-    def seleccionar_tienda(self, window, usuario):
+    def seleccionar_tienda2(self, window, usuario):
         """Método para seleccionar una tienda"""
         # Limpiar la ventana de widgets anteriores
         for widget in window.winfo_children():
