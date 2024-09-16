@@ -37,7 +37,7 @@ class Ventana(Tk):
         frame_p2 = Frame(frame_principal, padx=5, pady=5, bd=2, relief="solid",bg="#1c2951")
         frame_p2.pack(side=RIGHT, fill=BOTH, expand=True, padx=5, pady=5)
 
-        from .bienvenida import Bienvenida
-        from .hojaVida import HojaVida
+        from uiMain.bienvenida import Bienvenida
+        from uiMain.hojaVida import HojaVida
         self.bienvenida = Bienvenida(frame_p1)
         self.hoja_vida = HojaVida(frame_p2)
