@@ -12,18 +12,18 @@ class Bienvenida(Frame):
         self._window = window
 
         # Divisiones P3 y P4 en P1
-        self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="#015086")
+        self.frame_p3 = Frame(self._window, height=180, padx=5, pady=5, bd=2, relief="solid",bg="#69a0ce")
         self.frame_p3.pack(fill=X, padx=5, pady=5)
 
-        self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid",bg="#015086")
+        self.frame_p4 = Frame(self._window, height=500, padx=5, pady=5, bd=2, relief="solid",bg="#69a0ce")
         self.frame_p4.pack(fill=BOTH, expand=True, padx=5, pady=(5,0), anchor='s')
 
         self._next_el = 0
 
-        saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"),bg="#aed6f1")
+        saludo = Label(self.frame_p3, text="Bienvenido a My_Tiendita donde podrás realizar tus compras o administrar tus tiendas", font=("Helvetica", 10, "bold"),bg="#69a0ce")
         saludo.pack(pady=5)
 
-        self.frame_aux =Frame(self.frame_p3, height=120,width=200,bg="light blue")
+        self.frame_aux =Frame(self.frame_p3, height=120,bg="#69a0ce")
         self.frame_aux.pack(fill=BOTH, expand=True)
 
         # self.saludo2.pack(fill=BOTH, expand=True, pady=5)
