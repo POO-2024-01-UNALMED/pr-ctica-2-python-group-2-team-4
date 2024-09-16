@@ -17,7 +17,9 @@ class EscritorLector:
 
     @classmethod
     def deserializar(cls,nombre):
-        path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),"src/baseDatos/temp/" + nombre+ '.txt')
+        path = os.path.abspath('temp\\'+nombre + '.txt')
+        #path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),
+        #                    "src/baseDatos/temp/" + nombre + '.txt')
         with open(path,"rb") as file:
                 data=pickle.load(file)
                 file.close()
@@ -35,5 +37,8 @@ class EscritorLector:
 
     @classmethod
     def serializar(cls,lista,nombre):
-        with open("baseDatos/temp/"+nombre+".txt","wb") as file:
+        path = os.path.abspath('temp\\'+nombre + '.txt')
+        #path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),
+        #                    "src/baseDatos/temp/" + nombre + '.txt')
+        with open(path,"wb") as file:
             pickle.dump(lista,file)
