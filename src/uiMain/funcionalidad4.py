@@ -1,4 +1,4 @@
-from tkinter import Button, Frame, Label, Tk, TkVersion
+from tkinter import Button, Frame, Label, Tk, TkVersion, messagebox
 import tkinter
 import tkinter as tk
 from typing import List, Optional
@@ -6,6 +6,7 @@ import sys
 
 from fieldFrame import FieldFrame
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+from gestorAplicacion.servicios.enums import Genero
 from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.sujetos.administrador import Administrador
 from uiMain import identidad, interfaz
@@ -332,8 +333,44 @@ class Funcionalidad4:
             else :
                 frame = Frame(window, bg="blue")
                 frame.pack(fill=tk.BOTH, expand=True)
+                cls.funcionalidad()
 
         ingresa()
+
+    @classmethod
+    def funcionalidad(cls,window):
+        def seleccionar_tienda(usuario1):
+            def on_select(event):
+                selected_index = listbox.curselection()
+                if selected_index:
+                    selected_tienda = usuario1.get_tiendas()[selected_index[0]]
+                    messagebox.showinfo("Tienda Seleccionada", f"Has seleccionado: {selected_tienda}")
+                else:
+                    messagebox.showwarning("Advertencia", "No has seleccionado ninguna tienda")
+
+
+                    tiendas = usuario1.get_tiendas()
+    
+                listbox = tk.Listbox(window)
+                listbox.pack(padx=10, pady=10)
+                
+                for tienda in tiendas:
+                    listbox.insert(tk.END, tienda)
+                
+                listbox.bind("<<ListboxSelect>>", on_select)
+
+        usuario1 = Administrador("pacho",20,20,Genero.M,1000000)  
+        tienda1 = Tienda(
+        nombre="Tienda A",
+        pasillos=None,
+        nit="123456789",
+        dueno=usuario1,
+        saldo=500,
+        estado="abierta"
+        )
+        usuario1.set_tiendas([tienda1])
+        
+        seleccionar_tienda( usuario1)
     
     def seleccionar_tienda(self, window, usuario):
         """Método para seleccionar una tienda"""
