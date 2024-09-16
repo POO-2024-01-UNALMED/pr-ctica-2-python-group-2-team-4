@@ -222,9 +222,12 @@ class Identidad2:
             else:
                 self.mostrar_alerta(p)
 
+        # Iniciar el proceso de identificación
         criterios = ["ID"]
         valores = [""]
         habilitado = [True]
+        
+        # Mostrar el frame que solicita el ID
         self.mostrar_frame(
             titulo="Ingrese su documento",
             descripcion="Ingrese el ID para buscar su registro.",

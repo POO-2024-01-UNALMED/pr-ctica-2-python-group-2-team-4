@@ -315,27 +315,36 @@ class Funcionalidad4:
 
     @classmethod
     def ingresar(self, window):
-        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        # Limpiar los widgets de la ventana
+        widgets = window.winfo_children()
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
 
+        # Proceso de identificación del usuario
         def ingresa():
             from .identidad import Identidad2
             identidad = Identidad2(window)
-            
-            # Usar la función identificar_persona y esperar el resultado antes de seguir
             identidad.identificar_persona()
 
-            self.usuario = identidad.resultado
+            # Usamos un after para esperar y verificar hasta que identidad.resultado esté definido
+            def check_identificacion():
+                if identidad.resultado is not None:
+                    self.usuario = identidad.resultado
+                    # Llama al frame de usuario solo si el usuario ha sido identificado
+                    self.mostrar_frame_usuario(window)
+                else:
+                    # Si aún no se ha identificado, verificar de nuevo
+                    window.after(100, check_identificacion)
 
-            if self.usuario:  # Asegurarse de que la identificación fue exitosa
-                self.mostrar_frame_usuario(window)
+            # Iniciar la espera para que el resultado se procese
+            window.after(100, check_identificacion)
 
-        ingresa()  # Llama a ingresa()
+        ingresa()
 
     @classmethod
     def mostrar_frame_usuario(self, window):
+        # Mostrar el frame rojo o azul dependiendo del tipo de usuario
         def callback():
             if not isinstance(self.usuario, Administrador):
                 frame = Frame(window, bg="red")
@@ -343,7 +352,7 @@ class Funcionalidad4:
             else:
                 frame = Frame(window, bg="blue")
                 frame.pack(fill=tk.BOTH, expand=True)
-                self.funcionalidad(window)  # Llamar a la funcionalidad solo si es admin
+                self.funcionalidad(window)
 
         window.after(100, callback)
 
