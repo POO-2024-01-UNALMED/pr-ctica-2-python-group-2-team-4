@@ -40,7 +40,10 @@ class HojaVida(Frame):
             png = "juanDiego/foto"+str(numero+1)
         else:
             png="jordan/foto"+str(numero+1)
-        path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets', png+'.png')
+        try:
+            path = os.path.realpath('src\\assets\\'+png+'.png')
+        except:
+            path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets', png+'.png')
         if not os.path.exists(path):
             raise FileNotFoundError(f"Image file not found at path: {path}")
 
@@ -66,9 +69,12 @@ class HojaVida(Frame):
             txt = "juanDiego"
         else:
             txt="jordan"
-
-        with open(os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\'+txt+".txt"), "r+") as hv_text:
-            self._text.insert(INSERT, hv_text.read())
+        try:
+            with open(os.path.realpath('src\\assets\\'+txt+".txt"), "r+") as hv_text:
+                self._text.insert(INSERT, hv_text.read())
+        except:
+            with open(os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\'+txt+".txt"), "r+") as hv_text:
+                self._text.insert(INSERT, hv_text.read())
 
     def proximo(self, _):
         self._text.destroy()

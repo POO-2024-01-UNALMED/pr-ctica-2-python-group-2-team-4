@@ -34,7 +34,10 @@ class Bienvenida(Frame):
 
         self._pantallazos = []
         for i in range(0,5):
-            path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\pantallazos\\pantallazo'+str(i+1)+'.png')
+            try:
+                path = os.path.realpath('src\\assets\\pantallazos\\pantallazo'+str(i+1)+'.png')
+            except:
+                path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\pantallazos\\pantallazo'+str(i+1)+'.png')
             pantallazo = PhotoImage(file=path)
             self._pantallazos.append(pantallazo)
 
