@@ -232,8 +232,6 @@ class Identidad2:
                     if (int(persona.get_id())) == (int(p)):
                         self.resultado = persona
                         self.mostrar_mensaje(f"Bienvenido {persona.get_nombre()}")
-                if not self.resultado:
-                    self.mostrar_alerta(p)
             except ValueError:
                 messagebox.showerror("Error", "valor no numerico")
                 self.identificar_persona()
