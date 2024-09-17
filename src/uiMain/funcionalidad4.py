@@ -5,6 +5,7 @@ from typing import List, Optional
 import sys
 
 from fieldFrame import FieldFrame
+from servicios.proveedor import Proveedor
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from gestorAplicacion.servicios.enums import Genero
 from gestorAplicacion.servicios.tienda import Tienda
@@ -354,31 +355,7 @@ class Funcionalidad4:
                 self.seleccionar_tienda2(window)
 
         window.after(100, callback)
-    # @classmethod
-    # def funcionalidad(self, window):
-        
-    #     usuario1 = self.usuario
-    #     if isinstance(usuario1, Administrador) and len(usuario1.get_tiendas()) > 0:
-    #         tiendas = usuario1.get_tiendas()
-    
-    #         listbox = tk.Listbox(window)
-    #         listbox.pack(padx=10, pady=10)
-            
-    #         for tienda in tiendas:
-    #             listbox.insert(tk.END, tienda)
-            
-    #         def on_select(event):
-    #             selected_index = listbox.curselection()
-    #             if selected_index:
-    #                 selected_tienda = tiendas[selected_index[0]]
-    #                 messagebox.showinfo("Tienda Seleccionada", f"Has seleccionado: {selected_tienda}")
-    #                 self.administrar_tienda(window, selected_tienda)
-    #             else:
-    #                 messagebox.showwarning("Advertencia", "No has seleccionado ninguna tienda")
-            
-    #         listbox.bind("<<ListboxSelect>>", on_select)
-    #     else:
-    #         messagebox.showinfo("Advertencia", "El usuario no posee tiendas")
+   
     
     @classmethod
     def seleccionar_tienda2(self, window):
@@ -411,6 +388,8 @@ class Funcionalidad4:
                     command=lambda t=tienda: self.administrar_tienda(window, t)).pack(pady=5)
 
     @classmethod
+
+    @classmethod
     def administrar_tienda(self, window, tienda):
         """Método para administrar la tienda seleccionada"""
         self.tienda_selecta = tienda
@@ -421,6 +400,45 @@ class Funcionalidad4:
         Label(window, text=f"Has seleccionado la tienda: {tienda.get_nombre()}", font=("Arial", 15)).pack(pady=10)
 
         # Botones para administrar la tienda
-        Button(window, text="Administrar Productos", font=("Arial", 12)).pack(pady=5)#, command=self.administrar_productos
-        Button(window, text="Administrar Proveedores", font=("Arial", 12)).pack(pady=5)#, command=self.administrar_proveedores
+        Button(window, text="Administrar Productos", font=("Arial", 12)).pack(pady=5)
+        Button(window, text="Administrar Proveedores", font=("Arial", 12), command=lambda: self.mostrar_proveedores(window)).pack(pady=5)
+
+    @classmethod
+    def mostrar_proveedores(self, window):
+        """Método para mostrar proveedores disponibles y permitir seleccionar uno"""
+        # Limpiar la ventana de widgets anteriores
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        Label(window, text="Proveedores disponibles:", font=("Arial", 15)).pack(pady=10)
+
+        # Frame para contener la lista de proveedores
+        proveedores_frame = Frame(window)
+        proveedores_frame.pack(pady=10)
+
+        # Obtener la lista de proveedores
+        proveedores = Proveedor.get_seis_proveedores()
+
+        if len(proveedores) == 0:
+            Label(proveedores_frame, text="No hay proveedores disponibles.", font=("Arial", 12)).pack(pady=5)
+        else:
+            # Mostrar cada proveedor como un botón seleccionable
+            for idx, proveedor in enumerate(proveedores, start=1):
+                Button(proveedores_frame, text=f"{idx}. {proveedor.get_nombre()} - {proveedor.get_tipo()}", 
+                    font=("Arial", 12), 
+                    command=lambda p=proveedor: self.seleccionar_proveedor(window, p)).pack(pady=5)
+
+    @classmethod
+    def seleccionar_proveedor(self, window, proveedor):
+        """Método para manejar la selección de un proveedor y mostrar información adicional"""
+        # Limpiar la ventana de widgets anteriores
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        Label(window, text=f"Has seleccionado al proveedor: {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
+        
+        # Aquí puedes agregar más opciones o detalles sobre el proveedor
+        # Por ejemplo, mostrar detalles de los productos que entrega o sus categorías
+        Label(window, text=f"Tipo de proveedor: {proveedor.get_tipo()}", font=("Arial", 12)).pack(pady=5)
+        Label(window, text=f"Entrega en las siguientes tiendas: {', '.join([t.get_nombre() for t in proveedor.get_tiendas()])}", font=("Arial", 12)).pack(pady=5)
 
