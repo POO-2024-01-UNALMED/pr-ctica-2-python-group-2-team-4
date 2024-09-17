@@ -84,3 +84,6 @@ class Membresia(Enum):
     
     def get_precio(self):
         return self.precio
+
+    def get_nombre(self):
+        return self.name

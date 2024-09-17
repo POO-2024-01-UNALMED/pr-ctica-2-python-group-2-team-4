@@ -2,6 +2,7 @@
 import os
 import pathlib
 import tkinter
+from math import trunc
 from tkinter import*
 from tkinter import messagebox
 
@@ -15,7 +16,7 @@ class FieldFrame(Frame):
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado,
                  titulo="Proceso o Consulta", descripcion="Descripcion proceso/consulta", botones=True,
                  titulo_font_size=30, descripcion_font_size=20, bg_color="#024A86", bgTitulo="light blue",
-                 bgLabel="black", bgForm="white", wrapTitulo=500, wrapDescripcion=1000):
+                 bgLabel="black", bgForm="white", wrapTitulo=500, wrapDescripcion=1000,descripcionh=True):
         super().__init__(master, bg=bg_color)
         self._tituloCriterios = tituloCriterios
         self._criterios = criterios
@@ -31,12 +32,13 @@ class FieldFrame(Frame):
                         wraplength=wrapTitulo, fg=bgLabel)
         proceso.pack(fill=BOTH, pady=5, padx=5)
 
-        # Frame para la descripción del proceso
-        descripProceso = Frame(self, relief=SOLID, bd=2, bg="black")
-        descripProceso.pack(pady=10, padx=10)
-        descripcionlabel = Label(descripProceso, text=descripcion, font=("Arial", descripcion_font_size), bg=bgTitulo,
-                                 wraplength=wrapDescripcion, fg=bgLabel)
-        descripcionlabel.pack(pady=5, padx=5)
+        if descripcionh==True:
+            # Frame para la descripción del proceso
+            descripProceso = Frame(self, relief=SOLID, bd=2, bg="black")
+            descripProceso.pack(pady=10, padx=10)
+            descripcionlabel = Label(descripProceso, text=descripcion, font=("Arial", descripcion_font_size), bg=bgTitulo,
+                                     wraplength=wrapDescripcion, fg=bgLabel)
+            descripcionlabel.pack(pady=5, padx=5)
 
         # Frame para los campos
         self.campos = Frame(self, relief=SOLID, bd=2, pady=10, padx=10, bg=bgForm)

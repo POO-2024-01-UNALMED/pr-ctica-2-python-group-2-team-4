@@ -25,17 +25,22 @@ class Funcionalidad1:
         funcionalidad2 = Funcionalidad2()
         funcionalidad2.elegir_tipo_busqueda(cliente, window)
     #--------------------------------------------------------------------------------------------------------------------------------------------
+
+    """"
+    def ingresar(self, window):
+        widgets = window.winfo_children()
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+
+        from .identidad import Identidad2
+        persona = Identidad2(window).identificar_persona()
+        if isinstance(persona, Cliente):
+            self.consultasEco(persona, window)
+        else:
+            self.ingresar(window)
     """
-    @classmethod
-    def ingresar(cls, window):
-        def ingresa():
-            from .identidad import Identidad2
-            persona = Identidad2(window).identificar_persona()
-            if not isinstance(persona, Cliente):
-                cls.consultasEco(persona, window)
-            else:
-                cls.ingresar(window)
-        """
     #--------------------------------------------------------------------------------------------------------------------------------------------
     def consultasEco(self, cliente, window):
         from gestorAplicacion.servicios.tienda import Tienda
@@ -78,12 +83,8 @@ class Funcionalidad1:
 
         # Botón 3: Consulta de membresías
         boton3 = Button(boton_frame, text="Consulta de membresías",
-                        font=("Arial", 15))
+                        font=("Arial", 15),command=lambda:self.consulta_membresia(cliente,window))
         boton3.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
-
-        # Botón 4: Volver al menú principal
-        boton4 = Button(boton_frame, text="Volver", font=("Arial", 15))
-        boton4.grid(row=4, column=0, sticky='ew', padx=50, pady=10)
 
         # Ajustar la configuración del grid para que el `boton_frame` ocupe el espacio disponible
         zona2Fun1.campos.columnconfigure(1, weight=1)
@@ -91,12 +92,6 @@ class Funcionalidad1:
 
         # Mostrar el frame con los botones
         zona2Fun1.pack(fill=BOTH, expand=True)
-    #--------------------------------------------------------------------------------------------------------------------------------------------
-    def printTiendas(self):
-       tienditas=Tienda.revision_tienda(Tienda.get_tiendas())
-       for i in tienditas:
-           c=  isinstance(i,Tienda)
-           print(c)
     #--------------------------------------------------------------------------------------------------------------------------------------------
     def consulta_general_productos(self, cliente, window,page=1):
         from gestorAplicacion.sujetos.cliente import Cliente
@@ -544,7 +539,96 @@ class Funcionalidad1:
             Button(productos_frame, text="Volver", font=("Arial", 12), bg="#243340", padx=30, pady=15, fg="white",
                    width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
 
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+    def consulta_membresia(self, cliente, window):
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from uiMain.main import Main
+        from gestorAplicacion.servicios.tienda import Tienda
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
+        if Tienda.buscar_tienda():
+
+            if cliente.get_edad()>18:
+                from gestorAplicacion.servicios.enums import Membresia
+                # Crear un FieldFrame con el título y descripción correspondiente
+                zona2Fun1 = FieldFrame(window, None, [None], None, [],
+                                       [None], "Membresias",
+                                       None
+                                       , False, 25, 15, "#243340", "white", "black", "#243340", 0, 800,False)
+
+                # Crear un Frame para los botones y añadirlo al `FieldFrame`
+                boton_frame = Frame(zona2Fun1.campos, bg="#F2F2F2")
+                boton_frame.grid(row=0, column=1, columnspan=2, pady=20, padx=10, sticky='nsew')
+
+                # Configurar las columnas y filas del `boton_frame` para que se expandan
+                boton_frame.columnconfigure(0, weight=1)
+                boton_frame.rowconfigure(0, weight=1)
+                boton_frame.rowconfigure(1, weight=1)
+                boton_frame.rowconfigure(2, weight=1)
+                boton_frame.rowconfigure(3, weight=1)
+
+                # Texto Opciones
+                texto_label = Label(boton_frame, text="No tienes una membresía. ¿Te gustaría elegir una?",
+                                    font=("Arial", 20), bg="#F2F2F2")
+                texto_label.grid(row=0, column=0, sticky='ew', padx=50, pady=10)
+
+                membresia_dict = {}
+                enumerado = 1
+                for tipo in Membresia:
+                    membresia_dict[enumerado] = tipo
+                    Button(boton_frame, text=f"{tipo.get_nombre()}",
+                           font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                           width=35,
+                           ).grid(row=enumerado, column=0, sticky='ew', padx=50, pady=10)
+                    enumerado+=1
+
+                # Botón 4: Volver al menú principal
+                boton4 = Button(boton_frame, text="Volver", font=("Arial", 15),command=lambda:self.consultasEco(cliente,window) )
+                boton4.grid(row=4, column=0, sticky='ew', padx=50, pady=10)
+
+                # Ajustar la configuración del grid para que el `boton_frame` ocupe el espacio disponible
+                zona2Fun1.campos.columnconfigure(1, weight=1)
+                zona2Fun1.campos.rowconfigure(1, weight=1)
+
+                # Mostrar el frame con los botones
+                zona2Fun1.pack(fill=BOTH, expand=True)
+
+
+
+            else:
+                # Crear el marco para las Tiendas
+                tiendasGeneral_frame = Frame(window, bg="#243340")
+                tiendasGeneral_frame.pack(pady=10, fill=BOTH, expand=True)
+
+                # Crear el marco para las Tiendas
+                membresia_frame = Frame(tiendasGeneral_frame, bg="#243340")
+                membresia_frame.pack(pady=10, fill=BOTH, expand=True)
+                Label(membresia_frame,
+                      text="Lo sentimos, no puedes obtener una membresía ya que eres menor de edad Recuerda ir a revisar alguna tienda esto servirá para escoger productos en la funcionalidad 2",
+                      font=("Arial", 44), bg="#F2F2F2").pack(pady=10)
+                Button(membresia_frame, text="Volver a Consultas",
+                       font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                       width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
+
+
+        else:
+            # Crear el marco para las Tiendas
+            tiendasGeneral_frame = Frame(window, bg="#243340")
+            tiendasGeneral_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            # Crear el marco para las Tiendas
+            membresia_frame = Frame(tiendasGeneral_frame, bg="#243340")
+            membresia_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            Label(membresia_frame,
+                    text="No hay tiendas disponibles en el momento.",
+                    font=("Arial", 44), bg="#F2F2F2").pack(pady=10)
+            Button(membresia_frame, text="Volver a Consultas",
+                    font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                    width=35, command=lambda: self.consultasEco(cliente,window)).pack(pady=10, anchor=CENTER)
 
 
 
