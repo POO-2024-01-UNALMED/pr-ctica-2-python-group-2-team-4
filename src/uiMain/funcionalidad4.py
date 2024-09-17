@@ -385,20 +385,20 @@ class Funcionalidad4:
         """Método para seleccionar una tienda"""
         # Limpiar la ventana de widgets anteriores
         usuario = self.usuario
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                widget.destroy()
 
         # Si no hay tiendas registradas
         if len(usuario.get_tiendas()) == 0:
             Label(window, text="No tienes ninguna tienda registrada", font=("Arial", 15)).pack(pady=10)
             Label(window, text="¿Qué desea hacer?", font=("Arial", 12)).pack(pady=5)
-
+            #pady=20, padx=20, fill='both', expand=True
             # Botones para cambiar de usuario o volver al menú principal
             opciones_frame = Frame(window)
-            opciones_frame.pack(pady=10)
-
-            Button(opciones_frame, text="Cambiar de usuario", font=("Arial", 12)).pack(side="left", padx=10)
-            Button(opciones_frame, text="Volver al menú principal", font=("Arial", 12)).pack(side="left", padx=10)
+            opciones_frame.pack(pady=40)
+               
         else:
             Label(window, text="Tiendas disponibles:", font=("Arial", 15)).pack(pady=10)
 
