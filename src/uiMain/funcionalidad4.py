@@ -401,12 +401,18 @@ class Funcionalidad4:
         # Si no hay tiendas registradas
         if len(usuario.get_tiendas()) == 0:
             Label(window, text="No tienes ninguna tienda registrada", font=("Arial", 15)).pack(pady=10)
-            Label(window, text="¿Qué desea hacer?", font=("Arial", 12)).pack(pady=5)
-            #pady=20, padx=20, fill='both', expand=True
-            # Botones para cambiar de usuario o volver al menú principal
+            Label(window, text="Por favor, registre una tienda en la funcionalidad 5 para continuar.", font=("Arial", 12)).pack(pady=5)
+
+            # Frame para botones
             opciones_frame = Frame(window)
             opciones_frame.pack(pady=40)
-               
+
+            # # Botón para redirigir al usuario a registrar una nueva tienda
+            # Button(opciones_frame, text="Registrar tienda", font=("Arial", 12), command=self.registrar_tienda).pack(side="left", padx=10)
+
+            # # Botón para cambiar de usuario si lo desea
+            # Button(opciones_frame, text="Cambiar de usuario", font=("Arial", 12), command=lambda: self.ingresar(window)).pack(side="left", padx=10)
+
         else:
             Label(window, text="Tiendas disponibles:", font=("Arial", 15)).pack(pady=10)
 
@@ -417,7 +423,6 @@ class Funcionalidad4:
             for idx, tienda in enumerate(usuario.get_tiendas(), start=1):
                 Button(tiendas_frame, text=f"{idx}. {tienda.get_nombre()}", font=("Arial", 12), 
                     command=lambda t=tienda: self.administrar_tienda(window, t)).pack(pady=5)
-
     
 
     @classmethod
@@ -434,11 +439,12 @@ class Funcionalidad4:
 
         # Botones para administrar la tienda
         Button(window, text="Administrar Productos", font=("Arial", 12)).pack(pady=5)
-        Button(window, text="Administrar Proveedores", font=("Arial", 12), command=lambda: self.mostrar_proveedores(window)).pack(pady=5)
+        Button(window, text="Administrar Proveedores", font=("Arial", 12), command=lambda: self.mostrar_proveedores(window, tienda)).pack(pady=5)
 
     @classmethod
-    def mostrar_proveedores(self, window):
+    def mostrar_proveedores(self, window, tienda):
         """Método para mostrar proveedores disponibles y permitir seleccionar uno que coincida con la categoría de un pasillo"""
+        self.tienda_selecta = tienda
         # Limpiar la ventana de widgets anteriores
         widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
         for i, widget in enumerate(widgets):
@@ -452,15 +458,15 @@ class Funcionalidad4:
         proveedores_frame.pack(pady=10)
 
         # Obtener la lista de pasillos de la tienda seleccionada
-        pasillos = self.tienda_selecta.get_pasillos()
+        pasillos = tienda.get_pasillos()
 
-        # Obtener las categorías de los pasillos
-        categorias_pasillos = {pasillo.categoria for pasillo in pasillos}
+        # Obtener las categorías de los pasillos y convertirlas a texto
+        categorias_pasillos = {pasillo.categoria.get_texto() for pasillo in pasillos}
 
         # Obtener la lista de proveedores
         proveedores = Proveedor.get_seis_proveedores()
 
-        # Filtrar los proveedores que coincidan con las categorías de los pasillos
+        # Filtrar los proveedores que coincidan con las categorías de los pasillos (comparamos en formato texto)
         proveedores_filtrados = [proveedor for proveedor in proveedores if proveedor.get_tipo() in categorias_pasillos]
 
         if len(proveedores_filtrados) == 0:
@@ -468,7 +474,7 @@ class Funcionalidad4:
         else:
             # Mostrar cada proveedor filtrado como un botón seleccionable
             for idx, proveedor in enumerate(proveedores_filtrados, start=1):
-                Button(proveedores_frame, text=f"{idx}. {proveedor.get_nombre()} - {proveedor.get_tipo().get_texto()}", 
+                Button(proveedores_frame, text=f"{idx}. {proveedor.get_nombre()} - {proveedor.get_tipo()}", 
                     font=("Arial", 12), 
                     command=lambda p=proveedor: self.seleccionar_proveedor(window, p)).pack(pady=5)
 
@@ -481,8 +487,6 @@ class Funcionalidad4:
 
         Label(window, text=f"Has seleccionado al proveedor: {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
         
-        # Mostrar detalles adicionales del proveedor seleccionado
-        Label(window, text=f"Tipo de proveedor: {proveedor.get_tipo().get_texto()}", font=("Arial", 12)).pack(pady=5)
-        Label(window, text=f"Entrega en las siguientes tiendas: {', '.join([t.get_nombre() for t in proveedor.get_tiendas()])}", font=("Arial", 12)).pack(pady=5)
+        
 
 

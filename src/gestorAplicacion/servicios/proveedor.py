@@ -7,13 +7,13 @@ class Proveedor:
         self.nombre = nombre
         self.entrega = entrega if entrega is not None else []
         self.tipo = tipo
-        self.tiendas = tiendas if tiendas is not None else []
+        self.tiendas = tiendas if tiendas is not None else []   
+        
+        # if self.tiendas:
+        #     for tienda in self.tiendas:
+        #         tienda.get_proveedores().append(self)
 
-        if self.tiendas:
-            for tienda in self.tiendas:
-                tienda.get_proveedores().append(self)
-
-        Proveedor.seis_proveedores.append(self)
+        # Proveedor.seis_proveedores.append(self)
 
     # Getters y setters
     def get_nombre(self):
