@@ -184,6 +184,7 @@ class Identidad2:
         self.window = window
         self.frame_actual = None
         self.resultado = None
+        self.terminado = False
 
     def mostrar_frame(self, titulo, descripcion, criterios, valores, habilitado, callback):
         # Destruir el frame actual si existe
@@ -218,6 +219,7 @@ class Identidad2:
 
             if persona_encontrada:
                 self.resultado = persona_encontrada
+                
                 self.mostrar_mensaje(f"Bienvenido {persona_encontrada.get_nombre()}")
             else:
                 self.mostrar_alerta(p)
@@ -312,6 +314,8 @@ class Identidad2:
         )
 
     def mostrar_mensaje(self, mensaje):
+        def cambiar():
+            self.terminado = True
         # Se muestra un mensaje usando un label en el frame actual
         if self.frame_actual:
             self.frame_actual.destroy()
@@ -319,8 +323,8 @@ class Identidad2:
         self.frame_actual = Frame(self.window, bg="light blue")
         self.frame_actual.pack(pady=20, padx=20, fill='both', expand=True)
         Label(self.frame_actual, text=mensaje, font=("Arial", 20), bg="light blue").pack(pady=20, padx=20)
-        Button(self.frame_actual, text="Aceptar", command=self.frame_actual.destroy).pack(pady=10)
-
+        Button(self.frame_actual, text="Aceptar", command=cambiar).pack(pady=10)
+        
 
 
         

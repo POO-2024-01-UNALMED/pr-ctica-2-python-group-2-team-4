@@ -667,11 +667,19 @@ if __name__ == "__main__":
     tienda3.get_empleados().extend([cajero3, cajero7])
     tienda4.get_empleados().append(cajero4)
 
+
+    admin7 = Administrador("Ricardo Díaz", 207, 45, Genero.H, 15000.0)
+  
+    for tienda in admin1.get_tiendas():
+        print(tienda.get_nombre())
+   
+
     cliente = None
     for persona in Persona.get_personas():  # Asegúrate de que `Persona.get_personas()` devuelva todos los clientes
         if 11001==persona.get_id():
             cliente = persona
             break
+
 
     print(cliente)
     if cliente is None:
@@ -698,10 +706,11 @@ if __name__ == "__main__":
             cliente.get_facturas().append(carrito)
             tienda.get_facturas().append(carrito)
 
+            print(cliente.get_facturas())
+            print(tienda.get_facturas())
             # El carrito ya se ha agregado a la lista de facturas del cliente y de la tienda
             print("Carrito creado y productos añadidos con éxito.")
             print(f"Total del carrito: {carrito.calcular_total()}")
-
     ventana = Ventana()
     ventana.crearVentana1()
     ventana.mainloop()
