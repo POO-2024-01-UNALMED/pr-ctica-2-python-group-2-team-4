@@ -687,15 +687,14 @@ class Funcionalidad1:
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
-
         from gestorAplicacion.servicios.enums import Membresia
-        perfil = cliente.perfil_demografico()
-        print(perfil)
-        mensaje = cliente.get_mensaje_por_perfil(perfil, membresia)
+
+        mensaje=cliente.evolucionar_membresia(cliente,membresia)
+
         # Crear un FieldFrame con el título y descripción correspondiente
         zona2Fun1 = FieldFrame(window, None, [None], None, [],
-                               [None], f"Membresia {membresia.get_nombre()}", f"{mensaje}", False, 25, 15, "#243340",
-                               "white", "black", "#243340", 0, 0, True)
+                               [None], f"Felicitaciones!", None, False, 25, 15, "#243340",
+                               "white", "black", "#243340", 0, 0, False)
 
         # Crear un Frame para los botones y añadirlo al `FieldFrame`
         boton_frame = Frame(zona2Fun1.campos, bg="#F2F2F2")
@@ -709,21 +708,17 @@ class Funcionalidad1:
         boton_frame.rowconfigure(3, weight=1)
 
         # Texto Opciones
-        texto_label1 = Label(boton_frame, text=f"El valor de la membresia es ${membresia.get_precio()}",
+        texto_label1 = Label(boton_frame, text=f"{mensaje}",
                              font=("Arial", 20), bg="#F2F2F2")
         texto_label1.grid(row=0, column=0, sticky='ew', padx=50, pady=10)
 
-        texto_label = Label(boton_frame, text="¿Deseas comprar esta membresía?",
-                            font=("Arial", 20), bg="#F2F2F2")
-        texto_label.grid(row=1, column=0, sticky='ew', padx=50, pady=10)
-
         # Botón 4: Volver al menú principal
-        boton4 = Button(boton_frame, text="Aceptar", font=("Arial", 15),
+        boton4 = Button(boton_frame, text="Volver a menu principal", font=("Arial", 15),
                         )
         boton4.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 4: Volver al menú principal
-        boton4 = Button(boton_frame, text="Cancelar", font=("Arial", 15),
+        boton4 = Button(boton_frame, text="Mirar otra Membresia", font=("Arial", 15),
                         command=lambda: self.consulta_membresia(cliente, window))
         boton4.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
 

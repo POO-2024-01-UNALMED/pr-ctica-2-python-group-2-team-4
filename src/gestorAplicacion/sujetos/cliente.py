@@ -136,9 +136,9 @@ class Cliente(Persona):
         return mensaje.format(mensaje_perfil)
 
     def evolucionar_membresia(self,cliente, nueva_membresia):
-        costo_evolucion = Cliente.calcular_costo_evolucion(cliente.membresia, nueva_membresia)
-        if cliente.dinero >= costo_evolucion:
-            cliente.dinero -= costo_evolucion
+        costo_evolucion = Cliente.calcular_costo_evolucion(cliente._membresia, nueva_membresia)
+        if cliente._dinero >= costo_evolucion:
+            cliente._dinero -= costo_evolucion
             cliente.set_membresia(nueva_membresia)
             return f"Ahora eres miembro de la membresía {nueva_membresia.get_nombre()}.\n Tu saldo total quedo en: ${cliente.get_dinero()}"
         else:
