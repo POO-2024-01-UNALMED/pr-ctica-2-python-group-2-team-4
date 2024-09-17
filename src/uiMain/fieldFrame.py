@@ -15,8 +15,8 @@ sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group
 class FieldFrame(Frame):
     def __init__(self, master, tituloCriterios, criterios, tituloValores, valores, habilitado,
                  titulo="Proceso o Consulta", descripcion="Descripcion proceso/consulta", botones=True,
-                 titulo_font_size=30, descripcion_font_size=20, bg_color="#024A86", bgTitulo="#69a0ce",
-                 bgLabel="black", bgForm="#69a0ce", wrapTitulo=500, wrapDescripcion=1000,descripcionh=True):
+                 titulo_font_size=30, descripcion_font_size=18, bg_color="#024A86", bgTitulo="#69a0ce",
+                 bgLabel="black", bgForm="#69a0ce", wrapTitulo=500, wrapDescripcion=1500,descripcionh=True):
         super().__init__(master, bg=bg_color)
         self._tituloCriterios = tituloCriterios
         self._criterios = criterios
@@ -35,8 +35,8 @@ class FieldFrame(Frame):
         if descripcionh==True:
             # Frame para la descripción del proceso
             descripProceso = Frame(self, relief=SOLID, bd=2, bg="black")
-            descripProceso.pack(pady=10, padx=10)
-            descripcionlabel = Label(descripProceso, text=descripcion, font=("Arial", descripcion_font_size), bg=bgTitulo,
+            descripProceso.pack(pady=5, padx=10)
+            descripcionlabel = Label(descripProceso, text=descripcion, font=("Helvetica", descripcion_font_size), bg=bgTitulo,
                                      wraplength=wrapDescripcion, fg=bgLabel)
             descripcionlabel.pack(pady=5, padx=5)
 

@@ -29,7 +29,7 @@ class Bienvenida(Frame):
         # self.saludo2.pack(fill=BOTH, expand=True, pady=5)
         self.saludo2 = scrolledtext.ScrolledText(self.frame_aux, height=8, width=77, padx=5)
         self.saludo2.tag_configure("center", justify="center")
-        self.saludo2.insert(INSERT, "Descripcion texto largo de software My_Tiendita")
+        self.saludo2.insert(INSERT, "My_tiendita_2.0 es una aplicación de gestión avanzada de tiendas y compras en línea que ofrece una interfaz gráfica moderna y fácil de usar para una experiencia de usuario óptima. Los clientes pueden buscar productos de manera eficiente, ya sea por categoría o por nombre, lo que les permite encontrar rápidamente lo que necesitan. La aplicación facilita la gestión del carrito de compras, permitiendo agregar o eliminar productos con facilidad y pagar facturas de manera rápida y segura. Los usuarios tienen la flexibilidad de seleccionar entre distintas tiendas, adaptando su experiencia de compra a sus preferencias. Además, los propietarios de tiendas pueden administrar sus establecimientos de manera efectiva, gestionando productos y monitoreando el estado de las ventas. My_tiendita_2.0 combina funcionalidades avanzadas con un diseño intuitivo para proporcionar una solución completa en la gestión de tiendas y en la experiencia de compra en línea.")
 
 
         self._pantallazos = []
@@ -42,7 +42,7 @@ class Bienvenida(Frame):
                 pantallazo = PhotoImage(file=path)
             self._pantallazos.append(pantallazo)
 
-        self._label = Label(self.frame_p4, image=self._pantallazos[0], height=350, width=600)
+        self._label = Label(self.frame_p4, image=self._pantallazos[0], height=350, width=600,bg="#69a0ce")
         self._label.bind('<Leave>', self.proximo)
         self._label.pack(pady=5,fill="both", expand=True)
 

@@ -267,13 +267,10 @@ class Iniciar_ventana_usuario():
         window.config(menu=menubar)
 
         # submenu de procesos y consultas
-        submenu = Menu(window)
-        submenu.add_command(label="Crear cliente manualmente", command=evtClienteManual)
 
         menuarchivo.add_command(label="Aplicacion", command=aplicacion_popup)
         menuarchivo.add_command(label="Guardar y salir", command=salir)
 
-        menuprocesos.add_cascade(label="Menu creaciones y destrucciones", menu=submenu)
         from uiMain.fieldFrame import FieldFrame
         zona2 = FieldFrame(window, "Criterios", ["Documento", "citerio2", "criterio3"], "Datos", ["Hola", None, None], ["normal","normal","normal"])
 
@@ -364,8 +361,6 @@ class Iniciar_ventana_usuario():
 
         from uiMain.funcionalidad5 import Funcionalidad5
         menuprocesos.add_command(label="Funcionalidad 5", command=lambda: prueba2(window))
-
-        menuprocesos.add_command(label="identificarse", command=Identidad2(window).identificar_persona)
 
         def prueba2(window):
             matarloTodo2()
