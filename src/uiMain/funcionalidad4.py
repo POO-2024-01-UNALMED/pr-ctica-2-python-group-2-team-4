@@ -480,55 +480,79 @@ class Funcionalidad4:
 
     @classmethod
     def seleccionar_proveedor(self, window, proveedor):
-        """Método para manejar la selección de un proveedor y mostrar información adicional"""
+        """Método para manejar la selección de un proveedor y mostrar los productos para que el usuario seleccione la cantidad a pedir"""
         # Limpiar la ventana de widgets anteriores
         for widget in window.winfo_children():
             widget.destroy()
 
-        # Mostrar el nombre del proveedor seleccionado
         Label(window, text=f"Has seleccionado al proveedor: {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
 
-        # Mostrar productos disponibles del proveedor
-        Label(window, text="Seleccione productos a pedir:", font=("Arial", 12)).pack(pady=5)
+        # Obtener los productos del proveedor
+        productos_proveedor = proveedor.get_productos_proveedor()
 
-        # Frame para mostrar los productos
-        productos_frame = Frame(window)
-        productos_frame.pack(pady=10)
+        if not productos_proveedor:
+            Label(window, text="Este proveedor no tiene productos disponibles.", font=("Arial", 12)).pack(pady=5)
+            return
 
-        productos = proveedor.get_productos_proveedor()
+        # Configurar las etiquetas y valores iniciales
+        criterios = [f"{producto.get_nombre()} - ${producto.get_precio():.2f} c/u" for producto in productos_proveedor]
+        valores = ["0" for _ in productos_proveedor]  # Inicialmente, todos los valores son 0
+        habilitado = [True for _ in productos_proveedor]  # Todos los campos están habilitados
 
-        if not productos:
-            Label(productos_frame, text="Este proveedor no tiene productos disponibles.", font=("Arial", 12)).pack(pady=5)
-        else:
-            for idx, producto in enumerate(productos, start=1):
-                # Mostrar cada producto como un botón seleccionable
-                Button(productos_frame, text=f"{idx}. {producto}", font=("Arial", 12),
-                    command=lambda p=producto: self.procesar_seleccion_producto(window, proveedor, p)).pack(pady=5)
+        # Mostrar el frame para que el usuario ingrese la cantidad de cada producto
+        field_frame = FieldFrame(
+            window, 
+            tituloCriterios="Producto", 
+            criterios=criterios, 
+            tituloValores="Cantidad", 
+            valores=valores, 
+            habilitado=habilitado, 
+            titulo="Productos del Proveedor", 
+            descripcion="Seleccione la cantidad de cada producto para reabastecer su tienda.", 
+            botones=True
+        )
+        field_frame.pack(fill="both", expand=True, pady=10)
 
-    @classmethod
-    def procesar_seleccion_producto(self, window, proveedor, producto):
-        """Método para manejar la selección de un producto y confirmar el pedido"""
-        # Limpiar la ventana de widgets anteriores
-        for widget in window.winfo_children():
-            widget.destroy()
+        def hacer_pedido():
+            cantidades = [int(entry.get()) for entry in field_frame._entrys]
+            total_costo = 0
+            tienda = self.tienda_selecta
+            saldo_tienda = tienda.get_saldo()
 
-        # Mostrar la confirmación de la selección
-        Label(window, text=f"Has seleccionado el producto: {producto} del proveedor {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
+            for producto, cantidad in zip(productos_proveedor, cantidades):
+                if cantidad > 0:
+                    # Clonar el producto y agregarlo al pasillo correspondiente
+                    for _ in range(cantidad):
+                        producto_clonado = Producto(
+                            nombre=f"{producto.get_nombre()} - {producto.get_precio()}",
+                            marca=producto.get_marca(),
+                            precio=producto.get_precio(),
+                            tamano=producto.get_tamano(),
+                            categoria=producto.get_categoria(),
+                            descripcion=producto.get_descripcion(),
+                            pasillo=None,  # Esto se asignará en el pasillo correspondiente
+                            tienda=tienda
+                        )
+                        # Asignar al pasillo según la categoría
+                        pasillo_correspondiente = next(
+                            (p for p in tienda.get_pasillos() if p.categoria == producto.get_categoria()), None
+                        )
+                        if pasillo_correspondiente:
+                            pasillo_correspondiente.agregar_producto(producto_clonado)
 
-        # Aquí puedes agregar más lógica para confirmar el pedido o realizar alguna acción adicional
-        Button(window, text="Confirmar Pedido", font=("Arial", 12), command=lambda: self.confirmar_pedido(window, proveedor, producto)).pack(pady=10)
+                        total_costo += producto.get_precio()
 
-    @classmethod
-    def confirmar_pedido(self, window, proveedor, producto):
-        """Método para confirmar el pedido del producto al proveedor"""
-        # Limpiar la ventana de widgets anteriores
-        for widget in window.winfo_children():
-            widget.destroy()
+            # Verificar si el total excede el saldo de la tienda
+            if total_costo > saldo_tienda:
+                Label(window, text="¡Saldo de la tienda insuficiente para completar el pedido!", font=("Arial", 12), fg="red").pack(pady=10)
+            else:
+                # Actualizar el saldo de la tienda
+                tienda.set_saldo(saldo_tienda - total_costo)
+                Label(window, text="Reabastecimiento completado.", font=("Arial", 15), fg="green").pack(pady=10)
 
-        Label(window, text=f"Pedido confirmado para el producto: {producto} del proveedor {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
+        # Botón para hacer el pedido
+        field_frame.aceptar.config(command=hacer_pedido)
 
-        # Botón para regresar al menú principal o hacer otra acción
-        Button(window, text="Regresar", font=("Arial", 12), command=lambda: self.seleccionar_proveedor(window, proveedor)).pack(pady=10)
         
         
 
