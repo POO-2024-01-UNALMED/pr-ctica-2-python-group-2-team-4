@@ -3,10 +3,10 @@ import tkinter
 import tkinter as tk
 from typing import List, Optional
 import sys
-
+sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from fieldFrame import FieldFrame
 from servicios.proveedor import Proveedor
-sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+
 from gestorAplicacion.servicios.enums import Genero
 from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.sujetos.administrador import Administrador
@@ -394,8 +394,10 @@ class Funcionalidad4:
         """Método para administrar la tienda seleccionada"""
         self.tienda_selecta = tienda
         # Limpiar la ventana de widgets anteriores
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                widget.destroy()
 
         Label(window, text=f"Has seleccionado la tienda: {tienda.get_nombre()}", font=("Arial", 15)).pack(pady=10)
 
@@ -405,10 +407,12 @@ class Funcionalidad4:
 
     @classmethod
     def mostrar_proveedores(self, window):
-        """Método para mostrar proveedores disponibles y permitir seleccionar uno"""
+        """Método para mostrar proveedores disponibles y permitir seleccionar uno que coincida con la categoría de un pasillo"""
         # Limpiar la ventana de widgets anteriores
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                widget.destroy()
 
         Label(window, text="Proveedores disponibles:", font=("Arial", 15)).pack(pady=10)
 
@@ -416,15 +420,24 @@ class Funcionalidad4:
         proveedores_frame = Frame(window)
         proveedores_frame.pack(pady=10)
 
+        # Obtener la lista de pasillos de la tienda seleccionada
+        pasillos = self.tienda_selecta.get_pasillos()
+
+        # Obtener las categorías de los pasillos
+        categorias_pasillos = {pasillo.categoria for pasillo in pasillos}
+
         # Obtener la lista de proveedores
         proveedores = Proveedor.get_seis_proveedores()
 
-        if len(proveedores) == 0:
-            Label(proveedores_frame, text="No hay proveedores disponibles.", font=("Arial", 12)).pack(pady=5)
+        # Filtrar los proveedores que coincidan con las categorías de los pasillos
+        proveedores_filtrados = [proveedor for proveedor in proveedores if proveedor.get_tipo() in categorias_pasillos]
+
+        if len(proveedores_filtrados) == 0:
+            Label(proveedores_frame, text="No hay proveedores disponibles para esta tienda.", font=("Arial", 12)).pack(pady=5)
         else:
-            # Mostrar cada proveedor como un botón seleccionable
-            for idx, proveedor in enumerate(proveedores, start=1):
-                Button(proveedores_frame, text=f"{idx}. {proveedor.get_nombre()} - {proveedor.get_tipo()}", 
+            # Mostrar cada proveedor filtrado como un botón seleccionable
+            for idx, proveedor in enumerate(proveedores_filtrados, start=1):
+                Button(proveedores_frame, text=f"{idx}. {proveedor.get_nombre()} - {proveedor.get_tipo().get_texto()}", 
                     font=("Arial", 12), 
                     command=lambda p=proveedor: self.seleccionar_proveedor(window, p)).pack(pady=5)
 
@@ -437,8 +450,8 @@ class Funcionalidad4:
 
         Label(window, text=f"Has seleccionado al proveedor: {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
         
-        # Aquí puedes agregar más opciones o detalles sobre el proveedor
-        # Por ejemplo, mostrar detalles de los productos que entrega o sus categorías
-        Label(window, text=f"Tipo de proveedor: {proveedor.get_tipo()}", font=("Arial", 12)).pack(pady=5)
+        # Mostrar detalles adicionales del proveedor seleccionado
+        Label(window, text=f"Tipo de proveedor: {proveedor.get_tipo().get_texto()}", font=("Arial", 12)).pack(pady=5)
         Label(window, text=f"Entrega en las siguientes tiendas: {', '.join([t.get_nombre() for t in proveedor.get_tiendas()])}", font=("Arial", 12)).pack(pady=5)
+
 
