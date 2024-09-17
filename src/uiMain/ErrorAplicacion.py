@@ -56,5 +56,19 @@ def procesar_cliente(cliente):
     # Si es un cliente, se continúa con la operación
     print(f"Procesando cliente: {cliente.get_nombre()}")
 
-class ExceptionInventada4(CategoriaPropia2):
-    pass
+
+# Excepción personalizada para cuando el objeto no es de tipo Administrador
+class ObjetoNoEsAdministradorError(Exception):
+    def __init__(self, message="El objeto proporcionado no es un administrador."):
+        self.message = message
+        super().__init__(self.message)
+
+
+# Función que solo acepta objetos de tipo Administrador
+def procesar_administrador(administrador):
+    # Verificar si el objeto es de tipo Administrador
+    if not isinstance(administrador, Administrador):
+        raise ObjetoNoEsAdministradorError("Se esperaba un objeto de tipo Administrador, pero se recibió otro tipo.")
+
+    # Si es un administrador, se continúa con la operación
+    print(f"Procesando administrador: {administrador.get_nombre()}")
