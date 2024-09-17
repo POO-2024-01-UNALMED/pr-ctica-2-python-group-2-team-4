@@ -2,7 +2,7 @@ import sys
 from tkinter import Frame, Label, Entry, Button, messagebox, simpledialog, IntVar, Radiobutton, StringVar, RIGHT, LEFT, \
     font, BOTH
 
-from numpy.ma.core import filled
+#from numpy.ma.core import filled
 
 from gestorAplicacion.servicios.ahorcado import Ahorcado
 from gestorAplicacion.servicios.enums import TipoCaja
@@ -449,7 +449,7 @@ class Funcionalidad3:
         frame.grid_rowconfigure(1, weight=1)
         frame.grid_rowconfigure(2, weight=1)
         for i in range(9):
-            button = tk.Button(frame, text="", width=40,height=20, command=lambda i=i: handle_click(i + 1))
+            button = tk.Button(frame, text="", width=40,height=20, command=lambda j=i: handle_click(i + 1))
             button.grid(row=i // 3, column=i % 3)
             buttons.append(button)
 
