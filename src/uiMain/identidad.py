@@ -211,18 +211,23 @@ class Identidad2:
                 if entry.get() == "":
                     messagebox.showerror("Error", "Faltan campos por completar")
                     return
-            p = self.frame_actual._entrys[0].get()  # Suponiendo que el ID está en el primer Entry
+            try:
+                p = int(self.frame_actual._entrys[0].get()) # Suponiendo que el ID está en el primer Entry
+                from gestorAplicacion.sujetos.persona import Persona
+                personas = Persona.get_personas()
+                persona_encontrada = next(
+                    (persona for persona in personas if isinstance(persona, Persona) and persona.get_id() == int(p)),
+                    None)
+                if persona_encontrada:
+                    self.resultado = persona_encontrada
 
-            from gestorAplicacion.sujetos.persona import Persona
-            personas = Persona.get_personas()
-            persona_encontrada = next((persona for persona in personas if isinstance(persona, Persona) and persona.get_id() == int(p)), None)
+                    self.mostrar_mensaje(f"Bienvenido {persona_encontrada.get_nombre()}")
+                else:
+                    self.mostrar_alerta(p)
 
-            if persona_encontrada:
-                self.resultado = persona_encontrada
-                
-                self.mostrar_mensaje(f"Bienvenido {persona_encontrada.get_nombre()}")
-            else:
-                self.mostrar_alerta(p)
+            except ValueError:
+                messagebox.showerror("Error", "valor no numerico")
+                self.identificar_persona()
 
         # Iniciar el proceso de identificación
         criterios = ["ID"]
