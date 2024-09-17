@@ -26,11 +26,35 @@ def verificar_tienda_asignada(cliente):
         raise TiendaNoAsignadaError(cliente)
 
 
-class ExceptionInventada2(CategoriaPropia1):
-    pass
+class SaldoInsuficienteError(Exception):
+    def __init__(self, cliente, message="No tienes suficiente dinero para realizar la compra."):
+        self.cliente = cliente
+        self.message = f"Cliente {cliente.get_nombre()}: {message}"
+        super().__init__(self.message)
 
-class ExceptionInventada3(CategoriaPropia2):
-    pass
+# Función para verificar si el cliente tiene suficiente dinero
+def verificar_saldo(cliente, monto_compra):
+    if cliente.get_dinero() == 0:
+        raise SaldoInsuficienteError(cliente, "Tu saldo es 0. No puedes realizar compras.")
+    elif cliente.get_dinero() < monto_compra:
+        raise SaldoInsuficienteError(cliente, "No tienes suficiente dinero para esta compra.")
+
+
+# Excepción personalizada para cuando el objeto no es de tipo Cliente
+class ObjetoNoEsClienteError(Exception):
+    def __init__(self, message="El objeto proporcionado no es un cliente."):
+        self.message = message
+        super().__init__(self.message)
+
+
+# Función que solo acepta objetos de tipo Cliente
+def procesar_cliente(cliente):
+    # Verificar si el objeto es de tipo Cliente
+    if not isinstance(cliente, Cliente):
+        raise ObjetoNoEsClienteError("Se esperaba un objeto de tipo Cliente, pero se recibió otro tipo.")
+
+    # Si es un cliente, se continúa con la operación
+    print(f"Procesando cliente: {cliente.get_nombre()}")
 
 class ExceptionInventada4(CategoriaPropia2):
     pass
