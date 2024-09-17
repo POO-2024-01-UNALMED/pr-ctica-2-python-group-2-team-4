@@ -5,7 +5,7 @@ from typing import List, Optional
 import sys
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 
-from servicios.producto import Producto
+from gestorAplicacion.servicios.producto import Producto
 from fieldFrame import FieldFrame
 from gestorAplicacion.servicios.proveedor import Proveedor
 
@@ -545,9 +545,15 @@ class Funcionalidad4:
             if total_costo > saldo_tienda:
                 Label(window, text="¡Saldo de la tienda insuficiente para completar el pedido!", font=("Arial", 12), fg="red").pack(pady=10)
             else:
-                # Actualizar el saldo de la tienda
-                tienda.set_saldo(saldo_tienda - total_costo)
-                Label(window, text="Reabastecimiento completado.", font=("Arial", 15), fg="green").pack(pady=10)
+                def operacion_completada():
+        # Código para actualizar la interfaz después de completar la operación
+                    Label(window, text="Reabastecimiento completado.", font=("Arial", 15), fg="green").pack(pady=10)
+                    # Botón para terminar
+                    terminar_button = Button(window, text="Terminar", font=("Arial", 15), command=window.destroy)
+                    terminar_button.pack(pady=10)
+
+    # Programar la actualización de la interfaz después de la operación asincrónica
+                window.after(100, operacion_completada)
 
         # Botón para hacer el pedido
         field_frame.aceptar.config(command=hacer_pedido)

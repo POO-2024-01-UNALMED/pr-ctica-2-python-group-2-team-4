@@ -25,6 +25,9 @@ class Proveedor:
     def set_productos_proveedor(self, productos):
         self.productos_proveedor = productos
 
+    def get_nombre(self):
+        return self.nombre
+
     def set_nombre(self, nombre):
         self.nombre = nombre
 

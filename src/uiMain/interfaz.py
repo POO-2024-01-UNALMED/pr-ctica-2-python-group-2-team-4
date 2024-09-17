@@ -379,11 +379,33 @@ class Iniciar_ventana_usuario():
             proveedor5 = Proveedor(nombre="Proveedor de Hogar", tipo=Categoria.HOGAR.get_texto())
             proveedor6 = Proveedor(nombre="Proveedor de Electrónica", tipo=Categoria.ELECTRONICO.get_texto())
 
-            # Agregarlos a la lista estática de proveedores
+            # Create sample products for each category
+            producto_alimento1 = Producto(nombre="Manzanas", marca="FreshFarms", precio=3.5, categoria="Alimento")
+            producto_alimento2 = Producto(nombre="Leche", marca="La Vaquita", precio=2.0, categoria="Alimento")
+            producto_bebida1 = Producto(nombre="Coca Cola", marca="Coca Cola", precio=1.5, categoria="Bebida")
+            producto_bebida2 = Producto(nombre="Agua Mineral", marca="Nestlé", precio=1.0, categoria="Bebida")
+            producto_limpieza1 = Producto(nombre="Detergente", marca="CleanMax", precio=5.0, categoria="Limpieza")
+            producto_personal1 = Producto(nombre="Shampoo", marca="Herbal Essences", precio=6.0, categoria="Personal")
+            producto_hogar1 = Producto(nombre="Sábanas", marca="HomeCollection", precio=20.0, categoria="Hogar")
+            producto_electronico1 = Producto(nombre="Televisor", marca="Samsung", precio=300.0, categoria="Electrónico")
+
+            # Assign products to their respective providers
+            proveedor1.set_productos_proveedor([producto_alimento1, producto_alimento2])  # Alimentos
+            proveedor2.set_productos_proveedor([producto_bebida1, producto_bebida2])  # Bebidas
+            proveedor3.set_productos_proveedor([producto_limpieza1])  # Limpieza
+            proveedor4.set_productos_proveedor([producto_personal1])  # Productos Personales
+            proveedor5.set_productos_proveedor([producto_hogar1])  # Hogar
+            proveedor6.set_productos_proveedor([producto_electronico1])  # Electrónica
+
+            # Add these providers to the list of providers
             Proveedor.set_seis_proveedores([proveedor1, proveedor2, proveedor3, proveedor4, proveedor5, proveedor6])
 
+            # Example to print the products for each provider
             for proveedor in Proveedor.get_seis_proveedores():
-                print(proveedor)
+                print(f"Productos de {proveedor.nombre}:")
+                for producto in proveedor.get_productos_proveedor():
+                    print(f"- {producto._nombre}: ${producto._precio} c/u")
+
 
             matarloTodo2()
             funcionalidad = Funcionalidad4()
