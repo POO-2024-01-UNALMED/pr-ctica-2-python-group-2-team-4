@@ -309,8 +309,6 @@ class Iniciar_ventana_usuario():
                 if persona.get_nombre() == "Carlos":
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente = persona
-            funcionalidad1 = Funcionalidad1()
-            funcionalidad1.consultasEco(cliente, window)
             funcionalidad2 = Funcionalidad2()
             funcionalidad2.elegir_tipo_busqueda(cliente, window)
 

@@ -667,7 +667,7 @@ class Funcionalidad1:
 
         # Botón 4: Volver al menú principal
         boton4 = Button(boton_frame, text="Aceptar", font=("Arial", 15),
-                        )
+                   command=lambda:self.felicitar_membresia(cliente,membresia,window))
         boton4.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 4: Volver al menú principal
@@ -682,7 +682,58 @@ class Funcionalidad1:
         # Mostrar el frame con los botones
         zona2Fun1.pack(fill=BOTH, expand=True)
 
-   # def felicitar_membresia(self,cliente,membresia,window):
+    def felicitar_membresia(self,cliente,membresia,window):
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        from gestorAplicacion.servicios.enums import Membresia
+        perfil = cliente.perfil_demografico()
+        print(perfil)
+        mensaje = cliente.get_mensaje_por_perfil(perfil, membresia)
+        # Crear un FieldFrame con el título y descripción correspondiente
+        zona2Fun1 = FieldFrame(window, None, [None], None, [],
+                               [None], f"Membresia {membresia.get_nombre()}", f"{mensaje}", False, 25, 15, "#243340",
+                               "white", "black", "#243340", 0, 0, True)
+
+        # Crear un Frame para los botones y añadirlo al `FieldFrame`
+        boton_frame = Frame(zona2Fun1.campos, bg="#F2F2F2")
+        boton_frame.grid(row=0, column=1, columnspan=2, pady=20, padx=10, sticky='nsew')
+
+        # Configurar las columnas y filas del `boton_frame` para que se expandan
+        boton_frame.columnconfigure(0, weight=1)
+        boton_frame.rowconfigure(0, weight=1)
+        boton_frame.rowconfigure(1, weight=1)
+        boton_frame.rowconfigure(2, weight=1)
+        boton_frame.rowconfigure(3, weight=1)
+
+        # Texto Opciones
+        texto_label1 = Label(boton_frame, text=f"El valor de la membresia es ${membresia.get_precio()}",
+                             font=("Arial", 20), bg="#F2F2F2")
+        texto_label1.grid(row=0, column=0, sticky='ew', padx=50, pady=10)
+
+        texto_label = Label(boton_frame, text="¿Deseas comprar esta membresía?",
+                            font=("Arial", 20), bg="#F2F2F2")
+        texto_label.grid(row=1, column=0, sticky='ew', padx=50, pady=10)
+
+        # Botón 4: Volver al menú principal
+        boton4 = Button(boton_frame, text="Aceptar", font=("Arial", 15),
+                        )
+        boton4.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
+
+        # Botón 4: Volver al menú principal
+        boton4 = Button(boton_frame, text="Cancelar", font=("Arial", 15),
+                        command=lambda: self.consulta_membresia(cliente, window))
+        boton4.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
+
+        # Ajustar la configuración del grid para que el `boton_frame` ocupe el espacio disponible
+        zona2Fun1.campos.columnconfigure(1, weight=1)
+        zona2Fun1.campos.rowconfigure(1, weight=1)
+
+        # Mostrar el frame con los botones
+        zona2Fun1.pack(fill=BOTH, expand=True)
+
 
 
 
