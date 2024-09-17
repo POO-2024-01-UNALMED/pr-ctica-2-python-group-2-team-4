@@ -33,99 +33,54 @@ class Funcionalidad5:
     @classmethod
     def personalizar_tienda(cls, admin,window):
         from gestorAplicacion.servicios.tienda import Tienda
-        tiendas = Tienda.get_tiendas()
-
-        # Corregido: bucle invertido y pop durante la iteración
-        for i in reversed(range(len(tiendas))):
-            if tiendas[i].get_dueno() is not None or tiendas[i].get_estado() == "cerrado":
-                tiendas.pop(i)
-        criterios = ["tienda"]
-        valores = [""]
-        habilitado = [True]
-        func5=FieldFrame(
-            master=window,
-            tituloCriterios="tiendas",
-            criterios=criterios,
-            tituloValores="Valores",
-            valores=valores,
-            habilitado=habilitado,
-            titulo="Personalizar Tienda",
-            descripcion="Para adaptar tu tienda a tu diseño"
-            )
-        func5.pack(fill="both", expand=True)
-        from gestorAplicacion.servicios.tienda import Tienda
-        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        widgets = window.winfo_children()
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
 
-        # Crear el marco para las Tiendas
-        tiendasGeneral_frame = Frame(window, bg="#243340")
-        tiendasGeneral_frame.pack(pady=10, fill=BOTH, expand=True)
+        # Crear un FieldFrame con el título y descripción correspondiente
+        zona2Fun1 = FieldFrame(window, "", [None], "", [],
+                               [None], "Personalización de tiendas",
+                               "La Funcionalidad 5, permite a los usuarios realizar compras de múltiples tiendas. El sistema filtra tiendas según su estado de actividad, permite reorganizar pasillos, contratar empleados y llamar al proveedor."
+                               , False, 25, 15, "#243340", "white", "black", "#F2F2F2", 0, 800)
 
-        # Crear el marco para las Tiendas
-        tiendas_frame = Frame(tiendasGeneral_frame, bg="#243340")
-        tiendas_frame.pack(pady=10, fill=BOTH, expand=True)
+        # Crear un Frame para los botones y añadirlo al `FieldFrame`
+        boton_frame = Frame(zona2Fun1.campos, bg="#F2F2F2")
+        boton_frame.grid(row=0, column=1, columnspan=2, pady=20, padx=10, sticky='nsew')
 
-        tiendas = Tienda.revision_tienda(Tienda.get_tiendas())
-        Label(tiendas_frame, text="Selecciona una de las tiendas que tenemos disponibles para ti:",font=("Arial", 16), bg="#F2F2F2", fg="black").pack(pady=10)
-            # Crear un marco adicional para centrar los botones
-        botones_frame = Frame(tiendas_frame, bg="#243340")
-        botones_frame.pack(padx=100, pady=20, fill=BOTH, expand=True)
+        # Configurar las columnas y filas del `boton_frame` para que se expandan
+        boton_frame.columnconfigure(0, weight=1)
+        boton_frame.rowconfigure(0, weight=1)
+        boton_frame.rowconfigure(1, weight=1)
+        boton_frame.rowconfigure(2, weight=1)
+        boton_frame.rowconfigure(3, weight=1)
 
-            # Mostrar las tiendas en la página actual
-            #indice = 1 + (page - 1) * tiendas_por_pagina
+        # Texto Opciones
+        texto_label = Label(boton_frame, text="Ha seleccionado Ecosistema de Consultas Personalizadas",
+                            font=("Arial", 20), bg="#F2F2F2")
+        texto_label.grid(row=0, column=0, sticky='ew', padx=50, pady=10)
 
-            # Controles de paginación
-        paginacion_frame = Frame(tiendas_frame, bg="#243340")
-        paginacion_frame.pack(pady=10)
-        if Tienda.get_tiendas()==0:
-            Label(tiendas_frame,
-                  text="No hay tiendas disponibles en el momento.",
-                  font=("Arial", 44), bg="#F2F2F2").pack(pady=10)
-        eleccion=0
-        
+        # Botón 1: Consulta general de productos
+        boton1 = Button(boton_frame, text="Llamar Proveedor",
+                        font=("Arial", 15) )
+        boton1.grid(row=1, column=0, sticky='ew', padx=50, pady=10)
 
-        # Validación de entrada del usuario
-        if eleccion < 0 or eleccion >= len(tiendas):
-            print("Selección inválida. Por favor, intenta de nuevo.")
-            return
+        # Botón 2: Consulta de productos por categoría
+        boton2 = Button(boton_frame, text="Reorganizar Pasillos",
+                        font=("Arial", 15))
+        boton2.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
 
-        tien = tiendas[eleccion]
+        # Botón 3: Consulta de membresías
+        boton3 = Button(boton_frame, text="Contratar Empleados",
+                        font=("Arial", 15))
+        boton3.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
 
-        diferencia = admin.get_dinero() - tien.get_saldo()
-        if diferencia >= 0:
-            tien.set_dueno(admin)
-            admin.get_tiendas().append(tien)
-            print(f"Has seleccionado la tienda: {tien.get_nombre()}")
-            print(f"Se te restó ${tien.get_saldo():.2f} de tu saldo")
-            print(f"Ahora eres el dueño de la tienda: \"{tien.get_nombre()}\"")
-            admin.set_dinero(diferencia)
-            print(f"Tu saldo ahora es de: ${diferencia:.2f}")
-        else:
-            print("No tienes suficiente dinero para comprar esta tienda.")
-            return
+        # Ajustar la configuración del grid para que el `boton_frame` ocupe el espacio disponible
+        zona2Fun1.campos.columnconfigure(1, weight=1)
+        zona2Fun1.campos.rowconfigure(1, weight=1)
 
-        iterar = True
-        while iterar:
-            print("1. ¿Desea reorganizar pasillos?")
-            print("2. ¿Desea llamar al proveedor?")
-            print("3. ¿Desea contratar empleados?")
-            print("4. Salir de personalizar tienda")
-            #decision = Main.escaner_con_rango(4)
-            decision = 1
-            if decision == 1:
-                cls.reorganizar_pasillos(tien)
-            elif decision == 2:
-                cls.llamar_proveedor(tien, admin)
-            elif decision == 3:
-                cls.contratar(tien)
-            elif decision == 4:
-                iterar = False
-                print("Ha salido de personalizar tienda")
-            else:
-                print("Ese número está fuera del rango")
-                print("Introduzca otro número: ")
+        # Mostrar el frame con los botones
+        zona2Fun1.pack(fill=BOTH, expand=True)
 
     @staticmethod
     def reorganizar_pasillos(tien):
