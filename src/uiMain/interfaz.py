@@ -221,12 +221,12 @@ class Iniciar_ventana_usuario():
 
         # Abre la pestana de dialogo con los nombres de los integrantes del equipo
         def open_popup():
-            messagebox.showinfo("Titulo","Integrantes del equipo:\n- Jhorman Shair Ramirez Henao\n- Juan Esteban Pineda Henao\n- Juan Diego Ordoñez Londoño\n- Jordan Sanchez Torres")
+            messagebox.showinfo("Autores","Integrantes del equipo:\n- Jhorman Shair Ramirez Henao\n- Juan Esteban Pineda Henao\n- Juan Diego Ordoñez Londoño\n- Jordan Sanchez Torres")
 
         # Abre la pestana de dialogo con la informacion del programa y su funcionalidad.
         def aplicacion_popup():
-            textonimo = "La aplicación My_Tiendita_2.0 es un software que permite la gestión de una tienda de tecnología. \n "
-            messagebox.showinfo("Titulo descriptivo", textonimo)
+            textonimo ="La función de My_tiendita_2.0 es gestionar una tienda virtual completa ofreciendo una experiencia de compra integral tanto para los clientes como para los administradores. Permite a los usuarios explorar, seleccionar y adquirir productos, ajustando el carrito de compras según restricciones de edad y saldo disponible. Facilita el proceso de pago, gestionando la selección de cajas, aplicando descuentos basados en membresías, y generando facturas detalladas. Además, supervisa el inventario y el estado financiero de la tienda, asegurando la calidad de los productos y tomando medidas para evitar déficits. Finalmente, permite a los usuarios adquirir y personalizar tiendas en bancarrota, reorganizando pasillos, reabasteciendo productos y contratando personal para revitalizar el negocio"
+            messagebox.showinfo("Sobre la aplicacion", textonimo)
         # ----------------------------------------------------------------------------------
         def salir():
             framesAMatar = []
