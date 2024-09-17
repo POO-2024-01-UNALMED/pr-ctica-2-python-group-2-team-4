@@ -9,9 +9,9 @@ class Persona:
     from gestorAplicacion.servicios.carrito import Carrito
     personas = []
 
-    def __init__(self, nombre="", numero= 0, edad= 0, genero= None):
+    def __init__(self, nombre: str = "", id: int = 0, edad: int = 0, genero: Genero = None):
         self.nombre = nombre
-        self.numero = numero
+        self.id = id
         self.edad = edad
         self.genero = genero
         Persona.personas.append(self)
@@ -26,15 +26,18 @@ class Persona:
 
     def get_nombre(self) -> str:
         return self.nombre
-
+    
     def set_nombre(self, nombre: str):
         self.nombre = nombre
 
-    def get_numero(self) -> int:
-        return self.numero
+    def get_id(self) -> int:
+        return self.id
 
-    def set_id(self, id1):
-        self.numero = id1
+    def set_id(self, id: int):
+        self.id = id
+
+    def get_edad(self) -> int:
+        return self.edad
 
     def get_edad(self) -> int:
         return self.edad
