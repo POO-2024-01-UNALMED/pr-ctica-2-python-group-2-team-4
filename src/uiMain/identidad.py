@@ -285,7 +285,7 @@ class Identidad2:
             if decision == "1":
                 # Importar Cliente solo cuando sea necesario
                 from gestorAplicacion.sujetos.cliente import Cliente
-                persona = Cliente(nombre, id, edad, genero)
+                persona = Cliente(nombre, id, int(edad), genero)
                 self.resultado = persona              
                 self.mostrar_mensaje(f"Usuario Cliente creado con éxito. Bienvenido {nombre}")
             else:
