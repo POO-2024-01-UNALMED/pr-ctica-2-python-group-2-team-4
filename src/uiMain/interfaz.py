@@ -5,8 +5,9 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 import sys
-
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+
+from gestorAplicacion.servicios.proveedor import Proveedor
 from gestorAplicacion.servicios.carrito import Carrito
 from gestorAplicacion.sujetos.cliente import Cliente
 from gestorAplicacion.sujetos.persona import Persona
@@ -376,6 +377,19 @@ class Iniciar_ventana_usuario():
             Funcionalidad5.ingresar(window)
 
         def prueba(window):
+            proveedor1 = Proveedor(nombre="Proveedor de Alimentos", tipo=Categoria.ALIMENTO.get_texto())
+            proveedor2 = Proveedor(nombre="Proveedor de Bebidas", tipo=Categoria.BEBIDA.get_texto())
+            proveedor3 = Proveedor(nombre="Proveedor de Limpieza", tipo=Categoria.LIMPIEZA.get_texto())
+            proveedor4 = Proveedor(nombre="Proveedor de Productos Personales", tipo=Categoria.PERSONAL.get_texto())
+            proveedor5 = Proveedor(nombre="Proveedor de Hogar", tipo=Categoria.HOGAR.get_texto())
+            proveedor6 = Proveedor(nombre="Proveedor de Electrónica", tipo=Categoria.ELECTRONICO.get_texto())
+
+            # Agregarlos a la lista estática de proveedores
+            Proveedor.set_seis_proveedores([proveedor1, proveedor2, proveedor3, proveedor4, proveedor5, proveedor6])
+
+            for proveedor in Proveedor.get_seis_proveedores():
+                print(proveedor)
+
             matarloTodo2()
             funcionalidad = Funcionalidad4()
             widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
@@ -698,6 +712,12 @@ if __name__ == "__main__":
 
 
     admin7 = Administrador("Ricardo Díaz", 207, 45, Genero.H, 15000.0)
+
+        # Creación de los seis proveedores con diferentes categorías
+    
+
+    # Para verificar que están correctamente añadidos:
+    
   
     for tienda in admin1.get_tiendas():
         print(tienda.get_nombre())
