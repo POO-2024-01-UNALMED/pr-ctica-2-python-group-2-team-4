@@ -1,9 +1,9 @@
 import math
 from tkinter import *
-from tkinter import messagebox, simpledialog
+from tkinter import messagebox, simpledialog, font
 
 from uiMain.fieldFrame import FieldFrame
-
+import tkinter as tk
 
 class Funcionalidad2:
     def __init__(self):
@@ -203,17 +203,21 @@ class Funcionalidad2:
                 if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                     widget.destroy()
 
-            frame1 = Frame(window, bg="light blue")
+            frame = FieldFrame(window,
+                               "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                               [], "Escoja uno de los botones", [], [], "Funcionalidad2",
+                               "La funcionalidad se basas en darle la posibilidad al cliente de interactuar" + " con los productos de la tienda y con su carrito asociado" + "permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",
+                               False)
+            for widget in frame.campos.winfo_children():
+                widget.destroy()
+            frame1=frame.campos
+            frame1.config(bg="#69a0ce")
             frame1.pack(fill=BOTH, expand=True)
-
-            label_instrucciones = Label(frame1, text="Selecciona una categoría:",
-                                        font=("Arial", 16, "bold"), bg="light blue")
-            label_instrucciones.pack(pady=10)
 
             from gestorAplicacion.servicios.enums import Categoria
 
             # Frame para centrar los botones
-            frame_botones = Frame(frame1, bg="light blue")
+            frame_botones = Frame(frame1, bg="#69a0ce")
             frame_botones.pack(pady=20, expand=True)  # Asegura que el frame de botones esté centrado en el frame1
 
             # Mostrar categorías
@@ -225,6 +229,7 @@ class Funcionalidad2:
 
             Button(frame1, text="Volver", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                    command=lambda: self.elegir_tipo_busqueda(cliente,window)).pack(pady=10, anchor=CENTER)
+            frame.pack(fill=BOTH, expand=True)
 
         def buscar_productos_por_categoria(categoria,frame1):
             productos = cliente.get_tienda().buscar_productos(categoria)
@@ -235,13 +240,8 @@ class Funcionalidad2:
             mostrar_productos(frame1, productos)
 
         def mostrar_error(frame, mensaje):
-            for widget in frame.winfo_children():
-                if hasattr(widget, 'error_widget') and widget.error_widget:
-                    widget.destroy()
-
-            label_error = Label(frame, text=mensaje, font=("Arial", 12), fg="red", bg="light blue", borderwidth=2,
-                                relief="solid")
-            label_error.pack(pady=5, padx=10)
+            label_error = Label(frame, text=mensaje, font=("Arial", 14,"bold"), bg="#69a0ce",fg="red")
+            label_error.pack()
 
         def mostrar_productos(frame1, productos):
             for widget in frame1.winfo_children():
@@ -262,10 +262,6 @@ class Funcionalidad2:
                 # Limpiar los widgets existentes en el frame
                 for widget in frame1.winfo_children():
                     widget.destroy()
-
-                label_instrucciones = Label(frame1, text="Estos son los productos en la categoría seleccionada:",
-                                            font=("Arial", 16, "bold"), bg="light blue")
-                label_instrucciones.pack(pady=10)
                 # Mostrar los productos
 
                 for i, producto in enumerate(productos[inferior:superior], start=1):
@@ -279,7 +275,7 @@ class Funcionalidad2:
                     boton_producto.pack(fill=BOTH, expand=True)
 
                 # Controles de paginación
-                paginacion_frame = Frame(frame1, bg="light blue")
+                paginacion_frame = Frame(frame1, bg="#69a0ce")
                 paginacion_frame.pack(pady=10, fill=X, padx=20)
 
                 if inferior > 0:
@@ -294,14 +290,14 @@ class Funcionalidad2:
 
 
                 # Añadir el Entry para mostrar el producto seleccionado y la cantidad
-                label_producto = Label(frame1, text="Producto Seleccionado:", font=("Arial", 12), bg="light blue")
+                label_producto = Label(frame1, text="Producto Seleccionado:", font=("Arial", 12), bg="#69a0ce")
                 label_producto.pack(side="top", padx=5)
 
                 entry_producto = Entry(frame1, font=("Arial", 12), width=60)
                 entry_producto.pack(side="top", pady=5)
                 entry_producto.config(state="readonly")
 
-                label_cantidad = Label(frame1, text="Cantidad Deseada:", font=("Arial", 12), bg="light blue")
+                label_cantidad = Label(frame1, text="Cantidad Deseada:", font=("Arial", 12), bg="#69a0ce")
                 label_cantidad.pack(side="top", padx=5)
 
                 entry_cantidad = Entry(frame1, font=("Arial", 12))
@@ -682,7 +678,7 @@ class Funcionalidad2:
             if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
                 widget.destroy()
 
-        frame = Frame(window, bg="light blue", padx=20, pady=20)
+        frame = Frame(window, bg="#024A86", padx=20, pady=20)
         frame.pack(expand=True, fill=BOTH, padx=20, pady=20)
 
         # Etiqueta con mensaje en un cuadro de fondo
@@ -793,7 +789,15 @@ class Funcionalidad2:
                 if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                     widget.destroy()
 
-            frame1 = Frame(window, bg="light blue")
+            frame = FieldFrame(window,
+                               "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                               [], "Escoja uno de los botones", [], [], "Funcionalidad2",
+                               "La funcionalidad se basas en darle la posibilidad al cliente de interactuar" + " con los productos de la tienda y con su carrito asociado" + "permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",
+                               False)
+
+            frame1 = frame.campos
+            for widget in frame1.winfo_children():
+                widget.destroy()
             frame1.pack(fill=BOTH, expand=True)
 
             productos = cliente.get_carrito().get_productos()
@@ -808,9 +812,6 @@ class Funcionalidad2:
                 productos_cantidad[id_producto] = productos_cantidad.get(id_producto, 0) + 1
 
             # Crear interfaz para mostrar los productos en el carrito
-            label_instrucciones = Label(frame1, text="Estos son los productos en su carrito:",
-                                        font=("Arial", 16, "bold"), bg="light blue")
-            label_instrucciones.pack(pady=10)
 
             self.producto_seleccionado = None
 
@@ -834,14 +835,14 @@ class Funcionalidad2:
                 boton_producto.pack(fill=BOTH, expand=True)
 
             # Añadir el Entry para mostrar el producto seleccionado y la cantidad
-            label_producto = Label(frame1, text="Producto Seleccionado:", font=("Arial", 12), bg="light blue")
+            label_producto = Label(frame1, text="Producto Seleccionado:", font=("Arial", 12), bg="#69a0ce")
             label_producto.pack(side="top", padx=5)
 
             entry_producto = Entry(frame1, font=("Arial", 12), width=60)
             entry_producto.pack(side="top", pady=5)
             entry_producto.config(state="readonly")  # Solo lectura
 
-            label_cantidad = Label(frame1, text="Cantidad a Eliminar:", font=("Arial", 12), bg="light blue")
+            label_cantidad = Label(frame1, text="Cantidad a Eliminar:", font=("Arial", 12), bg="#69a0ce")
             label_cantidad.pack(side="top", padx=5)
 
             entry_cantidad = Entry(frame1, font=("Arial", 12))
@@ -873,6 +874,7 @@ class Funcionalidad2:
 
             Button(frame1, text="Volver", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                    command=lambda: self.elegir_tipo_busqueda(cliente,window)).pack(pady=10, anchor=CENTER)
+            frame.pack(fill=BOTH, expand=True)
 
         mostrar_productos()
 
@@ -911,33 +913,69 @@ class Funcionalidad2:
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
         frame=FieldFrame(window,"La búsqueda de nuestra tienda es"+" lo más accesible para nuestros clientes. ¿Que desea hacer?",[],"Escoja uno de los botones",[],[],"Funcionalidad2","La funcionalidad se basas en darle la posibilidad al cliente de interactuar"+" con los productos de la tienda y con su carrito asociado"+"permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",False)
-        boton1=Button(frame.campos,text="Buscar productos por categoría",command= lambda:self.elegir_categoria(cliente,window))
-        boton2=Button(frame.campos,text="Buscar productos por nombre",command= lambda:self.busqueda_nombre(cliente,window))
-        boton1.grid(row=1,column=1)
-        boton2.grid(row=1,column=2)
-        frame.pack(fill=BOTH, expand=True)
-        tienda = cliente.get_tienda()
+        custom_font = font.Font(family="Helvetica", size=14, weight="bold")
 
-        # Botón para descartar compra
-        boton4 = Button(frame.campos, text="Volver y descartar compra", command= lambda:self.descartar_compra(cliente,window))
-        boton4.grid(row=2, column=2)
+        frame.campos.config(bg="#69a0ce")
+        # Colores para el fondo y el texto
+        bg_color = "#4CAF50"  # Verde agradable para los botones
+        fg_color = "#FFFFFF"  # Blanco para el texto
 
+        frame.campos.grid_columnconfigure(0, weight=1)
+        frame.campos.grid_columnconfigure(1, weight=1)
+        frame.campos.grid_rowconfigure(0, weight=1)
+        frame.campos.grid_rowconfigure(1, weight=1)
+        frame.campos.grid_rowconfigure(2, weight=1)
+        frame.campos.grid_rowconfigure(3, weight=1)
+        frame.campos.grid_rowconfigure(4, weight=1)
+
+        # Botón para buscar productos por categoría
+        boton1 = tk.Button(frame.campos, text="Buscar productos por categoría",
+                           font=custom_font, bg=bg_color, fg=fg_color,
+                           width=15, height=2,
+                           command=lambda: self.elegir_categoria(cliente, window))
+        boton1.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
+
+        # Botón para buscar productos por nombre
+        boton2 = tk.Button(frame.campos, text="Buscar productos por nombre",
+                           font=custom_font, bg=bg_color, fg=fg_color,
+                           width=15, height=2,
+                           command=lambda: self.busqueda_nombre(cliente, window))
+        boton2.grid(row=1, column=2, padx=10, pady=10, sticky="ew")
+
+        # Botón para eliminar un producto del carrito
         if len(cliente.get_carrito().get_productos()) > 0:
-            boton3 = Button(frame.campos, text="Eliminar un producto de mi carrito",command= lambda:self.eliminar_producto_del_carrito(cliente,window))
-            boton3.grid(row=2, column=1)
+            boton3 = tk.Button(frame.campos, text="Eliminar un producto de mi carrito",
+                               font=custom_font, bg=bg_color, fg=fg_color,
+                               width=15, height=2,
+                               command=lambda: self.eliminar_producto_del_carrito(cliente, window))
+            boton3.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
 
         # Botón para guardar carrito como factura
         if len(cliente.get_carrito().get_productos()) > 0:
-            boton5 = Button(frame.campos, text="Guardar carrito como factura",command= lambda:self.mostrar_factura_guardada(window,cliente))
-            boton5.grid(row=3, column=1)
+            boton5 = tk.Button(frame.campos, text="Guardar carrito como factura",
+                               font=custom_font, bg=bg_color, fg=fg_color,
+                               width=15, height=2,
+                               command=lambda: self.mostrar_factura_guardada(window, cliente))
+            boton5.grid(row=2, column=2, padx=10, pady=10, sticky="ew")
+
+        # Botón para descartar compra
+        boton4 = tk.Button(frame.campos, text="Volver y descartar compra",
+                           font=custom_font, bg="#F44336", fg=fg_color,  # Rojo para destacar
+                           width=15, height=2,
+                           command=lambda: self.descartar_compra(cliente, window))
+        boton4.grid(row=3, column=1, padx=10, pady=10, sticky="ew")
 
         # Mostrar el monto actual
         monto_actual = sum([producto.get_precio() for producto in cliente.get_carrito().get_productos()])
-        label_monto = Label(frame.campos,
-                            text=f"Recuerde que el monto que le queda para gastar es {cliente.get_dinero() - monto_actual}$")
-        label_monto.grid(row=4, column=1, columnspan=2)
+        label_monto = tk.Label(frame.campos,
+                               text=f"Recuerde que el monto que le queda para gastar es {cliente.get_dinero() - monto_actual}$",
+                               font=custom_font, fg="#333333",bg="#69a0ce")  # Gris oscuro para el texto
+        label_monto.grid(row=4, column=1, columnspan=2, padx=10, pady=10, sticky="ew")
 
-        frame.pack(fill=BOTH, expand=True)
+        # Configurar el layout de la cuadrícula para ajustar el tamaño de las columnas
+
+        # Asegurar que el Frame principal también se expanda correctamente
+        frame.pack(expand=True, fill=tk.BOTH)
 
         """if tienda is None:
             #Main.lineas()  # Implementar este método
