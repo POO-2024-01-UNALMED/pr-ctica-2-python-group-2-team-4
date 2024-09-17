@@ -1,6 +1,6 @@
 import sys
 from tkinter import Frame, Label, Entry, Button, messagebox, simpledialog, IntVar, Radiobutton, StringVar, RIGHT, LEFT, \
-    font
+    font, BOTH
 
 from numpy.ma.core import filled
 
@@ -43,24 +43,24 @@ class Funcionalidad3:
         # Verificar si hay tiendas con facturas
         if not tiendas:
             Label(frame1, text="No tienes facturas en ninguna tienda.",
-                  font=("Arial", 14), bg="light blue").pack(pady=20)
+                  font=("Arial", 14), bg="#69a0ce").pack(pady=20)
             return
 
         # Crear un frame para mostrar las tiendas
-        frame_tiendas = Frame(frame1, bg="light blue")
+        frame_tiendas = Frame(frame1, bg="#69a0ce")
         frame_tiendas.pack(fill='both', expand=True, pady=20)
 
         # Título
         Label(frame_tiendas, text="Selecciona una tienda:",
-              font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
+              font=("Arial", 16, "bold"), bg="#69a0ce").pack(pady=10)
 
         # Crear Listbox para las tiendas
-        listbox_tiendas = Listbox(frame_tiendas, font=("Arial", 12), width=50, height=10)
-        listbox_tiendas.pack(side='left', fill='y', padx=10)
+        listbox_tiendas = Listbox(frame_tiendas, font=("Arial", 24),width=50)
+        listbox_tiendas.pack(side='left', padx=10)
 
         # Scrollbar para el Listbox
         scrollbar = Scrollbar(frame_tiendas, orient=VERTICAL)
-        scrollbar.pack(side='right', fill='y')
+        scrollbar.pack(side='right', fill='both')
         listbox_tiendas.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=listbox_tiendas.yview)
 
@@ -82,7 +82,7 @@ class Funcionalidad3:
                command=seleccionar_tienda).pack(pady=10)
 
         def mostrar_error(mensaje):
-            Label(frame_tiendas, text=mensaje, font=("Arial", 12), fg="red", bg="light blue").pack(pady=10)
+            Label(frame_tiendas, text=mensaje, font=("Arial", 12), fg="red", bg="#69a0ce").pack(pady=10)
 
         frame.pack(fill='both', expand=True, pady=20)
 
@@ -96,16 +96,16 @@ class Funcionalidad3:
         mis_facturas = persona.get_facturas1(tienda_seleccionada)
 
         # Crear un frame para mostrar las facturas
-        frame_facturas = Frame(frame1, bg="light blue")
+        frame_facturas = Frame(frame1, bg="#69a0ce")
         frame_facturas.pack(fill='both', expand=True, pady=20)
 
         # Título
         Label(frame_facturas, text="Selecciona una factura:",
-              font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
+              font=("Arial", 16, "bold"), bg="#69a0ce").pack(pady=10)
 
         # Crear Listbox para las facturas
-        listbox_facturas = Listbox(frame_facturas, font=("Arial", 12), width=70, height=10)
-        listbox_facturas.pack(side='left', fill='y', padx=10)
+        listbox_facturas = Listbox(frame_facturas, font=("Arial", 24), width=60, height=10)
+        listbox_facturas.pack(side='left', fill=BOTH, padx=10)
 
         # Scrollbar para el Listbox
         scrollbar = Scrollbar(frame_facturas, orient=VERTICAL)
@@ -129,7 +129,7 @@ class Funcionalidad3:
 
         Button(frame_facturas, text="Seleccionar factura",
                font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
-               command=seleccionar_factura).pack(pady=10)
+               command=seleccionar_factura).pack(pady=10,padx=40)
 
         def mostrar_error(mensaje):
             Label(frame_facturas, text=mensaje, font=("Arial", 12), fg="red", bg="light blue").pack(pady=10)
@@ -143,23 +143,32 @@ class Funcionalidad3:
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
 
+        frame = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Funcionalidad 3",
+                           "La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",
+                           False)
+
+        frame1=frame.campos
+        for widget in frame1.winfo_children():
+            widget.destroy()
         # Crear un frame para mostrar los detalles
-        frame_detalle = Frame(window, bg="light blue")
+        frame_detalle = Frame(frame1, bg="#69a0ce")
         frame_detalle.pack(fill='both', expand=True, pady=20)
 
         # Título
         Label(frame_detalle, text="Detalles de la Factura",
-              font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
+              font=("Arial", 16, "bold"), bg="#69a0ce").pack(pady=10)
 
         # Encabezado
         Label(frame_detalle, text="Productos de la factura:",
-              font=("Arial", 14, "bold"), bg="light blue").pack(pady=10)
+              font=("Arial", 14, "bold"), bg="#69a0ce").pack(pady=10)
 
         for numero_producto, producto in enumerate(factura_seleccionada.get_productos(), start=1):
             if producto:
                 Label(frame_detalle,
                       text=f"{numero_producto}. {producto.get_nombre()} - {producto.get_marca()} - {producto.get_tamano().get_tamano()} - {producto.get_categoria().get_texto()} - ${producto.get_precio():.2f}",
-                      font=("Arial", 12), bg="light blue").pack(pady=5)
+                      font=("Arial", 12), bg="#69a0ce").pack(pady=5)
 
         # Opciones adicionales
         if isinstance(persona, Administrador):
@@ -174,27 +183,32 @@ class Funcionalidad3:
 
         elif isinstance(persona, Cliente):
             Label(frame_detalle, text="Opciones:",
-                  font=("Arial", 12, "bold"), bg="light blue").pack(pady=10)
+                  font=("Arial", 12, "bold"), bg="#69a0ce").pack(pady=10)
             Button(frame_detalle, text="Pagar factura",
                    font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
-                   command=lambda: self.seleccionar_caja(persona,factura_seleccionada,window)).pack()
+                   command=lambda: self.seleccionar_caja(persona,factura_seleccionada,window)).pack(pady=10)
             Button(frame_detalle, text="Escoger otra factura",
                    font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
-                   command=lambda: self.impresion_facturas(persona, window)).pack(pady=5)
-            Button(frame_detalle, text="Salir de funcionalidad",
-                   font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
-                   command=lambda: Main.escoger_funcionalidad()).pack(pady=5)
+                   command=lambda: self.impresion_facturas(persona, window)).pack(pady=10)
+        frame.pack(fill='both', expand=True, pady=20)
 
     def seleccionar_caja(self, cliente, carrito, window):
         widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
+        frame = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Funcionalidad 3",
+                           "La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",
+                           False)
+
 
         cajas = cliente.get_tienda().cajas_disponibles()
-        frame=Frame(window)
+        frame1=frame.campos
+        for widget in frame1.winfo_children():
+            widget.destroy()
         frame.pack(fill='both', expand=True, pady=20)
-
         def esperar_caja():
             pass
 
@@ -202,20 +216,20 @@ class Funcionalidad3:
             pass
 
         if not cajas:
-            mensaje_label = Label(frame, text="No hay cajas disponibles.")
+            mensaje_label = Label(frame1, text="No hay cajas disponibles.")
             mensaje_label.pack(pady=5)
 
             # Botón para esperar a que una caja esté disponible
-            esperar_button = Button(frame, text="Esperar a que una caja esté disponible",
+            esperar_button = Button(frame1, text="Esperar a que una caja esté disponible",
                                        command=esperar_caja)
             esperar_button.pack(pady=5)
 
             # Botón para no pagar y salir
-            salir_button = Button(frame, text="No pagar y salir", command=salir)
+            salir_button = Button(frame1, text="No pagar y salir", command=salir)
             salir_button.pack(pady=5)
 
         else:
-            caja_label = Label(frame, text="Seleccione una caja para pagar:")
+            caja_label = Label(frame1, text="Seleccione una caja para pagar:",bg="#69a0ce")
             caja_label.pack(pady=5)
 
             # Definir una fuente personalizada para los botones
@@ -230,13 +244,13 @@ class Funcionalidad3:
 
                 # Crear el botón con propiedades personalizadas
                 caja_button = tk.Button(
-                    frame,
+                    frame1,
                     text=caja_info,
                     font=custom_font,
                     bg=bg_color,
                     fg=fg_color,
                       # Ajusta el ancho del botón
-                    height=3,  # Ajusta la altura del botón
+                    height=1,  # Ajusta la altura del botón
                     relief=tk.RAISED,  # Añade un efecto de relieve
                     bd=4,  # Bordes más gruesos
                     command=lambda c=caja: self.pagar_factura(cliente, carrito, c, window)
@@ -250,19 +264,27 @@ class Funcionalidad3:
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
+        frame = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Funcionalidad 3",
+                           "La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",
+                           False)
+        frame1=frame.campos
+        for widget in frame1.winfo_children():
+            widget.destroy()
         descuento_membresia = cliente.calcular_descuento_por_membresia()
         precio_total = carrito.calcular_total()
         self.precio_con_descuento = precio_total * (1 - descuento_membresia)
 
         # Imprimir factura con descuento por membresía
-        frame=Frame(window,bd=2,relief="solid")
         factura_text = carrito.generar_detalles_factura(descuento_membresia, False)
-        Label(frame, text=factura_text, justify=LEFT,font=("Helvetica",24)).pack()
-        frame.pack(fill='x', expand=True, pady=20)
+        Label(frame1, text=factura_text, justify=LEFT,font=("Helvetica",20)).pack()
+        frame1.pack(fill='x', expand=True, pady=20)
         # Opción de borrar la factura antes de pagar
-        Label(window, text="¿Desea borrar esta factura y no pagarla?",font=("Helvetica",24)).pack(pady=5)
-        Button(window, text="Sí",font=("Helvetica",20), command=lambda:self.borrar_factura(carrito,cliente,caja_seleccionada)).pack(side=LEFT, padx=10, pady=10)
-        Button(window, text="No",font=("Helvetica",20), command=lambda: self.opcion_juego(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10, pady=10)
+        Label(frame1, text="¿Desea borrar esta factura y no pagarla?",font=("Helvetica",20)).pack(pady=5)
+        Button(frame1, text="Sí",font=("Helvetica",20),bg="red",width=10, command=lambda:self.borrar_factura(carrito,cliente,caja_seleccionada)).pack(side=LEFT, padx=10, pady=10)
+        Button(frame1, text="No",font=("Helvetica",20),bg="light green",width=10, command=lambda: self.opcion_juego(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10, pady=10)
+        frame.pack(fill='both', expand=True, pady=20)
 
     def borrar_factura(self,carrito,cliente,caja_seleccionada):
         carrito.eliminar_carrito()
@@ -278,24 +300,38 @@ class Funcionalidad3:
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
+        frame = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Funcionalidad 3",
+                           "La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",
+                           False)
+        frame1=frame.campos
+        for widget in frame1.winfo_children():
+            widget.destroy()
         self.gano_juego = False
-        Label(window, text="¿Desea intentar obtener un descuento adicional jugando?").pack(pady=5)
-        Button(window, text="Sí", command=lambda: self.seleccionar_juego(cliente,carrito,caja_seleccionada,window)).pack(side=LEFT, padx=10)
-        Button(window, text="No", command=lambda: self.confirmar_pago(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
+        Label(frame1, text="¿Desea intentar obtener un descuento adicional jugando?, pagara 10 mil si no tiene membresia",font=("Helvetica",20),bg="#69a0ce").pack(pady=5)
+        Button(frame1, text="Sí",bg="light green",font=("Helvetica",20),width=20, command=lambda: self.seleccionar_juego(cliente,carrito,caja_seleccionada,window)).pack(side=LEFT, padx=10)
+        Button(frame1, text="No",bg="red",width=20,font=("Helvetica",20), command=lambda: self.confirmar_pago(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
+        frame.pack(fill='both', expand=True, pady=20)
 
     def seleccionar_juego(self,cliente,carrito,caja_seleccionada, window):
         widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
+        frame = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Funcionalidad 3",
+                           "La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",
+                           False)
+        frame1 = frame.campos
+        for widget in frame1.winfo_children():
+            widget.destroy()
 
-        tiene_membresia = cliente.get_membresia() is not None
-        if not tiene_membresia:
-            messagebox.showinfo("Juego", "Debe pagar 10 mil para intentar jugar.")
-            carrito.incrementar_costo(10000)
-        Label(window, text="Seleccione un juego:").pack(pady=5)
-        Button(window, text="Tres en Raya", command=lambda: self.jugar(cliente,carrito,caja_seleccionada,window,1)).pack(side=LEFT, padx=10)
-        Button(window, text="Ahorcado", command=lambda: self.jugar(cliente,carrito,caja_seleccionada,window, 2)).pack(side=RIGHT, padx=10)
+        Label(frame1, text="Seleccione un juego:").pack(pady=5)
+        Button(frame1, text="Tres en Raya", command=lambda: self.jugar(cliente,carrito,caja_seleccionada,window,1)).pack(side=LEFT, padx=10)
+        Button(frame1, text="Ahorcado", command=lambda: self.jugar(cliente,carrito,caja_seleccionada,window, 2)).pack(side=RIGHT, padx=10)
+        frame.pack(fill='both', expand=True, pady=20)
 
     def ahorcado(self, window):
         from gestorAplicacion.servicios.ahorcado import Ahorcado
@@ -404,7 +440,7 @@ class Funcionalidad3:
                 button.config(state=tk.DISABLED)
 
         buttons = []
-        frame=Frame(window)
+        frame=Frame(window,bg="#69a0ce")
         frame.pack(fill='both', expand=True, pady=20)
         frame.grid_columnconfigure(0, weight=1)
         frame.grid_columnconfigure(1, weight=1)
@@ -435,12 +471,21 @@ class Funcionalidad3:
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
+        frame = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Funcionalidad 3",
+                           "La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",
+                           False)
+        frame1 = frame.campos
+        for widget in frame1.winfo_children():
+            widget.destroy()
         self.ya_jugo = False
+        frame.pack(fill='both', expand=True, pady=20)
 
         if seleccion_juego == 1:
-            self.gano_juego = self.tres_en_raya(window)
+            self.gano_juego = self.tres_en_raya(frame1)
         elif seleccion_juego == 2:
-            self.gano_juego = self.ahorcado(window)
+            self.gano_juego = self.ahorcado(frame1)
 
         if self.gano_juego:
             tk.messagebox.showinfo("Juego", "¡Felicidades! Ha ganado un descuento adicional del 10%.")
@@ -455,12 +500,21 @@ class Funcionalidad3:
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
+        frame = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Funcionalidad 3",
+                           "La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",
+                           False)
+        frame1 = frame.campos
+        for widget in frame1.winfo_children():
+            widget.destroy()
 
-        Label(window, text="¿Desea pagar la factura?").pack(pady=5)
+        Label(frame1, text="¿Desea pagar la factura?").pack(pady=5)
         factura_text = carrito.generar_detalles_factura(cliente.calcular_descuento_por_membresia(), self.gano_juego)
-        Label(window, text=factura_text, justify=LEFT).pack(pady=10)
-        Button(window, text="Sí", command=lambda: self.pagar_factura1(cliente,carrito,caja_seleccionada,window)).pack(side=LEFT, padx=10)
-        Button(window, text="No", command=lambda: self.cancelar_pago(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
+        Label(frame1, text=factura_text, justify=LEFT).pack(pady=10)
+        Button(frame1, text="Sí", command=lambda: self.pagar_factura1(cliente,carrito,caja_seleccionada,window)).pack(side=LEFT, padx=10)
+        Button(frame1, text="No", command=lambda: self.cancelar_pago(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
+        frame.pack(fill='both', expand=True, pady=20)
 
     def cancelar_pago(self,cliente,carrito,caja_seleccionada,window):
         cliente.set_tienda(None)
@@ -496,6 +550,7 @@ class Funcionalidad3:
         carrito.set_caja(None)
 
         messagebox.showinfo("Pago", "La factura ha sido pagada exitosamente.")
+        self.impresion_facturas(cliente, window)
 
 
 """ caja_seleccionada.cliente = cliente

@@ -159,7 +159,7 @@ class Tienda:
 
         for tienda in tiendas_disp:
             # Verificar si la tienda tiene empleados y productos disponibles
-            if len(tienda.get_empleados()) > 0 and tienda.disponibilidad_productos():
+            if (len(tienda.get_empleados()) > 0) and tienda.disponibilidad_productos():
                 tiendas_validas.append(tienda)  # Agregar la tienda a la lista si cumple con las condiciones
 
         return tiendas_validas

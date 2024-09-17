@@ -124,13 +124,15 @@ class Iniciar_ventana_usuario():
         from uiMain.funcionalidad1 import Funcionalidad1
         from gestorAplicacion.sujetos.cliente import Cliente
         from gestorAplicacion.sujetos.persona import Persona
+        """"
         cliente = None
         for persona in Persona.get_personas():
-            if persona.get_nombre() == "Juan Pérez":
+            if persona.get_nombre() == "Carlos":
                 print(f"Bienvenido {persona.get_nombre()}")
                 cliente = persona
+        """
         funcionalidad1 = Funcionalidad1()
-        funcionalidad1.consultasEco(cliente, window)
+        funcionalidad1.ingresar(window)
     def __init__(self):
         def matarloTodo(frameUtilizado):
             for frame in framesAMatar:
@@ -760,6 +762,11 @@ if __name__ == "__main__":
 
         # Obtener la tienda del cliente
         tienda = cliente.get_tienda()
+
+        for t in tienda.get_cajas():
+            tienda.get_empleados().append(t.get_cajero())
+        print(len(tienda.get_empleados()))
+        print(tienda.get_nombre())
         if tienda is None:
             print("El cliente no está asociado a ninguna tienda.")
         else:

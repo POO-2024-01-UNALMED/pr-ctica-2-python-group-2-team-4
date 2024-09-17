@@ -211,6 +211,19 @@ class Identidad2:
                 if entry.get() == "":
                     messagebox.showerror("Error", "Faltan campos por completar")
                     return
+
+            p = self.frame_actual._entrys[0].get()  # Suponiendo que el ID está en el primer Entry
+
+            from gestorAplicacion.sujetos.persona import Persona
+            personas = Persona.get_personas()
+            for persona in Persona.personas:
+                if (int(persona.get_id()))==(int(p)):
+                    self.resultado = persona
+                    self.mostrar_mensaje(f"Bienvenido {persona.get_nombre()}")
+                    return persona
+            if not self.resultado:
+                self.mostrar_alerta(p)
+
             try:
                 p = int(self.frame_actual._entrys[0].get()) # Suponiendo que el ID está en el primer Entry
                 from gestorAplicacion.sujetos.persona import Persona
@@ -224,6 +237,7 @@ class Identidad2:
             except ValueError:
                 messagebox.showerror("Error", "valor no numerico")
                 self.identificar_persona()
+
 
         # Iniciar el proceso de identificación
         criterios = ["ID"]
@@ -285,7 +299,7 @@ class Identidad2:
             if decision == "1":
                 # Importar Cliente solo cuando sea necesario
                 from gestorAplicacion.sujetos.cliente import Cliente
-                persona = Cliente(nombre, id, edad, genero)
+                persona = Cliente(nombre, id, int(edad), genero)
                 self.resultado = persona              
                 self.mostrar_mensaje(f"Usuario Cliente creado con éxito. Bienvenido {nombre}")
             else:

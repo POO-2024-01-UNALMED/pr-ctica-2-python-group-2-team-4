@@ -141,7 +141,6 @@ class Cliente(Persona):
             cliente.set_membresia(nueva_membresia)
             return f"Ahora eres miembro de la membresía {nueva_membresia.get_nombre()}.\n Tu saldo total quedo en: ${cliente.get_dinero()}"
         else:
-            return f"Lo siento, no tienes suficiente saldo para evolucionar a {nueva_membresia.nombre}"
             return f"Lo siento, no tienes suficiente saldo para evolucionar a {nueva_membresia.get_nombre()}"
 
     @staticmethod
