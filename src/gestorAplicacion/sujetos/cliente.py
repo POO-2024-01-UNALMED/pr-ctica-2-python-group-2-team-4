@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from gestorAplicacion.sujetos.persona import Persona
 from gestorAplicacion.servicios.carrito import Carrito
 from gestorAplicacion.servicios.enums import Genero, Edades
@@ -130,8 +132,16 @@ class Cliente(Persona):
         return [c for c in tienda_seleccionada.get_facturas() if c.get_cliente() == self]
 
     def get_tiendas_con_facturas(self):
-        tiendas = set(factura.get_tienda() for factura in self._facturas if factura)
-        return list(tiendas)
+        tienda_con_facturas = defaultdict(int)  # Usamos defaultdict para simplificar el conteo
+
+        for factura in self._facturas:
+            if factura:
+                tienda = factura.get_tienda()
+                if tienda:
+                    tienda_con_facturas[tienda] += 1  # Contar las facturas por tienda
+
+        # Devolver la lista de tiendas únicas con al menos una factura
+        return list(tienda_con_facturas.keys())
 
     def calcular_descuento_por_membresia(self):
         if self._membresia:

@@ -16,7 +16,7 @@ class Funcionalidad1:
 
 
     cliente = None
-
+    #--------------------------------------------------------------------------------------------------------------------------------------------
     def funcion2(self,cliente,window):
         from uiMain.funcionalidad2 import Funcionalidad2
         from gestorAplicacion.sujetos.cliente import Cliente
@@ -24,7 +24,7 @@ class Funcionalidad1:
         from gestorAplicacion.sujetos.persona import Persona
         funcionalidad2 = Funcionalidad2()
         funcionalidad2.elegir_tipo_busqueda(cliente, window)
-
+    #--------------------------------------------------------------------------------------------------------------------------------------------
     """
     @classmethod
     def ingresar(cls, window):
@@ -36,7 +36,7 @@ class Funcionalidad1:
             else:
                 cls.ingresar(window)
         """
-       
+    #--------------------------------------------------------------------------------------------------------------------------------------------
     def consultasEco(self, cliente, window):
         from gestorAplicacion.servicios.tienda import Tienda
         widgets = window.winfo_children()
@@ -73,7 +73,7 @@ class Funcionalidad1:
 
         # Botón 2: Consulta de productos por categoría
         boton2 = Button(boton_frame, text="Consulta de productos por categoría",
-                        font=("Arial", 15),command=lambda:self.printTiendas())
+                        font=("Arial", 15),command=lambda:self.categoria(cliente,window))
         boton2.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 3: Consulta de membresías
@@ -91,13 +91,13 @@ class Funcionalidad1:
 
         # Mostrar el frame con los botones
         zona2Fun1.pack(fill=BOTH, expand=True)
-
+    #--------------------------------------------------------------------------------------------------------------------------------------------
     def printTiendas(self):
        tienditas=Tienda.revision_tienda(Tienda.get_tiendas())
        for i in tienditas:
            c=  isinstance(i,Tienda)
            print(c)
-
+    #--------------------------------------------------------------------------------------------------------------------------------------------
     def consulta_general_productos(self, cliente, window,page=1):
         from gestorAplicacion.sujetos.cliente import Cliente
         from uiMain.main import Main
@@ -166,8 +166,8 @@ class Funcionalidad1:
             Button(tiendas_frame, text="Volver a Consultas",
                    font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
                    width=35, command=lambda: self.consultasEco(cliente,window)).pack(pady=10, anchor=CENTER)
-
-    def aplicar_presupuesto(self, cliente, tienda, window):
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+    def aplicar_presupuesto(self, cliente, tienda, window,cat=None):
             widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
             for i, widget in enumerate(widgets):
                 if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
@@ -191,7 +191,7 @@ class Funcionalidad1:
 
             # Botón para presupuesto por defecto
             button_defecto = Button(presu_frame, text="Presupuesto por defecto", font=("Arial", 12),
-                                       command=lambda: self.enlace(cliente, tienda, None, window))
+                                       command=lambda: self.enlace(cliente, tienda, None, window,cat))
             button_defecto.pack(pady=5)
 
             # Label y cuadro de texto para presupuesto personalizado
@@ -203,11 +203,11 @@ class Funcionalidad1:
 
             # Botón para aplicar presupuesto personalizado
             button_personalizado = (Button(presu_frame, text="Aplicar presupuesto personalizado", font=("Arial", 12),
-                                             command=lambda: self.enlace(cliente, tienda,self.entry_presupuesto.get(), window)))
+                                             command=lambda: self.enlace(cliente, tienda,self.entry_presupuesto.get(), window,cat)))
             button_personalizado.pack(pady=10)
 
-
-    def enlace(self, cliente, tienda, presupuesto, window):
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+    def enlace(self, cliente, tienda, presupuesto, window,cat=None):
 
 
         numero = presupuesto
@@ -216,7 +216,7 @@ class Funcionalidad1:
             cliente.asignaciones(cliente, tienda, 100000, 50000)
             print(cliente.get_dinero())
             print(cliente.get_tienda().get_nombre())
-            self.presupuestoAsignado(cliente, tienda, window)
+            self.presupuestoAsignado(cliente, tienda, window,cat)
         else:
             try:
                 numero = float(numero)  # Intentamos convertir el valor a float
@@ -226,18 +226,12 @@ class Funcionalidad1:
                 cliente.asignaciones(cliente, tienda, 100000, 50000, float(presupuesto))
                 print(cliente.get_dinero())
                 print(cliente.get_tienda().get_nombre())
-                self.presupuestoAsignado(cliente, tienda, window)
+                self.presupuestoAsignado(cliente, tienda, window,cat)
             else:
                 messagebox.showinfo("No se asigno el presupuesto","Vuelve a intentarlo")
                 self.aplicar_presupuesto(cliente, tienda, window)
-
-
-
-
-
-
-
-    def presupuestoAsignado(self,cliente,tienda,window):
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+    def presupuestoAsignado(self,cliente,tienda,window,cat=None):
         widgets = window.winfo_children()
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
@@ -260,11 +254,16 @@ class Funcionalidad1:
         boton_frame.rowconfigure(2, weight=1)
         boton_frame.rowconfigure(3, weight=1)
 
-
-        # Botón 1: Consulta general de productos
-        boton1 = Button(boton_frame, text="Desea ver la descripcion de productos en la tienda",
-                        font=("Arial", 15),command=lambda:self.mostrar_productos_general(cliente,tienda,window))
-        boton1.grid(row=1, column=0, sticky='ew', padx=50, pady=10)
+        if cat==None:
+            # Botón 1: Consulta general de productos
+            boton1 = Button(boton_frame, text="Desea ver la descripcion de productos en la tienda",
+                            font=("Arial", 15),command=lambda:self.mostrar_productos_general(cliente,tienda,window))
+            boton1.grid(row=1, column=0, sticky='ew', padx=50, pady=10)
+        else:
+            # Botón 1: Consulta general de productos
+            boton1 = Button(boton_frame, text="Desea ver la descripcion de productos en la tienda",
+                            font=("Arial", 15), command=lambda: self.mostrar_productos_por_categoria(cliente, tienda,cat, window))
+            boton1.grid(row=1, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 2: Consulta de productos por categoría
         boton2 = Button(boton_frame, text="Desea ir a la fun2 para empezar a hacer sus compras",
@@ -282,7 +281,7 @@ class Funcionalidad1:
 
         # Mostrar el frame con los botones
         zona2Fun1.pack(fill=BOTH, expand=True)
-
+    #--------------------------------------------------------------------------------------------------------------------------------------------
     def mostrar_productos_general(self, cliente, tienda, window, page=1):
         widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
         for i, widget in enumerate(widgets):
@@ -318,7 +317,7 @@ class Funcionalidad1:
 
         for i, producto in enumerate(productos):
             Button(botones_frame,
-                   text=f"{i + 1}. {producto.get_nombre()} ",
+                   text=f"{producto.get_nombre()} ",
                    font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
                    width=35, command=lambda prod=producto: self.detalles(cliente,tienda,producto, window)).pack(pady=5,
                                                                                                              anchor=CENTER)
@@ -340,8 +339,8 @@ class Funcionalidad1:
 
         Button(productos_frame, text="Volver", font=("Arial", 12), bg="#243340", padx=30, pady=15,fg="white",
                width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
-
-    def detalles(self,cliente,tienda,producto, window):
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+    def detalles(self,cliente,tienda,producto, window,cat=None):
         widgets = window.winfo_children()
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
@@ -353,9 +352,10 @@ class Funcionalidad1:
                                f"{producto.get_descripcion()}"
                                , False, 25, 15, "#243340", "white", "black", "#F2F2F2", 0, 800)
 
+
         # Crear un Frame para los botones y añadirlo al `FieldFrame`
         boton_frame = Frame(zona2Fun1.campos, bg="#F2F2F2")
-        boton_frame.grid(row=0, column=1, columnspan=2, pady=20, padx=10, sticky='nsew')
+        boton_frame.grid(row=4, column=1, columnspan=2, pady=20, padx=10, sticky='nsew')
 
         # Configurar las columnas y filas del `boton_frame` para que se expandan
         boton_frame.columnconfigure(0, weight=1)
@@ -363,10 +363,14 @@ class Funcionalidad1:
         boton_frame.rowconfigure(1, weight=1)
         boton_frame.rowconfigure(2, weight=1)
         boton_frame.rowconfigure(3, weight=1)
-
-        # Botón 3: Consulta de membresías
-        boton3 = Button(boton_frame, text="Mirar otro Producto", font=("Arial", 15),command=lambda:self.mostrar_productos_general(cliente,tienda,window))
-        boton3.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
+        if cat==None:
+            # Botón 3: Consulta de membresías
+            boton3 = Button(boton_frame, text="Mirar otro Producto", font=("Arial", 15),command=lambda:self.mostrar_productos_general(cliente,tienda,window))
+            boton3.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
+        else:
+            # Botón 3: Consulta de membresías
+            boton3 = Button(boton_frame, text="Mirar otro Producto", font=("Arial", 15),command=lambda: self.mostrar_productos_por_categoria(cliente,tienda,cat,window))
+            boton3.grid(row=3, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 4: Volver al menú principal
         boton4 = Button(boton_frame, text="Volver al Ecosistema de consultas", font=("Arial", 15),command=lambda:self.consultasEco(cliente,window))
@@ -378,6 +382,197 @@ class Funcionalidad1:
 
         # Mostrar el frame con los botones
         zona2Fun1.pack(fill=BOTH, expand=True)
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+    def categoria(self, cliente, window):
+            # Limpieza de cualquier mensaje previo en la ventana
+            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+            for i, widget in enumerate(widgets):
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                    widget.destroy()
+
+            # Recolectar y mostrar las categorías disponibles
+            from gestorAplicacion.servicios.enums import Categoria
+
+            # Crear el marco para las categorías
+            categorias_frame = Frame(window, bg="#243340")
+            categorias_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            Label(categorias_frame, text="Estas son las categorías de los productos de nuestras tiendas:",
+                  font=("Arial", 16), bg="#F2F2F2").pack(pady=10)
+
+            # Crear un marco adicional para centrar los botones
+            botones_frame = Frame(categorias_frame, bg="#243340")
+            botones_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            enumerado = 1
+            categoria_dict = {}
+            for tipo in Categoria:
+                categoria_dict[enumerado] = tipo
+                Button(botones_frame, text=f"{enumerado}. {tipo.get_texto()}",
+                       font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                       width=35,
+                       command=lambda cat=tipo: self.consulta_categoria(cliente, cat, window)).pack(
+                    pady=5, anchor=CENTER)
+                enumerado += 1
+
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+    def consulta_categoria(self, cliente,cat, window,page=1):
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from uiMain.main import Main
+        from gestorAplicacion.servicios.tienda import Tienda
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        # Crear el marco para las Tiendas
+        tiendasGeneral_frame = Frame(window, bg="#243340")
+        tiendasGeneral_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        # Crear el marco para las Tiendas
+        tiendas_frame = Frame(tiendasGeneral_frame, bg="#243340")
+        tiendas_frame.pack(pady=10, fill=BOTH, expand=True)
+
+        if Tienda.buscar_tienda_categoria(cat):
+            tiendas = Tienda.categoria_tienda(cat)
+            Label(tiendas_frame, text=f"Selecciona una de las tiendas que tenemos disponibles para ti en la categoria {cat.get_texto()}:",
+                  font=("Arial", 16), bg="#F2F2F2", fg="black").pack(pady=10)
+            # Definir número de tiendas por página
+            tiendas_por_pagina = 4
+            total_paginas = math.ceil(len(tiendas) / tiendas_por_pagina)
+            tiendas_pagina = tiendas[(page - 1) * tiendas_por_pagina: page * tiendas_por_pagina]
+
+            # Crear un marco adicional para centrar los botones
+            botones_frame = Frame(tiendas_frame, bg="#243340")
+            botones_frame.pack(padx=100, pady=20, fill=BOTH, expand=True)
+
+            # Mostrar las tiendas en la página actual
+            indice = 1 + (page - 1) * tiendas_por_pagina
+
+            for tienda in tiendas_pagina:
+                Button(botones_frame, text=f"{indice}. {tienda.get_nombre()}",
+                       font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                       width=35,
+                       command=lambda t=tienda: self.aplicar_presupuesto(cliente, t, window,cat)
+                       ).pack(pady=5, anchor=CENTER)
+                indice += 1
+
+            # Controles de paginación
+            paginacion_frame = Frame(tiendas_frame, bg="#243340")
+            paginacion_frame.pack(pady=10)
+
+            # Botón "Anterior" para ir a la página anterior
+            if page > 1:
+                Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#F2F2F2", fg="black",
+                       command=lambda: self.consulta_categoria(cliente,cat, window, page - 1)).pack(side="left",
+                                                                                                        padx=5)
+
+            # Botón "Siguiente" para ir a la página siguiente
+            if page < total_paginas:
+                Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#F2F2F2", fg="black",
+                       command=lambda: self.consulta_categoria(cliente,cat, window, page + 1)).pack(side="right",
+                                                                                                        padx=5)
+
+            # Botón "Volver" para regresar a la pantalla anterior
+            Button(botones_frame, text=f"{indice}. Volver",
+                   font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                   width=35, command=lambda: self.categoria(cliente, window)).pack(pady=5, anchor=CENTER)
+        else:
+            Label(tiendas_frame,
+                  text="No hay tiendas disponibles en el momento.",
+                  font=("Arial", 44), bg="#F2F2F2").pack(pady=10)
+            Button(tiendas_frame, text="Volver a Consultas",
+                   font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                   width=35, command=lambda: self.consultasEco(cliente,window)).pack(pady=10, anchor=CENTER)
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+
+    def mostrar_productos_por_categoria(self, cliente,tienda, categoria, window, page=1):
+            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+            for i, widget in enumerate(widgets):
+                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                    widget.destroy()
+
+            productos = cliente.get_tienda().buscar_productos(categoria)
+
+            # Mostrar productos encontrados
+            productos_frame = Frame(window, bg="#243340")
+            productos_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            if not productos:
+                Label(productos_frame,
+                      text="No hay productos disponibles",
+                      font=("Arial", 12), bg="F2F2F2").pack(pady=10)
+                Button(productos_frame, text="Volver a Consulta",
+                       font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                       width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
+                return
+
+            Label(productos_frame, text=f"Productos de  {tienda.get_nombre()} de la categoria {categoria.get_texto()}:",
+                  font=("Arial", 16), bg="#F2F2F2").pack(pady=10)
+
+            # Definir número de productos por página
+            productos_por_pagina = 4
+            total_paginas = math.ceil(len(productos) / productos_por_pagina)
+            productos = productos[(page - 1) * productos_por_pagina: page * productos_por_pagina]
+
+            botones_frame = Frame(productos_frame, bg="#F2F2F2")
+            botones_frame.pack(pady=10, fill=BOTH, expand=True)
+
+            for i, producto in enumerate(productos):
+                Button(botones_frame,
+                       text=f"{producto.get_nombre()} ",
+                       font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
+                       width=35, command=lambda prod=producto: self.detalles(cliente, tienda, producto, window,categoria)).pack(
+                    pady=5,
+                    anchor=CENTER)
+
+            # Controles de paginación
+            paginacion_frame = Frame(productos_frame, bg="#243340")
+            paginacion_frame.pack(pady=10)
+
+            # Botones de paginación
+            if page > 1:
+                Button(paginacion_frame, text="Anterior", font=("Arial", 12), bg="#243340", fg="white",
+                       command=lambda: self.mostrar_productos_por_categoria(cliente, categoria,tienda, window, page - 1)).pack(
+                    side="left", padx=5)
+
+            if page < total_paginas:
+                Button(paginacion_frame, text="Siguiente", font=("Arial", 12), bg="#243340", fg="white",
+                       command=lambda: self.mostrar_productos_por_categoria(cliente,categoria, tienda, window, page + 1)).pack(
+                    side="right", padx=5)
+
+            Button(productos_frame, text="Volver", font=("Arial", 12), bg="#243340", padx=30, pady=15, fg="white",
+                   width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

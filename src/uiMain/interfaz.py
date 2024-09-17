@@ -5,6 +5,11 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 import sys
+
+from gestorAplicacion.servicios.carrito import Carrito
+from gestorAplicacion.sujetos.cliente import Cliente
+from gestorAplicacion.sujetos.persona import Persona
+
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from gestorAplicacion.servicios.caja import Caja
 from gestorAplicacion.servicios.enums import Genero, Tamano, Edades, Categoria, TipoCaja
@@ -305,7 +310,23 @@ class Iniciar_ventana_usuario():
             funcionalidad2 = Funcionalidad2()
             funcionalidad2.elegir_tipo_busqueda(cliente, window)
 
+        def funcion3():
+            from uiMain.funcionalidad3 import Funcionalidad3
+            from gestorAplicacion.sujetos.cliente import Cliente
+            from gestorAplicacion.servicios.enums import Genero
+            from gestorAplicacion.sujetos.persona import Persona
+
+            cliente = None
+            for persona in Persona.get_personas():
+                if 11001 == persona.get_id():
+                    print(f"Bienvenido {persona.get_nombre()}")
+                    cliente = persona
+            funcionalidad3 = Funcionalidad3()
+            funcionalidad3.impresion_facturas(cliente, window)
+
         menuprocesos.add_command(label="Funcionalidad 2", command=funcion2)
+
+        menuprocesos.add_command(label="Funcionalidad 3", command=funcion3)
 
         menuayuda.add_command(label="Acerca de", command=open_popup)
 
@@ -646,12 +667,50 @@ if __name__ == "__main__":
     tienda3.get_empleados().extend([cajero3, cajero7])
     tienda4.get_empleados().append(cajero4)
 
+
     admin7 = Administrador("Ricardo Díaz", 207, 45, Genero.H, 15000.0)
   
     for tienda in admin1.get_tiendas():
         print(tienda.get_nombre())
    
 
+    cliente = None
+    for persona in Persona.get_personas():  # Asegúrate de que `Persona.get_personas()` devuelva todos los clientes
+        if 11001==persona.get_id():
+            cliente = persona
+            break
+
+
+    print(cliente)
+    if cliente is None:
+        print("Cliente no encontrado.")
+    else:
+        print(f"Bienvenido {cliente.get_nombre()}")
+
+        # Obtener la tienda del cliente
+        tienda = cliente.get_tienda()
+        if tienda is None:
+            print("El cliente no está asociado a ninguna tienda.")
+        else:
+            # Crear productos
+            producto1 = Producto(nombre="Manzanas", precio=2.5, tienda=tienda)
+            producto2 = Producto(nombre="Pan", precio=1.5, tienda=tienda)
+            producto3 = Producto(nombre="Leche", precio=3.0, tienda=tienda)
+
+            # Crear carrito y agregar productos
+            carrito = Carrito(tienda=tienda)
+            carrito.get_productos().append(producto1)
+            carrito.get_productos().append(producto2)
+            carrito.get_productos().append(producto3)
+
+            cliente.get_facturas().append(carrito)
+            tienda.get_facturas().append(carrito)
+
+            print(cliente.get_facturas())
+            print(tienda.get_facturas())
+            # El carrito ya se ha agregado a la lista de facturas del cliente y de la tienda
+            print("Carrito creado y productos añadidos con éxito.")
+            print(f"Total del carrito: {carrito.calcular_total()}")
     ventana = Ventana()
     ventana.crearVentana1()
     ventana.mainloop()

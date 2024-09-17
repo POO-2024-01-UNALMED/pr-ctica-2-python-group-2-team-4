@@ -1,4 +1,3 @@
-
 class Tienda:
 
     tiendas = []
@@ -137,7 +136,7 @@ class Tienda:
     @staticmethod
     def buscar_tienda_categoria(categoria):
         tiendas_revisadas = Tienda.revision_tienda(Tienda.tiendas)
-        tiendas_disp = [tienda for tienda in tiendas_revisadas if any(pasillo.categoria == categoria for pasillo in tienda.pasillos)]
+        tiendas_disp = [tienda for tienda in tiendas_revisadas if any(pasillo.categoria == categoria for pasillo in tienda._pasillos)]
         return len(tiendas_disp) > 0
 
     @staticmethod
@@ -151,7 +150,7 @@ class Tienda:
     @staticmethod
     def categoria_tienda(categoria):
         tiendas_revisadas = Tienda.revision_tienda(Tienda.tiendas)
-        tiendas_disp = [tienda for tienda in tiendas_revisadas if any(pasillo.categoria == categoria for pasillo in tienda.pasillos)]
+        tiendas_disp = [tienda for tienda in tiendas_revisadas if any(pasillo.categoria == categoria for pasillo in tienda._pasillos)]
         return tiendas_disp
 
     @staticmethod

@@ -42,13 +42,14 @@ class HojaVida(Frame):
             png="jordan/foto"+str(numero+1)
         try:
             path = os.path.realpath('src\\assets\\'+png+'.png')
+            photo = PhotoImage(file=path)
         except:
             path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets', png+'.png')
+            photo = PhotoImage(file=path)
         if not os.path.exists(path):
             raise FileNotFoundError(f"Image file not found at path: {path}")
 
         # Redimensionar la imagen usando subsample
-        photo = PhotoImage(file=path)
         photo = photo.subsample(2, 2)  # Ajusta los valores según sea necesario
 
         self._photos[numero] = photo  # Mantén la referencia a la imagen
