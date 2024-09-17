@@ -1,18 +1,18 @@
 from tkinter import Button, Frame, Label, Tk, TkVersion, messagebox
 import tkinter
 import tkinter as tk
-from typing import List, Optional
+#from typing import List, Optional
 import sys
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 
 from gestorAplicacion.servicios.producto import Producto
-from fieldFrame import FieldFrame
+from uiMain.fieldFrame import FieldFrame
 from gestorAplicacion.servicios.proveedor import Proveedor
 
 from gestorAplicacion.servicios.enums import Genero
 from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.sujetos.administrador import Administrador
-from uiMain import identidad, interfaz
+#from uiMain import identidad, interfaz
 
 import gestorAplicacion
 

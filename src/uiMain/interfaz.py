@@ -285,7 +285,7 @@ class Iniciar_ventana_usuario():
             from gestorAplicacion.sujetos.persona import Persona
             cliente = None
             for persona in Persona.get_personas():
-                if persona.get_nombre() == "Carlos":
+                if persona.get_nombre() == "Juan Pérez":
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente = persona
             funcionalidad1 = Funcionalidad1()
@@ -527,7 +527,7 @@ class Inicio(Frame):
 
 if __name__ == "__main__":
     EscritorLector.deserializarTodo()
-
+    Cliente(nombre="Juan Pérez", id=12345, edad=15, genero=Genero.M, dinero=100.0, carrito=None, tienda=None)
     admin1 = Administrador("Beatriz Gómez", 201, 40, Genero.M, 12000.0)
     admin2 = Administrador("Ricardo Díaz", 202, 45, Genero.H, 15000.0)
     admin3 = Administrador("Sofía Sánchez", 203, 38, Genero.M, 11000.0)

@@ -2,7 +2,7 @@
 import os
 import pathlib
 import tkinter
-from math import trunc
+#from math import trunc
 from tkinter import*
 from tkinter import messagebox
 
