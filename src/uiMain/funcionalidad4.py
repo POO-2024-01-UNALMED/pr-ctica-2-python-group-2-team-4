@@ -1,3 +1,4 @@
+from datetime import datetime
 from tkinter import Button, Frame, Label, Tk, TkVersion, messagebox
 import tkinter
 import tkinter as tk
@@ -435,7 +436,7 @@ class Funcionalidad4:
         Label(window, text=f"Has seleccionado la tienda: {tienda.get_nombre()}", font=("Arial", 15)).pack(pady=10)
 
         # Botones para administrar la tienda
-        Button(window, text="Administrar Productos", font=("Arial", 12)).pack(pady=5)
+        Button(window, text="Administrar Productos", font=("Arial", 12), command=lambda: self.administrar_productos(window, tienda)).pack(pady=5)
         Button(window, text="Administrar Proveedores", font=("Arial", 12), command=lambda: self.mostrar_proveedores(window, tienda)).pack(pady=5) 
 
     @classmethod
@@ -464,6 +465,7 @@ class Funcionalidad4:
 
     @classmethod
     def mostrar_inventario_productos(self, window, tienda):
+        
         """Método para mostrar el total de productos en el inventario"""
         # Limpiar la ventana de widgets anteriores
         widgets = window.winfo_children()  
@@ -479,15 +481,15 @@ class Funcionalidad4:
         # Diccionario para agrupar productos por nombre, tamaño y marca
         inventario = {}
         for producto in productos_totales:
-            clave = (producto._nombre, producto._tamano, producto._marca)
+            clave = (producto.get_nombre(), producto.get_tamano(), producto.get_marca())
             if clave in inventario:
                 inventario[clave]["cantidad"] += 1
             else:
                 inventario[clave] = {
-                    "nombre": producto._nombre,
-                    "tamano": producto._tamano,
-                    "marca": producto._marca,
-                    "precio": producto._precio,
+                    "nombre": producto.get_nombre(),
+                    "tamano": producto.get_tamano(),
+                    "marca": producto.get_marca(),
+                    "precio": producto.get_precio(),
                     "cantidad": 1
                 }
 
@@ -500,7 +502,50 @@ class Funcionalidad4:
             Label(inventario_frame, text=f"{detalles['nombre']} - {detalles['tamano']} - {detalles['marca']} - Cantidad: {detalles['cantidad']} - Precio: ${detalles['precio']:.2f}", font=("Arial", 12)).pack(pady=5)
             
 
+    @classmethod
+    def mostrar_productos_vencidos(self, window, tienda):
+        """Método para mostrar los productos vencidos en la tienda"""
 
+        # Limpiar la ventana de widgets anteriores
+        widgets = window.winfo_children()
+        for i, widget in enumerate(widgets):
+            if i >= 4:
+                widget.destroy()
+
+        # Título de la sección
+        Label(window, text="Productos vencidos:", font=("Arial", 15)).pack(pady=10)
+
+        # Lista para almacenar productos vencidos
+        productos_vencidos = []
+
+        # Recorrer cada pasillo de la tienda para acceder a los productos
+        for pasillo in tienda._pasillos:
+            for producto in pasillo.productos:
+                fecha_perecer = producto._fecha_perecer
+
+                if isinstance(fecha_perecer, str):
+                    try:
+                        # Intentar convertir la cadena a fecha usando el formato adecuado
+                        fecha_perecer = datetime.strptime(fecha_perecer, "%Y-%m-%d").date()  # Ejemplo de formato 'YYYY-MM-DD'
+                    except ValueError:
+                        # Si la conversión falla, se ignora este producto
+                        continue
+
+                # Verificar si la fecha de vencimiento es válida y si el producto está vencido
+                if fecha_perecer and fecha_perecer < Producto.fecha_actual:
+                    productos_vencidos.append(producto)
+
+        # Frame para mostrar los productos vencidos
+        vencidos_frame = Frame(window)
+        vencidos_frame.pack(pady=10)
+
+        # Mostrar los productos vencidos si existen
+        if productos_vencidos:
+            for producto in productos_vencidos:
+                Label(vencidos_frame, text=f"{producto._nombre} - {producto._tamano} - {producto._marca} - Vencido el: {producto._fecha_perecer}", font=("Arial", 12)).pack(pady=5)
+        else:
+            # Mensaje si no hay productos vencidos
+            Label(vencidos_frame, text="No hay productos vencidos en esta tienda.", font=("Arial", 12)).pack(pady=5)
 
     @classmethod
     def mostrar_proveedores(self, window, tienda):

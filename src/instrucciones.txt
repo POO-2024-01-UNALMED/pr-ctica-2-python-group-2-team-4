@@ -1,1 +1,20 @@
-Hola esto es una prueba
+Sistema de Consultas Personalizadas: Funcionalidad 1
+
+Esta funcionalidad permite a los usuarios consultar membresias y productos en una tienda simulada, ofreciendo busqueda general y por categoria. En la busqueda general, el sistema filtra tiendas sin productos o trabajadores y ajusta el presupuesto y limite de carrito segun la edad del usuario. En la busqueda por categoria, muestra tiendas con productos en la categoria seleccionada. Ademas, gestiona membresias, permitiendo actualizar o adquirir una nueva basada en la membresia actual del usuario.
+
+Muestra de Productos y Seleccion: Funcionalidad 2
+
+Esta funcionalidad permite a los usuarios explorar, seleccionar y adquirir productos dentro de la aplicacion, asegurando que cumplan con las restricciones de edad y genero y que el usuario tenga suficientes fondos. Los usuarios pueden buscar productos por categoria o nombre, visualizar atributos clave en una cuadrilla y anadir productos al carrito. La funcionalidad tambien incluye la gestion del carrito, permitiendo especificar la cantidad deseada, validar el stock disponible y manejar devoluciones. Antes de finalizar la compra, el sistema verifica los fondos disponibles y, si es necesario, recomienda productos alternativos mas economicos si el saldo es insuficiente.
+
+Pago de Productos: Funcionalidad 3
+
+Esta funcionalidad finaliza el proceso de compra gestionando la seleccion de cajas, la aplicacion de descuentos segun la membresia y la generacion de facturas detalladas. El cliente elige entre cajas rapidas o lentas segun la cantidad de productos en su carrito, y si no hay cajas disponibles, puede esperar o cancelar la compra. El sistema aplica descuentos automaticos basados en la membresia del cliente y genera una factura detallada con precios y ajustes de membresia. Las ganancias se registran y se asigna una parte al empleado que gestiono la caja, optimizando la experiencia de pago y manteniendo las operaciones de la tienda eficientes y rentables.
+
+Revision de Tienda: Funcionalidad 4
+
+Esta funcionalidad permite a la tienda gestionar su inventario y estado financiero, asegurando la calidad de los productos y la estabilidad economica. Comienza con un conteo e inspeccion exhaustiva del inventario, eliminando productos caducados o defectuosos. Luego, se genera una lista de reabastecimiento y se realiza un pedido al proveedor si hay deficit, con el costo deducido del saldo financiero. Si el balance financiero es negativo, se toman medidas para recuperar fondos mediante devoluciones al proveedor. Si persiste el deficit, la tienda se declara en bancarrota y se pone en venta, permitiendo a otros usuarios adquirirla.
+
+Compra y Personalizacion de Tienda: Funcionalidad 5
+
+Esta funcionalidad permite a los usuarios adquirir tiendas en bancarrota y revitalizarlas. Al comprar una tienda vacia, el nuevo propietario puede reorganizar los pasillos segun sus preferencias, reabastecer la tienda con productos de diversos proveedores y contratar empleados para asegurar el funcionamiento eficiente del negocio. La personalizacion de la tienda incluye ajustar la disposicion de productos y gestionar los costos de reabastecimiento, mientras que la contratacion de personal asegura que todas las areas de la tienda esten cubiertas. Esta funcionalidad otorga al usuario la capacidad de transformar una tienda desocupada en un negocio exitoso.
+
