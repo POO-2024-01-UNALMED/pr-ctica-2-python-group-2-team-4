@@ -1,1 +1,21 @@
-juanesjuanesjuanesjuanesjuanesjuanesjuanesjuanesjuanesjuanesjuanes
+Juan Esteban Pineda Henao
+Edad: 18 anos
+
+Perfil Personal
+Soy un estudiante de tercer semestre de Ingenieria de Sistemas en la Universidad Nacional de Colombia, con conocimientos en programacion, bases de datos y desarrollo de software. Estoy en busqueda de oportunidades para aplicar mis habilidades y seguir aprendiendo en proyectos tecnologicos.
+
+Formacion Academica
+Ingeniería de Sistemas
+Universidad Nacional de Colombia
+Actualmente cursando 3 semestre (2024).
+
+Experiencia en Proyectos
+Participacion en proyectos academicos relacionados con desarrollo de software y gestion de bases de datos.
+Colaborador en el desarrollo de soluciones tecnologicas aplicando conceptos de programacion orientada a objetos y logica de negocio.
+
+Habilidades
+
+Programacion en Java y Python
+Conocimientos en bases de datos
+Desarrollo de software y resolucion de problemas
+Trabajo en equipo y habilidades de comunicacion
