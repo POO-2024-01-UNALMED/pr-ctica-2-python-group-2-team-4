@@ -349,18 +349,44 @@ class Funcionalidad4:
 
     @classmethod
     def mostrar_frame_usuario(self, window):
-        # Mostrar el frame rojo o azul dependiendo del tipo de usuario
+    # Mostrar el frame correspondiente dependiendo del tipo de usuario
         def callback():
+            # Si no es administrador
             if not isinstance(self.usuario, Administrador):
+                # Limpiar la ventana
+                widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+                for i, widget in enumerate(widgets):
+                    if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                        widget.destroy()
+
+                # Crear un frame para mostrar el mensaje de que no es administrador
                 frame = Frame(window, bg="red")
-                frame.pack(fill=tk.BOTH, expand=True)
+                frame.pack(fill=tk.BOTH, expand=True, pady=50)
+
+                # Mensaje para el usuario no administrador
+                Label(frame, text="No eres un administrador.", font=("Arial", 15), bg="red", fg="white").pack(pady=10)
+
+                # Botón para volver a ingresar
+                Button(frame, text="Aceptar", font=("Arial", 12),
+                    command=lambda: self.ingresar(window)).pack(pady=10)
+
+            # Si es administrador
             else:
+                # Limpiar la ventana
+                widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+                for i, widget in enumerate(widgets):
+                    if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                        widget.destroy()
+
+                # Crear un frame para administrador
                 frame = Frame(window, bg="blue")
                 frame.pack(fill=tk.BOTH, expand=True)
+
+                # Llamar a la función seleccionar tienda para el administrador
                 self.seleccionar_tienda2(window)
 
+        # Usar after para evitar problemas asincrónicos y ejecutar el callback
         window.after(100, callback)
-   
     
     @classmethod
     def seleccionar_tienda2(self, window):
