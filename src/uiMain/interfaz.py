@@ -60,6 +60,77 @@ class FieldFrame_p(Frame):
         aceptar = Button(self, text="Aceptar",command=comando1).grid(pady = 50, column = 0, row = len(self._criterios)+1)
         borrar = Button(self, text="Borrar",command=self.borrarEntry).grid(pady = 50, column = 1, row = len(self._criterios)+1)
 class Iniciar_ventana_usuario():
+
+    @classmethod
+    def funcion2(cls,window):
+        from uiMain.funcionalidad2 import Funcionalidad2
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from gestorAplicacion.servicios.enums import Genero
+        from gestorAplicacion.sujetos.persona import Persona
+
+        cliente = None
+        for persona in Persona.get_personas():
+            if persona.get_nombre() == "Carlos":
+                print(f"Bienvenido {persona.get_nombre()}")
+                cliente = persona
+        funcionalidad2 = Funcionalidad2()
+        funcionalidad2.elegir_tipo_busqueda(cliente, window)
+
+    @classmethod
+    def funcion3(cls,window):
+        from uiMain.funcionalidad3 import Funcionalidad3
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from gestorAplicacion.servicios.enums import Genero
+        from gestorAplicacion.sujetos.persona import Persona
+
+        cliente = None
+        for persona in Persona.get_personas():
+            if persona.get_nombre() == "Carlos":
+                print(f"Bienvenido {persona.get_nombre()}")
+                cliente = persona
+        tienda = cliente.get_tienda()
+        if tienda is None:
+            print("El cliente no está asociado a ninguna tienda.")
+        else:
+            # Crear productos
+            producto1 = Producto(nombre="Manzanas", marca="Veracruz", tamano=Tamano.GRANDE,
+                                 edad_valida=Edades.MENORES, categoria=Categoria.ALIMENTO, precio=2.5,
+                                 tienda=tienda)
+            producto2 = Producto(nombre="Pan", marca="Veracruz", tamano=Tamano.GRANDE, edad_valida=Edades.MENORES,
+                                 categoria=Categoria.ALIMENTO, precio=1.5, tienda=tienda)
+            producto3 = Producto(nombre="Leche", marca="Veracruz", tamano=Tamano.GRANDE, edad_valida=Edades.MENORES,
+                                 categoria=Categoria.ALIMENTO, precio=3.0, tienda=tienda)
+            for pasillo in tienda.get_pasillos():
+                if pasillo.get_categoria() == Categoria.ALIMENTO:
+                    pasillo.get_productos().append(producto1)
+                    pasillo.get_productos().append(producto2)
+                    pasillo.get_productos().append(producto3)
+            # Crear carrito y agregar productos
+            carrito = Carrito(tienda=tienda)
+            carrito.get_productos().append(producto1)
+            carrito.get_productos().append(producto2)
+            carrito.get_productos().append(producto3)
+
+            carrito.set_cliente(cliente)
+            cliente.get_facturas().append(carrito)
+            tienda.get_facturas().append(carrito)
+
+        print(cliente.get_facturas())
+        funcionalidad3 = Funcionalidad3()
+        funcionalidad3.impresion_facturas(cliente, window)
+
+    @classmethod
+    def mostrar_funcionalidad_uno(cls, window):
+        from uiMain.funcionalidad1 import Funcionalidad1
+        from gestorAplicacion.sujetos.cliente import Cliente
+        from gestorAplicacion.sujetos.persona import Persona
+        cliente = None
+        for persona in Persona.get_personas():
+            if persona.get_nombre() == "Juan Pérez":
+                print(f"Bienvenido {persona.get_nombre()}")
+                cliente = persona
+        funcionalidad1 = Funcionalidad1()
+        funcionalidad1.consultasEco(cliente, window)
     def __init__(self):
         def matarloTodo(frameUtilizado):
             for frame in framesAMatar:
@@ -279,81 +350,15 @@ class Iniciar_ventana_usuario():
 
 
         # Función para mostrar el frame de Funcionalidad Uno
-        def mostrar_funcionalidad_uno():
-            from uiMain.funcionalidad1 import Funcionalidad1
-            from gestorAplicacion.sujetos.cliente import Cliente
-            from gestorAplicacion.sujetos.persona import Persona
-            cliente = None
-            for persona in Persona.get_personas():
-                if persona.get_nombre() == "Juan Pérez":
-                    print(f"Bienvenido {persona.get_nombre()}")
-                    cliente = persona
-            funcionalidad1 = Funcionalidad1()
-            funcionalidad1.consultasEco(cliente, window)
+
 
         # Añadir la opción en el menú para activar Funcionalidad Uno
-        menuprocesos.add_command(label="Funcionalidad 1", command=mostrar_funcionalidad_uno)
+        menuprocesos.add_command(label="Funcionalidad 1", command=lambda:self.mostrar_funcionalidad_uno(window))
 
 
-        def funcion2():
-            from uiMain.funcionalidad2 import Funcionalidad2
-            from gestorAplicacion.sujetos.cliente import Cliente
-            from gestorAplicacion.servicios.enums import Genero
-            from gestorAplicacion.sujetos.persona import Persona
+        menuprocesos.add_command(label="Funcionalidad 2", command=lambda:self.funcion2(window))
 
-            cliente=None
-            for persona in Persona.get_personas():
-                if persona.get_nombre() == "Carlos":
-                    print(f"Bienvenido {persona.get_nombre()}")
-                    cliente = persona
-            funcionalidad2 = Funcionalidad2()
-            funcionalidad2.elegir_tipo_busqueda(cliente, window)
-
-        def funcion3():
-            from uiMain.funcionalidad3 import Funcionalidad3
-            from gestorAplicacion.sujetos.cliente import Cliente
-            from gestorAplicacion.servicios.enums import Genero
-            from gestorAplicacion.sujetos.persona import Persona
-
-            cliente = None
-            for persona in Persona.get_personas():
-                if persona.get_nombre() == "Carlos":
-                    print(f"Bienvenido {persona.get_nombre()}")
-                    cliente = persona
-            tienda = cliente.get_tienda()
-            if tienda is None:
-                print("El cliente no está asociado a ninguna tienda.")
-            else:
-                # Crear productos
-                producto1 = Producto(nombre="Manzanas", marca="Veracruz", tamano=Tamano.GRANDE,
-                                     edad_valida=Edades.MENORES, categoria=Categoria.ALIMENTO, precio=2.5,
-                                     tienda=tienda)
-                producto2 = Producto(nombre="Pan", marca="Veracruz", tamano=Tamano.GRANDE, edad_valida=Edades.MENORES,
-                                     categoria=Categoria.ALIMENTO, precio=1.5, tienda=tienda)
-                producto3 = Producto(nombre="Leche", marca="Veracruz", tamano=Tamano.GRANDE, edad_valida=Edades.MENORES,
-                                     categoria=Categoria.ALIMENTO, precio=3.0, tienda=tienda)
-                for pasillo in tienda.get_pasillos():
-                    if pasillo.get_categoria() == Categoria.ALIMENTO:
-                        pasillo.get_productos().append(producto1)
-                        pasillo.get_productos().append(producto2)
-                        pasillo.get_productos().append(producto3)
-                # Crear carrito y agregar productos
-                carrito = Carrito(tienda=tienda)
-                carrito.get_productos().append(producto1)
-                carrito.get_productos().append(producto2)
-                carrito.get_productos().append(producto3)
-
-                carrito.set_cliente(cliente)
-                cliente.get_facturas().append(carrito)
-                tienda.get_facturas().append(carrito)
-
-            print(cliente.get_facturas())
-            funcionalidad3 = Funcionalidad3()
-            funcionalidad3.impresion_facturas(cliente, window)
-
-        menuprocesos.add_command(label="Funcionalidad 2", command=funcion2)
-
-        menuprocesos.add_command(label="Funcionalidad 3", command=funcion3)
+        menuprocesos.add_command(label="Funcionalidad 3", command=lambda:self.funcion3(window))
 
         menuayuda.add_command(label="Acerca de", command=open_popup)
 

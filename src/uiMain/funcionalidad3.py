@@ -2,12 +2,15 @@ import sys
 from tkinter import Frame, Label, Entry, Button, messagebox, simpledialog, IntVar, Radiobutton, StringVar, RIGHT, LEFT, \
     font
 
+from numpy.ma.core import filled
+
 from gestorAplicacion.servicios.ahorcado import Ahorcado
 from gestorAplicacion.servicios.enums import TipoCaja
 from gestorAplicacion.servicios.tresEnRaya import TresEnRaya
 from gestorAplicacion.sujetos import cliente
 from gestorAplicacion.sujetos.administrador import Administrador
 from gestorAplicacion.sujetos.cliente import Cliente
+from uiMain.fieldFrame import FieldFrame
 from uiMain.main import Main
 import tkinter as tk
 
@@ -26,15 +29,25 @@ class Funcionalidad3:
 
         # Obtener las tiendas con facturas
         tiendas = persona.get_tiendas_con_facturas()
+        frame = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Funcionalidad 3",
+                           "La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",
+                           False)
+
+        for widget in frame.campos.winfo_children():
+            widget.destroy()
+
+        frame1=frame.campos
 
         # Verificar si hay tiendas con facturas
         if not tiendas:
-            Label(window, text="No tienes facturas en ninguna tienda.",
+            Label(frame1, text="No tienes facturas en ninguna tienda.",
                   font=("Arial", 14), bg="light blue").pack(pady=20)
             return
 
         # Crear un frame para mostrar las tiendas
-        frame_tiendas = Frame(window, bg="light blue")
+        frame_tiendas = Frame(frame1, bg="light blue")
         frame_tiendas.pack(fill='both', expand=True, pady=20)
 
         # Título
@@ -60,7 +73,7 @@ class Funcionalidad3:
             if seleccion:
                 index = seleccion[0]
                 tienda_seleccionada = tiendas[index]
-                self.mostrar_facturas(tienda_seleccionada, persona, window)
+                self.mostrar_facturas(tienda_seleccionada, persona, window,frame1)
             else:
                 mostrar_error("Selecciona una tienda de la lista.")
 
@@ -71,19 +84,19 @@ class Funcionalidad3:
         def mostrar_error(mensaje):
             Label(frame_tiendas, text=mensaje, font=("Arial", 12), fg="red", bg="light blue").pack(pady=10)
 
-    def mostrar_facturas(self, tienda_seleccionada, persona, window):
+        frame.pack(fill='both', expand=True, pady=20)
+
+    def mostrar_facturas(self, tienda_seleccionada, persona, window,frame1):
         from tkinter import Frame, Label, Button, Listbox, END, Scrollbar, VERTICAL
 
-        # Limpiar la ventana actual
-        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
-        for i, widget in enumerate(widgets):
-            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
-                widget.destroy()
+        # Limpiar la ventana actual # Obtén todos los widgets en la ventana
+        for i in frame1.winfo_children():
+            i.destroy()
 
         mis_facturas = persona.get_facturas1(tienda_seleccionada)
 
         # Crear un frame para mostrar las facturas
-        frame_facturas = Frame(window, bg="light blue")
+        frame_facturas = Frame(frame1, bg="light blue")
         frame_facturas.pack(fill='both', expand=True, pady=20)
 
         # Título
