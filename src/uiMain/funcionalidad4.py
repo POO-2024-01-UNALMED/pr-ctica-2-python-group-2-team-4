@@ -485,7 +485,50 @@ class Funcionalidad4:
         for widget in window.winfo_children():
             widget.destroy()
 
+        # Mostrar el nombre del proveedor seleccionado
         Label(window, text=f"Has seleccionado al proveedor: {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
+
+        # Mostrar productos disponibles del proveedor
+        Label(window, text="Seleccione productos a pedir:", font=("Arial", 12)).pack(pady=5)
+
+        # Frame para mostrar los productos
+        productos_frame = Frame(window)
+        productos_frame.pack(pady=10)
+
+        productos = proveedor.get_productos_proveedor()
+
+        if not productos:
+            Label(productos_frame, text="Este proveedor no tiene productos disponibles.", font=("Arial", 12)).pack(pady=5)
+        else:
+            for idx, producto in enumerate(productos, start=1):
+                # Mostrar cada producto como un botón seleccionable
+                Button(productos_frame, text=f"{idx}. {producto}", font=("Arial", 12),
+                    command=lambda p=producto: self.procesar_seleccion_producto(window, proveedor, p)).pack(pady=5)
+
+    @classmethod
+    def procesar_seleccion_producto(self, window, proveedor, producto):
+        """Método para manejar la selección de un producto y confirmar el pedido"""
+        # Limpiar la ventana de widgets anteriores
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        # Mostrar la confirmación de la selección
+        Label(window, text=f"Has seleccionado el producto: {producto} del proveedor {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
+
+        # Aquí puedes agregar más lógica para confirmar el pedido o realizar alguna acción adicional
+        Button(window, text="Confirmar Pedido", font=("Arial", 12), command=lambda: self.confirmar_pedido(window, proveedor, producto)).pack(pady=10)
+
+    @classmethod
+    def confirmar_pedido(self, window, proveedor, producto):
+        """Método para confirmar el pedido del producto al proveedor"""
+        # Limpiar la ventana de widgets anteriores
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        Label(window, text=f"Pedido confirmado para el producto: {producto} del proveedor {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
+
+        # Botón para regresar al menú principal o hacer otra acción
+        Button(window, text="Regresar", font=("Arial", 12), command=lambda: self.seleccionar_proveedor(window, proveedor)).pack(pady=10)
         
         
 
