@@ -16,6 +16,7 @@ class Cliente(Persona):
         self._carrito = carrito
         self._caja = None
         self._facturas = []
+        super().personas.append(self)
 
 
     def get_membresia(self):
