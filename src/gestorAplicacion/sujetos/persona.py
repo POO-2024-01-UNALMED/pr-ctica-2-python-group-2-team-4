@@ -15,6 +15,8 @@ class Persona:
         self.edad = edad
         self.genero = genero
 
+        Persona.personas.append(self)
+
     @classmethod
     def get_personas(cls) -> List['Persona']:
         return cls.personas
