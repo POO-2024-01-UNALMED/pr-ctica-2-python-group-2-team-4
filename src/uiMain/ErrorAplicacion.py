@@ -49,12 +49,15 @@ class ObjetoNoEsClienteError(Exception):
 
 # Función que solo acepta objetos de tipo Cliente
 def procesar_cliente(cliente):
+    from gestorAplicacion.sujetos.cliente import Cliente
     # Verificar si el objeto es de tipo Cliente
     if not isinstance(cliente, Cliente):
         raise ObjetoNoEsClienteError("Se esperaba un objeto de tipo Cliente, pero se recibió otro tipo.")
 
     # Si es un cliente, se continúa con la operación
     print(f"Procesando cliente: {cliente.get_nombre()}")
+
+
 
 
 # Excepción personalizada para cuando el objeto no es de tipo Administrador
@@ -66,6 +69,7 @@ class ObjetoNoEsAdministradorError(Exception):
 
 # Función que solo acepta objetos de tipo Administrador
 def procesar_administrador(administrador):
+    from gestorAplicacion.sujetos.administrador import Administrador
     # Verificar si el objeto es de tipo Administrador
     if not isinstance(administrador, Administrador):
         raise ObjetoNoEsAdministradorError("Se esperaba un objeto de tipo Administrador, pero se recibió otro tipo.")
