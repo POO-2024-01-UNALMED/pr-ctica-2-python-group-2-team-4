@@ -7,7 +7,6 @@ class Administrador(Persona):
         super().__init__(nombre, id, edad, genero)
         self.dinero = dinero
         self.tiendas = []
-        super().personas.append(self)
 
     def get_tiendas(self):
         return self.tiendas

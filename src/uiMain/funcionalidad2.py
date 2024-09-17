@@ -5,6 +5,9 @@ from tkinter import messagebox, simpledialog, font
 from uiMain.fieldFrame import FieldFrame
 import tkinter as tk
 
+from uiMain.interfaz import Iniciar_ventana_usuario
+
+
 class Funcionalidad2:
     def __init__(self):
         pass
@@ -205,9 +208,8 @@ class Funcionalidad2:
 
             frame = FieldFrame(window,
                                "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
-                               [], "Escoja uno de los botones", [], [], "Funcionalidad2",
-                               "La funcionalidad se basas en darle la posibilidad al cliente de interactuar" + " con los productos de la tienda y con su carrito asociado" + "permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",
-                               False)
+                               [], "Escoja uno de los botones", [], [], "Busqueda por categoria",
+                               "Haz elegido la busqueda por categoria de productos elige una categoria para que te aparezcan los productos de este tipo",False)
             for widget in frame.campos.winfo_children():
                 widget.destroy()
             frame1=frame.campos
@@ -442,9 +444,8 @@ class Funcionalidad2:
                     widget.destroy()
             frame = FieldFrame(window,
                                "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
-                               [], "Escoja uno de los botones", [], [], "Funcionalidad2",
-                               "La funcionalidad se basas en darle la posibilidad al cliente de interactuar" + " con los productos de la tienda y con su carrito asociado" + "permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",
-                               False)
+                               [], "Escoja uno de los botones", [], [], "Busqueda por nombre",
+                               "Haz elegido la busqueda por nombre de productos introduce el nombre de tu producto o una parte del nombre",False)
 
             frame1 = frame.campos
             for widget in frame1.winfo_children():
@@ -667,11 +668,26 @@ class Funcionalidad2:
 
     @staticmethod
     def redirigir_funcionalidad1(window):
-        from main import Main
-        Main.escoger_funcionalidad()
+        Iniciar_ventana_usuario.mostrar_funcionalidad_uno(window)
 
     @staticmethod
     def descartar_compra(cliente,window):
+
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
+
+        frame1 = FieldFrame(window,
+                           "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                           [], "Escoja uno de los botones", [], [], "Compra descartada",
+                           "Haz elegido la descartar compra, se han devuelto los productos a los pasillos correspondientes y ya no tienes asignado ni un carro ni una tienda",
+                           False)
+
+        frame2=frame1.campos
+
+        for widget in frame2.winfo_children():
+            widget.destroy()
         carrito = cliente.get_carrito()
         tienda = cliente.get_tienda()
 
@@ -681,16 +697,8 @@ class Funcionalidad2:
                     pasillo.get_productos().append(producto)  # Implementar método en clase Pasillo
                     break
 
-        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
-        for i, widget in enumerate(widgets):
-            if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
-                widget.destroy()
-
-        frame = Frame(window, bg="#024A86", padx=20, pady=20)
-        frame.pack(expand=True, fill=BOTH, padx=20, pady=20)
-
         # Etiqueta con mensaje en un cuadro de fondo
-        mensaje_frame = Frame(frame, bg="white", padx=20, pady=20, relief=RAISED, borderwidth=2)
+        mensaje_frame = Frame(frame2, bg="white", padx=20, pady=20, relief=RAISED, borderwidth=2)
         mensaje_frame.pack(expand=True, fill=BOTH)
 
         mensaje = Label(mensaje_frame, text="Tu compra fue descartada con éxito.\n"
@@ -699,20 +707,17 @@ class Funcionalidad2:
         mensaje.pack(pady=10)
 
         # Botón para ir a la Funcionalidad 1
-        boton_ir_funcionalidad1 = Button(frame, text="Ir a la Funcionalidad 1",
+        boton_ir_funcionalidad1 = Button(frame2, text="Ir a la Funcionalidad 1",
                                             font=("Arial", 14, "bold"), command=lambda: Funcionalidad2.redirigir_funcionalidad1(window),
                                             bg="light green", fg="black", relief=RAISED, padx=10, pady=5)
         boton_ir_funcionalidad1.pack(pady=20)
-
-        # Centrar el botón
-        frame.columnconfigure(0, weight=1)
-        frame.rowconfigure(0, weight=1)
 
         carrito.get_productos().clear()
         print(
             "Se han descartado todos los productos del carrito y se han devuelto a los pasillos correspondientes.")
         cliente.set_tienda(None)
         cliente.set_carrito(None)
+        frame1.pack(fill=BOTH, expand=True)
 
     """def mostrar_carrito(self, cliente, window):
         def actualizar_productos(frame_productos, productos_map, productos_cantidad):
@@ -799,9 +804,9 @@ class Funcionalidad2:
 
             frame = FieldFrame(window,
                                "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
-                               [], "Escoja uno de los botones", [], [], "Funcionalidad2",
-                               "La funcionalidad se basas en darle la posibilidad al cliente de interactuar" + " con los productos de la tienda y con su carrito asociado" + "permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",
-                               False)
+                               [], "Escoja uno de los botones", [], [], "Gestion de productos en el carrito",
+                               "Haz elegido eliminar productos d emi carrito, escoge el producto y la cantidad que quieres eliminar de tu carrito",False)
+
 
             frame1 = frame.campos
             for widget in frame1.winfo_children():
@@ -897,8 +902,9 @@ class Funcionalidad2:
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
 
+
         # Crear un nuevo frame para mostrar el mensaje
-        frame_confirmacion = Frame(window, bg="light blue")
+        frame_confirmacion = Frame(window, bg="#69a0ce")
         frame_confirmacion.pack(fill=BOTH, expand=True)
 
         # Mensaje de confirmación
@@ -913,7 +919,7 @@ class Funcionalidad2:
         boton_ir_funcionalidad_3.pack(pady=20)
 
     def ir_funcionalidad_3(self,window):
-        pass
+        Iniciar_ventana_usuario.funcion3(window)
 
     def elegir_tipo_busqueda(self,cliente,window):
         widgets = window.winfo_children()  # Obtén todos los widgets en la ventana

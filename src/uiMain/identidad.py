@@ -8,7 +8,6 @@ from tkinter import Tk, messagebox
 # from gestorAplicacion.sujetos.persona import Persona
 
 from tkinter import Frame, Label, Entry, Button, Tk
-
 from uiMain.fieldFrame import FieldFrame
 
 
@@ -215,13 +214,16 @@ class Identidad2:
 
             from gestorAplicacion.sujetos.persona import Persona
             personas = Persona.get_personas()
-            persona_encontrada = next((persona for persona in personas if isinstance(persona, Persona) and persona.get_id() == int(p)), None)
+            print(p)
+            for persona in Persona.personas:
+                print(persona.get_id())
+                if (int(persona.get_id()))==(int(p)):
+                    self.resultado = persona
+                    self.mostrar_mensaje(f"Bienvenido {persona.get_nombre()}")
+                    return persona
+            print(self.resultado)
 
-            if persona_encontrada:
-                self.resultado = persona_encontrada
-                
-                self.mostrar_mensaje(f"Bienvenido {persona_encontrada.get_nombre()}")
-            else:
+            if not self.resultado:
                 self.mostrar_alerta(p)
 
         # Iniciar el proceso de identificación
@@ -267,12 +269,19 @@ class Identidad2:
 
     def mostrar_registro(self, id):
         def registrar():
+
+            from gestorAplicacion.sujetos.persona import Persona
             nombre = self.frame_actual._entrys[0].get()
             id = self.frame_actual._entrys[1].get()
             edad = self.frame_actual._entrys[2].get()
             genero = self.frame_actual._entrys[3].get()
             decision = self.frame_actual._entrys[4].get()
             dinero = self.frame_actual._entrys[5].get()
+
+            print(nombre)
+            print(dinero)
+            for p in Persona.personas:
+                print(p.get_nombre())
 
             if decision == "1":
                 # Importar Cliente solo cuando sea necesario
