@@ -440,15 +440,23 @@ class Funcionalidad2:
             for i, widget in enumerate(widgets):
                 if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                     widget.destroy()
+            frame = FieldFrame(window,
+                               "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                               [], "Escoja uno de los botones", [], [], "Funcionalidad2",
+                               "La funcionalidad se basas en darle la posibilidad al cliente de interactuar" + " con los productos de la tienda y con su carrito asociado" + "permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",
+                               False)
 
-            frame1 = Frame(window, bg="light blue")
+            frame1 = frame.campos
+            for widget in frame1.winfo_children():
+                widget.destroy()
+            frame1.config(bg="#69a0ce")
             frame1.pack(fill=BOTH, expand=True)
 
             # Añadir los Entry y Labels
-            frame_entries = Frame(frame1, bg="light blue")
+            frame_entries = Frame(frame1, bg="#69a0ce")
             frame_entries.pack(pady=10, fill=X, padx=10)
 
-            label_seleccion = Label(frame_entries, text="Nombre del Producto:", font=("Arial", 12), bg="light blue")
+            label_seleccion = Label(frame_entries, text="Nombre del Producto:", font=("Arial", 12), bg="#69a0ce")
             label_seleccion.pack(side="top", padx=5)
 
             entry_seleccion = Entry(frame_entries, font=("Arial", 12))
@@ -471,6 +479,10 @@ class Funcionalidad2:
                                   command=on_buscar,
                                   font=("Arial", 12), bg="#00FF00", fg="black")
             boton_buscar.pack(pady=10)
+            Button(frame1, text="Volver", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
+                   command=lambda: self.elegir_tipo_busqueda(cliente, window)).pack(pady=10, anchor=CENTER)
+
+            frame.pack(fill=BOTH, expand=True)
 
         def buscar_productos_por_nombre(nombre):
             # Buscar productos por coincidencia parcial (insensible a mayúsculas/minúsculas)
@@ -483,7 +495,7 @@ class Funcionalidad2:
                 if hasattr(widget, 'error_widget') and widget.error_widget:
                     widget.destroy()
 
-            label_error = Label(frame, text=mensaje, font=("Arial", 12), fg="red", bg="light blue", borderwidth=2,
+            label_error = Label(frame, text=mensaje, font=("Arial", 12), fg="red", bg="#69a0ce", borderwidth=2,
                                 relief="solid")
             label_error.pack(pady=5, padx=10)
 
@@ -492,10 +504,6 @@ class Funcionalidad2:
             superiors=superior
             for widget in frame1.winfo_children():
                 widget.destroy()
-
-            label_instrucciones = Label(frame1, text="Estas son las opciones de búsqueda por nombre:",
-                                        font=("Arial", 16, "bold"), bg="light blue")
-            label_instrucciones.pack(pady=10)
 
             # Mostrar los productos
             if superior>len(productos):
@@ -522,7 +530,7 @@ class Funcionalidad2:
                 boton_producto.pack(fill=BOTH, expand=True)
 
             # Controles de paginación
-            paginacion_frame = Frame(frame1, bg="light blue")
+            paginacion_frame = Frame(frame1, bg="#69a0ce")
             paginacion_frame.pack(pady=10, fill=X, padx=20)
 
             if inferior > 0:
@@ -535,14 +543,14 @@ class Funcionalidad2:
                     side="right", padx=5)
 
             # Añadir el botón para volver a buscar
-            label_producto = Label(frame1, text="Producto Seleccionado:", font=("Arial", 12), bg="light blue")
+            label_producto = Label(frame1, text="Producto Seleccionado:", font=("Arial", 12), bg="#69a0ce")
             label_producto.pack(side="top", padx=5)
 
             entry_producto = Entry(frame1, font=("Arial", 12), width=60)
             entry_producto.pack(side="top", pady=5)
             entry_producto.config(state="readonly")  # Solo lectura
 
-            label_cantidad = Label(frame1, text="Cantidad Deseada:", font=("Arial", 12), bg="light blue")
+            label_cantidad = Label(frame1, text="Cantidad Deseada:", font=("Arial", 12), bg="#69a0ce")
             label_cantidad.pack(side="top", padx=5)
 
             entry_cantidad = Entry(frame1, font=("Arial", 12))
@@ -912,7 +920,7 @@ class Funcionalidad2:
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
-        frame=FieldFrame(window,"La búsqueda de nuestra tienda es"+" lo más accesible para nuestros clientes. ¿Que desea hacer?",[],"Escoja uno de los botones",[],[],"Funcionalidad2","La funcionalidad se basas en darle la posibilidad al cliente de interactuar"+" con los productos de la tienda y con su carrito asociado"+"permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",False)
+        frame=FieldFrame(window,"La búsqueda de nuestra tienda es"+" lo más accesible para nuestros clientes. ¿Que desea hacer?",[],"Escoja uno de los botones",[],[],"Funcionalidad 2","La funcionalidad de la aplicación permite al cliente interactuar de manera fluida con los productos disponibles en la tienda, ofreciéndole la posibilidad de seleccionar artículos específicos y definir sus cantidades. Los productos seleccionados se agregan al carrito de compras, desde donde se pueden revisar, modificar o eliminar según sea necesario. Una vez que el cliente ha configurado su carrito a su gusto, puede proceder a guardar la factura, lo que facilita la revisión final y el pago del total acumulado. Esta funcionalidad asegura que el proceso de compra sea sencillo y flexible, adaptándose a las necesidades del cliente y permitiendo una experiencia de compra eficiente y organizada.",False)
         custom_font = font.Font(family="Helvetica", size=14, weight="bold")
 
         frame.campos.config(bg="#69a0ce")
