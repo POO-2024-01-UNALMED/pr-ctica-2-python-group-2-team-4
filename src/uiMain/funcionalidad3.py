@@ -19,8 +19,10 @@ class Funcionalidad3:
     def impresion_facturas(self, persona, window):
         from tkinter import Frame, Label, Button, Listbox, END, Tk, Scrollbar, VERTICAL
         # Limpiar la ventana actual
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
         # Obtener las tiendas con facturas
         tiendas = persona.get_tiendas_con_facturas()
@@ -73,8 +75,10 @@ class Funcionalidad3:
         from tkinter import Frame, Label, Button, Listbox, END, Scrollbar, VERTICAL
 
         # Limpiar la ventana actual
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
         mis_facturas = persona.get_facturas1(tienda_seleccionada)
 
@@ -121,8 +125,10 @@ class Funcionalidad3:
         from tkinter import Frame, Label, Button
 
         # Limpiar la ventana actual
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
         # Crear un frame para mostrar los detalles
         frame_detalle = Frame(window, bg="light blue")
@@ -167,8 +173,10 @@ class Funcionalidad3:
                    command=lambda: Main.escoger_funcionalidad()).pack(pady=5)
 
     def seleccionar_caja(self, cliente, carrito, window):
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
         cajas = cliente.get_tienda().cajas_disponibles()
         frame=Frame(window)
@@ -197,27 +205,51 @@ class Funcionalidad3:
             caja_label = Label(frame, text="Seleccione una caja para pagar:")
             caja_label.pack(pady=5)
 
+            # Definir una fuente personalizada para los botones
+            custom_font = font.Font(family="Helvetica", size=16, weight="bold")
+
+            # Colores para el fondo y el texto
+            bg_color = "#4CAF50"  # Verde agradable
+            fg_color = "#FFFFFF"
             for i, caja in enumerate(cajas):
                 cajero = caja.get_cajero()
                 caja_info = f"{i + 1}. Caja: {caja.get_nombre()}, Tipo: {caja.get_tipo()}, Empleado: {cajero.get_nombre()}"
-                caja_button = Button(frame, text=caja_info, command=lambda: self.pagar_factura(cliente, carrito, caja,window))
-                caja_button.pack(pady=5)
+
+                # Crear el botón con propiedades personalizadas
+                caja_button = tk.Button(
+                    frame,
+                    text=caja_info,
+                    font=custom_font,
+                    bg=bg_color,
+                    fg=fg_color,
+                      # Ajusta el ancho del botón
+                    height=3,  # Ajusta la altura del botón
+                    relief=tk.RAISED,  # Añade un efecto de relieve
+                    bd=4,  # Bordes más gruesos
+                    command=lambda c=caja: self.pagar_factura(cliente, carrito, c, window)
+                    # Usa `c` para evitar el problema de late binding
+                )
+
+                caja_button.pack(pady=10)
 
     def pagar_factura(self, cliente,carrito,caja_seleccionada,window):
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
         descuento_membresia = cliente.calcular_descuento_por_membresia()
         precio_total = carrito.calcular_total()
         self.precio_con_descuento = precio_total * (1 - descuento_membresia)
 
         # Imprimir factura con descuento por membresía
+        frame=Frame(window,bd=2,relief="solid")
         factura_text = carrito.generar_detalles_factura(descuento_membresia, False)
-        Label(window, text=factura_text, justify=LEFT).pack(pady=10)
-
+        Label(frame, text=factura_text, justify=LEFT,font=("Helvetica",24)).pack()
+        frame.pack(fill='x', expand=True, pady=20)
         # Opción de borrar la factura antes de pagar
-        Label(window, text="¿Desea borrar esta factura y no pagarla?").pack(pady=5)
-        Button(window, text="Sí", command=lambda:self.borrar_factura(carrito,cliente,caja_seleccionada)).pack(side=LEFT, padx=10)
-        Button(window, text="No", command=lambda: self.opcion_juego(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
+        Label(window, text="¿Desea borrar esta factura y no pagarla?",font=("Helvetica",24)).pack(pady=5)
+        Button(window, text="Sí",font=("Helvetica",20), command=lambda:self.borrar_factura(carrito,cliente,caja_seleccionada)).pack(side=LEFT, padx=10, pady=10)
+        Button(window, text="No",font=("Helvetica",20), command=lambda: self.opcion_juego(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10, pady=10)
 
     def borrar_factura(self,carrito,cliente,caja_seleccionada):
         carrito.eliminar_carrito()
@@ -229,16 +261,20 @@ class Funcionalidad3:
         return
 
     def opcion_juego(self,cliente,carrito,caja_seleccionada, window):
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
         self.gano_juego = False
         Label(window, text="¿Desea intentar obtener un descuento adicional jugando?").pack(pady=5)
         Button(window, text="Sí", command=lambda: self.seleccionar_juego(cliente,carrito,caja_seleccionada,window)).pack(side=LEFT, padx=10)
         Button(window, text="No", command=lambda: self.confirmar_pago(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
 
     def seleccionar_juego(self,cliente,carrito,caja_seleccionada, window):
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
         tiene_membresia = cliente.get_membresia() is not None
         if not tiene_membresia:
@@ -382,8 +418,10 @@ class Funcionalidad3:
 
 
     def jugar(self, cliente, carrito, caja_seleccionada, window, seleccion_juego):
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
         self.ya_jugo = False
 
         if seleccion_juego == 1:
@@ -400,8 +438,10 @@ class Funcionalidad3:
         self.confirmar_pago(cliente, carrito, caja_seleccionada, window)
 
     def confirmar_pago(self,cliente,carrito,caja_seleccionada, window):
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
         Label(window, text="¿Desea pagar la factura?").pack(pady=5)
         factura_text = carrito.generar_detalles_factura(cliente.calcular_descuento_por_membresia(), self.gano_juego)
