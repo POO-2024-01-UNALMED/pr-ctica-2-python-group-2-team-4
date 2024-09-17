@@ -11,7 +11,7 @@ class Proveedor:
 
         if self.tiendas:
             for tienda in self.tiendas:
-                tienda.proveedores.append(self)
+                tienda.get_proveedores().append(self)
 
         Proveedor.seis_proveedores.append(self)
 

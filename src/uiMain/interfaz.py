@@ -5,12 +5,12 @@ from tkinter import *
 from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 import sys
-
+sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from gestorAplicacion.servicios.carrito import Carrito
 from gestorAplicacion.sujetos.cliente import Cliente
 from gestorAplicacion.sujetos.persona import Persona
 
-sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+
 from gestorAplicacion.servicios.caja import Caja
 from gestorAplicacion.servicios.enums import Genero, Tamano, Edades, Categoria, TipoCaja
 from gestorAplicacion.servicios.pasillo import Pasillo
