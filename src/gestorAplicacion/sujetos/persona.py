@@ -14,7 +14,6 @@ class Persona:
         self.id = id
         self.edad = edad
         self.genero = genero
-        Persona.personas.append(self)
 
     @classmethod
     def get_personas(cls) -> List['Persona']:
