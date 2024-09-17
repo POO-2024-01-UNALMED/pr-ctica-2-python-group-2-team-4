@@ -37,11 +37,14 @@ class Bienvenida(Frame):
             try:
                 path = os.path.realpath('src\\assets\\pantallazos\\pantallazo'+str(i+1)+'.png')
                 pantallazo = PhotoImage(file=path)
+                self._pantallazos.append(pantallazo)
             except:
-                path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\pantallazos\\pantallazo'+str(i+1)+'.png')
-                pantallazo = PhotoImage(file=path)
-            self._pantallazos.append(pantallazo)
-
+                try:
+                    path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\pantallazos\\pantallazo'+str(i+1)+'.png')
+                    pantallazo = PhotoImage(file=path)
+                    self._pantallazos.append(pantallazo)
+                except:
+                    pass
         self._label = Label(self.frame_p4, image=self._pantallazos[0], height=350, width=600,bg="#69a0ce")
         self._label.bind('<Leave>', self.proximo)
         self._label.pack(pady=5,fill="both", expand=True)
