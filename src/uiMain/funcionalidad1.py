@@ -773,8 +773,8 @@ class Funcionalidad1:
                 membresia_frame = Frame(tiendasGeneral_frame, bg="#243340")
                 membresia_frame.pack(pady=10, fill=BOTH, expand=True)
                 Label(membresia_frame,
-                      text="Lo sentimos, no puedes obtener una membresía ya que eres menor de edad Recuerda ir a revisar alguna tienda esto servirá para escoger productos en la funcionalidad 2",
-                      font=("Arial", 44), bg="#F2F2F2").pack(pady=10)
+                      text="Lo sentimos, no puedes obtener una membresía ya que eres menor de edad\nRecuerda ir a revisar alguna tienda esto servirá para escoger productos en la funcionalidad 2",
+                      font=("Arial", 25), bg="#F2F2F2").pack(pady=10)
                 Button(membresia_frame, text="Volver a Consultas",
                        font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
                        width=35, command=lambda: self.consultasEco(cliente, window)).pack(pady=10, anchor=CENTER)
