@@ -1,21 +1,20 @@
 import math
-from codeop import compile_command
-from idlelib.editor import keynames
-from math import trunc
 from tkinter import *
 from tkinter import messagebox, simpledialog
 
 
 from gestorAplicacion.servicios.enums import Membresia
 from gestorAplicacion.servicios.tienda import Tienda
+
 from gestorAplicacion.sujetos.cliente import Cliente
-from uiMain import interfaz
 from uiMain.fieldFrame import FieldFrame
 
 
 class Funcionalidad1:
     def __init__(self):
-        pass
+        self.user_id = None
+        self.usuario = None
+
 
 
     cliente = None
@@ -29,21 +28,73 @@ class Funcionalidad1:
         funcionalidad2.elegir_tipo_busqueda(cliente, window)
     #--------------------------------------------------------------------------------------------------------------------------------------------
 
-    """"
     def ingresar(self, window):
+        # Limpiar los widgets de la ventana
         widgets = window.winfo_children()
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
 
+        # Proceso de identificación del usuario
+        def ingresa():
+            from uiMain.identidad import Identidad2
+            identidad = Identidad2(window)
+            identidad.identificar_persona()
 
-        from .identidad import Identidad2
-        persona = Identidad2(window).identificar_persona()
-        if isinstance(persona, Cliente):
-            self.consultasEco(persona, window)
-        else:
-            self.ingresar(window)
-    """
+            # Usamos un after para esperar y verificar hasta que identidad.resultado esté definido
+            def check_identificacion():
+                if identidad.resultado is not None and identidad.terminado is not False:
+                    usuario = identidad.resultado
+                    # Llama al frame de usuario solo si el usuario ha sido identificado
+                    self.consultasEco(usuario,window)
+                else:
+                    # Si aún no se ha identificado, verificar de nuevo
+                    window.after(100, check_identificacion)
+
+            # Iniciar la espera para que el resultado se procese
+            window.after(100, check_identificacion)
+
+        ingresa()
+
+
+    def mostrar_frame_usuario(self, window):
+    # Mostrar el frame correspondiente dependiendo del tipo de usuario
+        def callback():
+            # Si no es administrador
+            if not isinstance(self.usuario,Cliente):
+                # Limpiar la ventana
+                widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+                for i, widget in enumerate(widgets):
+                    if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                        widget.destroy()
+
+                # Crear un frame para mostrar el mensaje de que no es administrador
+                frame = Frame(window, bg="red")
+                frame.pack(fill=BOTH, expand=True, pady=50)
+
+                # Mensaje para el usuario no administrador
+                Label(frame, text="No eres un administrador.", font=("Arial", 15), bg="red", fg="white").pack(pady=10)
+
+                # Botón para volver a ingresar
+                Button(frame, text="Aceptar", font=("Arial", 12),
+                    command=lambda: self.ingresar(window)).pack(pady=10)
+
+            # Si es administrador
+            else:
+                # Limpiar la ventana
+                widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+                for i, widget in enumerate(widgets):
+                    if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                        widget.destroy()
+
+                # Crear un frame para administrador
+                frame = Frame(window, bg="blue")
+                frame.pack(fill=BOTH, expand=True)
+
+                # Llamar a al paso a la función aqui
+        # Usar after para evitar problemas asincrónicos y ejecutar el callback
+        window.after(100,callback)
+
     #--------------------------------------------------------------------------------------------------------------------------------------------
     def consultasEco(self, cliente, window):
         from gestorAplicacion.servicios.tienda import Tienda
