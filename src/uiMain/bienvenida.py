@@ -46,7 +46,7 @@ class Bienvenida(Frame):
         self._label.bind('<Leave>', self.proximo)
         self._label.pack(pady=5,fill="both", expand=True)
 
-        button = Button(self.frame_p4, text="Aca se ira a la otra ventana", command=self.abrir_ventana_principal)
+        button = Button(self.frame_p4, text="Inicio de aplicacion", command=self.abrir_ventana_principal)
         button.pack(side="bottom", pady=5)
 
     # Actualiza el proximo pantallazo de la aplicacion

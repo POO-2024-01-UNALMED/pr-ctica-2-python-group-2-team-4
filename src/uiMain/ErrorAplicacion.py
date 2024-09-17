@@ -14,19 +14,19 @@ class CategoriaPropia2(ErrorAplicacion):
         super().__init__(mensaje)
 
 # Definir la excepción personalizada que recibe un cliente
-class TiendaNoAsignadaError(Exception):
+class TiendaNoAsignadaError(CategoriaPropia1):
     def __init__(self, cliente, message="Debe pasar por la funcionalidad 1 para asignar una tienda."):
         self.cliente = cliente
         self.message = f"Cliente {cliente.get_nombre()}: {message}"  # Incluir el nombre del cliente en el mensaje
         super().__init__(self.message)
 
 # Función que verifica si el cliente tiene una tienda asignada
-def verificar_tienda_asignada(cliente):
-    if cliente.get_tienda() is None:  # Asume que 'None' significa que no hay tienda asignada
+def verificar_tienda_carrito_asignada(cliente):
+    if cliente.get_tienda() is None or cliente.get_carrito() is None:  # Asume que 'None' significa que no hay tienda asignada
         raise TiendaNoAsignadaError(cliente)
 
 
-class SaldoInsuficienteError(Exception):
+class SaldoInsuficienteError(CategoriaPropia2):
     def __init__(self, cliente, message="No tienes suficiente dinero para realizar la compra."):
         self.cliente = cliente
         self.message = f"Cliente {cliente.get_nombre()}: {message}"
@@ -41,7 +41,7 @@ def verificar_saldo(cliente, monto_compra):
 
 
 # Excepción personalizada para cuando el objeto no es de tipo Cliente
-class ObjetoNoEsClienteError(Exception):
+class ObjetoNoEsClienteError(CategoriaPropia2):
     def __init__(self, message="El objeto proporcionado no es un cliente."):
         self.message = message
         super().__init__(self.message)
@@ -61,7 +61,7 @@ def procesar_cliente(cliente):
 
 
 # Excepción personalizada para cuando el objeto no es de tipo Administrador
-class ObjetoNoEsAdministradorError(Exception):
+class ObjetoNoEsAdministradorError(CategoriaPropia1):
     def __init__(self, message="El objeto proporcionado no es un administrador."):
         self.message = message
         super().__init__(self.message)
