@@ -392,7 +392,7 @@ class Funcionalidad4:
                 Button(tiendas_frame, text=f"{idx}. {tienda.get_nombre()}", font=("Arial", 12), 
                     command=lambda t=tienda: self.administrar_tienda(window, t)).pack(pady=5)
 
-    @classmethod
+    
 
     @classmethod
     def administrar_tienda(self, window, tienda):
