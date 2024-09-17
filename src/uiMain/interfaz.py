@@ -288,7 +288,7 @@ class Iniciar_ventana_usuario():
             from gestorAplicacion.sujetos.persona import Persona
             cliente = None
             for persona in Persona.get_personas():
-                if 11001 == persona.get_id():
+                if persona.get_nombre() == "Carlos":
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente = persona
             funcionalidad1 = Funcionalidad1()
@@ -306,9 +306,11 @@ class Iniciar_ventana_usuario():
 
             cliente=None
             for persona in Persona.get_personas():
-                if 11001 == persona.get_id():
+                if persona.get_nombre() == "Carlos":
                     print(f"Bienvenido {persona.get_nombre()}")
-                    cliente=persona
+                    cliente = persona
+            funcionalidad1 = Funcionalidad1()
+            funcionalidad1.consultasEco(cliente, window)
             funcionalidad2 = Funcionalidad2()
             funcionalidad2.elegir_tipo_busqueda(cliente, window)
 
@@ -320,7 +322,7 @@ class Iniciar_ventana_usuario():
 
             cliente = None
             for persona in Persona.get_personas():
-                if 11001 == persona.get_id():
+                if persona.get_nombre() == "Carlos":
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente = persona
             funcionalidad3 = Funcionalidad3()
@@ -678,7 +680,7 @@ if __name__ == "__main__":
 
     cliente = None
     for persona in Persona.get_personas():  # Asegúrate de que `Persona.get_personas()` devuelva todos los clientes
-        if 11001==persona.get_id():
+        if persona.get_nombre()== "Carlos":
             cliente = persona
             break
 
