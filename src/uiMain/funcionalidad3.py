@@ -261,10 +261,12 @@ class Funcionalidad3:
                     result_label.config(text="¡Ganaste!")
                     guess_entry.config(state=tk.DISABLED)
                     self.gano_juego = True
+                    self.ya_jugo = True
                 elif juego_ahorcado.ha_perdido():
                     result_label.config(text="¡Perdiste!")
                     guess_entry.config(state=tk.DISABLED)
                     self.gano_juego = False
+                    self.ya_jugo = True
 
         def update_display():
             estado = juego_ahorcado.obtener_estado()
@@ -272,38 +274,44 @@ class Funcionalidad3:
 
         def restart_game():
             nonlocal juego_ahorcado
-            juego_ahorcado = Ahorcado("java")
+            juego_ahorcado = Ahorcado("python")  # Cambia "python" a una palabra aleatoria si lo deseas
             update_display()
             result_label.config(text="")
             guess_entry.config(state=tk.NORMAL)
 
         # Inicialización del juego
-        juego_ahorcado = Ahorcado("java")
+        juego_ahorcado = Ahorcado("python")  # Cambia "python" a una palabra aleatoria si lo deseas
         juego_ahorcado.iniciar()
 
         # Crear un Frame para el juego
-        game_frame = tk.Frame(window)
-        game_frame.pack(padx=10, pady=10)
+        game_frame = tk.Frame(window, padx=10, pady=10)
+        game_frame.pack(padx=20, pady=20)
+
+        # Definir una fuente para los botones y etiquetas
+        custom_font = font.Font(family="Helvetica", size=16, weight="bold")
 
         # Etiqueta para mostrar el estado del juego
-        estado_label = tk.Label(game_frame, text=juego_ahorcado.obtener_estado())
-        estado_label.pack(pady=5)
+        estado_label = tk.Label(game_frame, text=juego_ahorcado.obtener_estado(), font=custom_font)
+        estado_label.pack(pady=10)
 
         # Entrada para letras
-        guess_entry = tk.Entry(game_frame)
+        guess_entry = tk.Entry(game_frame, font=custom_font)
         guess_entry.pack(pady=5)
 
         # Botón para hacer la adivinanza
-        guess_button = tk.Button(game_frame, text="Adivinar", command=handle_guess)
+        guess_button = tk.Button(game_frame, text="Adivinar", font=custom_font, command=handle_guess)
         guess_button.pack(pady=5)
 
         # Etiqueta para mostrar el resultado
-        result_label = tk.Label(game_frame, text="")
-        result_label.pack(pady=5)
+        result_label = tk.Label(game_frame, text="", font=custom_font)
+        result_label.pack(pady=10)
 
         # Botón para reiniciar el juego
-        restart_button = tk.Button(game_frame, text="Reiniciar", command=restart_game)
-        restart_button.pack(pady=5)
+        restart_button = tk.Button(game_frame, text="Reiniciar", font=custom_font, command=restart_game)
+        restart_button.pack(pady=10)
+
+        # Actualizar la pantalla inicialmente
+        update_display()
 
         # Esperar a que el juego termine
         while not self.ya_jugo:
@@ -347,12 +355,20 @@ class Funcionalidad3:
                 button.config(state=tk.DISABLED)
 
         buttons = []
+        frame=Frame(window)
+        frame.pack(fill='both', expand=True, pady=20)
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_columnconfigure(1, weight=1)
+        frame.grid_columnconfigure(2, weight=1)
+        frame.grid_rowconfigure(0, weight=1)
+        frame.grid_rowconfigure(1, weight=1)
+        frame.grid_rowconfigure(2, weight=1)
         for i in range(9):
-            button = tk.Button(window, text="", width=10, height=3, command=lambda i=i: handle_click(i + 1))
+            button = tk.Button(frame, text="", width=40,height=20, command=lambda i=i: handle_click(i + 1))
             button.grid(row=i // 3, column=i % 3)
             buttons.append(button)
 
-        result_label = tk.Label(window, text="")
+        result_label = tk.Label(frame, text="")
         result_label.grid(row=3, columnspan=3)
 
         update_board()

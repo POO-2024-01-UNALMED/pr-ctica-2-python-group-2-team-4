@@ -6,7 +6,6 @@ from tkinter import scrolledtext, messagebox
 from tkinter.font import Font
 import sys
 
-
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from gestorAplicacion.servicios.carrito import Carrito
 from gestorAplicacion.sujetos.cliente import Cliente
@@ -323,6 +322,34 @@ class Iniciar_ventana_usuario():
                 if persona.get_nombre() == "Carlos":
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente = persona
+            tienda = cliente.get_tienda()
+            if tienda is None:
+                print("El cliente no está asociado a ninguna tienda.")
+            else:
+                # Crear productos
+                producto1 = Producto(nombre="Manzanas", marca="Veracruz", tamano=Tamano.GRANDE,
+                                     edad_valida=Edades.MENORES, categoria=Categoria.ALIMENTO, precio=2.5,
+                                     tienda=tienda)
+                producto2 = Producto(nombre="Pan", marca="Veracruz", tamano=Tamano.GRANDE, edad_valida=Edades.MENORES,
+                                     categoria=Categoria.ALIMENTO, precio=1.5, tienda=tienda)
+                producto3 = Producto(nombre="Leche", marca="Veracruz", tamano=Tamano.GRANDE, edad_valida=Edades.MENORES,
+                                     categoria=Categoria.ALIMENTO, precio=3.0, tienda=tienda)
+                for pasillo in tienda.get_pasillos():
+                    if pasillo.get_categoria() == Categoria.ALIMENTO:
+                        pasillo.get_productos().append(producto1)
+                        pasillo.get_productos().append(producto2)
+                        pasillo.get_productos().append(producto3)
+                # Crear carrito y agregar productos
+                carrito = Carrito(tienda=tienda)
+                carrito.get_productos().append(producto1)
+                carrito.get_productos().append(producto2)
+                carrito.get_productos().append(producto3)
+
+                carrito.set_cliente(cliente)
+                cliente.get_facturas().append(carrito)
+                tienda.get_facturas().append(carrito)
+
+            print(cliente.get_facturas())
             funcionalidad3 = Funcionalidad3()
             funcionalidad3.impresion_facturas(cliente, window)
 
