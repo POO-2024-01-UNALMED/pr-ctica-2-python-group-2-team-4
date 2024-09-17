@@ -646,6 +646,11 @@ if __name__ == "__main__":
     tienda3.get_empleados().extend([cajero3, cajero7])
     tienda4.get_empleados().append(cajero4)
 
+    admin7 = Administrador("Ricardo Díaz", 207, 45, Genero.H, 15000.0)
+  
+    for tienda in admin1.get_tiendas():
+        print(tienda.get_nombre())
+   
 
     ventana = Ventana()
     ventana.crearVentana1()

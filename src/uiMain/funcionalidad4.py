@@ -312,7 +312,6 @@ class Funcionalidad4:
         # Iniciar el loop de tkinter
         ventana.mainloop()
 
-
     @classmethod
     def ingresar(self, window):
         # Limpiar los widgets de la ventana
@@ -329,7 +328,7 @@ class Funcionalidad4:
 
             # Usamos un after para esperar y verificar hasta que identidad.resultado esté definido
             def check_identificacion():
-                if identidad.resultado is not None:
+                if identidad.resultado is not None and identidad.terminado is not False:
                     self.usuario = identidad.resultado
                     # Llama al frame de usuario solo si el usuario ha sido identificado
                     self.mostrar_frame_usuario(window)
@@ -352,39 +351,40 @@ class Funcionalidad4:
             else:
                 frame = Frame(window, bg="blue")
                 frame.pack(fill=tk.BOTH, expand=True)
-                self.funcionalidad(window)
+                self.seleccionar_tienda2(window)
 
         window.after(100, callback)
-
-    @classmethod
-    def funcionalidad(self, window):
+    # @classmethod
+    # def funcionalidad(self, window):
         
-        usuario1 = self.usuario
-        if isinstance(usuario1, Administrador) and len(usuario1.get_tiendas()) > 0:
-            tiendas = usuario1.get_tiendas()
+    #     usuario1 = self.usuario
+    #     if isinstance(usuario1, Administrador) and len(usuario1.get_tiendas()) > 0:
+    #         tiendas = usuario1.get_tiendas()
     
-            listbox = tk.Listbox(window)
-            listbox.pack(padx=10, pady=10)
+    #         listbox = tk.Listbox(window)
+    #         listbox.pack(padx=10, pady=10)
             
-            for tienda in tiendas:
-                listbox.insert(tk.END, tienda)
+    #         for tienda in tiendas:
+    #             listbox.insert(tk.END, tienda)
             
-            def on_select(event):
-                selected_index = listbox.curselection()
-                if selected_index:
-                    selected_tienda = tiendas[selected_index[0]]
-                    messagebox.showinfo("Tienda Seleccionada", f"Has seleccionado: {selected_tienda}")
-                    self.administrar_tienda(window, selected_tienda)
-                else:
-                    messagebox.showwarning("Advertencia", "No has seleccionado ninguna tienda")
+    #         def on_select(event):
+    #             selected_index = listbox.curselection()
+    #             if selected_index:
+    #                 selected_tienda = tiendas[selected_index[0]]
+    #                 messagebox.showinfo("Tienda Seleccionada", f"Has seleccionado: {selected_tienda}")
+    #                 self.administrar_tienda(window, selected_tienda)
+    #             else:
+    #                 messagebox.showwarning("Advertencia", "No has seleccionado ninguna tienda")
             
-            listbox.bind("<<ListboxSelect>>", on_select)
-        else:
-            messagebox.showinfo("Advertencia", "El usuario no posee tiendas")
+    #         listbox.bind("<<ListboxSelect>>", on_select)
+    #     else:
+    #         messagebox.showinfo("Advertencia", "El usuario no posee tiendas")
     
-    def seleccionar_tienda2(self, window, usuario):
+    @classmethod
+    def seleccionar_tienda2(self, window):
         """Método para seleccionar una tienda"""
         # Limpiar la ventana de widgets anteriores
+        usuario = self.usuario
         for widget in window.winfo_children():
             widget.destroy()
 
@@ -397,8 +397,8 @@ class Funcionalidad4:
             opciones_frame = Frame(window)
             opciones_frame.pack(pady=10)
 
-            Button(opciones_frame, text="Cambiar de usuario", font=("Arial", 12), command=self.cambiar_usuario).pack(side="left", padx=10)
-            Button(opciones_frame, text="Volver al menú principal", font=("Arial", 12), command=self.volver_menu_principal).pack(side="left", padx=10)
+            Button(opciones_frame, text="Cambiar de usuario", font=("Arial", 12)).pack(side="left", padx=10)
+            Button(opciones_frame, text="Volver al menú principal", font=("Arial", 12)).pack(side="left", padx=10)
         else:
             Label(window, text="Tiendas disponibles:", font=("Arial", 15)).pack(pady=10)
 
@@ -407,8 +407,10 @@ class Funcionalidad4:
 
             # Listar las tiendas disponibles
             for idx, tienda in enumerate(usuario.get_tiendas(), start=1):
-                Button(tiendas_frame, text=f"{idx}. {tienda.get_nombre()}", font=("Arial", 12), command=lambda t=tienda: self.administrar_tienda(window, t)).pack(pady=5)
+                Button(tiendas_frame, text=f"{idx}. {tienda.get_nombre()}", font=("Arial", 12), 
+                    command=lambda t=tienda: self.administrar_tienda(window, t)).pack(pady=5)
 
+    @classmethod
     def administrar_tienda(self, window, tienda):
         """Método para administrar la tienda seleccionada"""
         self.tienda_selecta = tienda
