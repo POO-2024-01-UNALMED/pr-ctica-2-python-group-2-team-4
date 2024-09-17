@@ -77,48 +77,67 @@ class Cliente(Persona):
             cliente.set_dinero(
                 presupuesto_personalizado if presupuesto_personalizado is not None else presupuesto_predeterminadoN)
 
-    @staticmethod
-    def perfil_demografico(cliente):
-        edad = cliente.edad
-        genero = cliente.genero
+
+    def perfil_demografico(self):
+        edad = self.edad
+        genero = self.genero
 
         if 18 <= edad <= 26:
-            return "Mujer Joven" if genero == Genero.M else "Hombre Joven"
+            return "MujerJoven" if genero == Genero.M else "HombreJoven"
         elif 27 <= edad <= 59:
-            return "Mujer Adulta" if genero == Genero.M else "Hombre Adulto"
+            return "MujerAdulta" if genero == Genero.M else "HombreAdulto"
         elif edad >= 60:
-            return "Mujer Anciana" if genero == Genero.M else "Hombre Anciano"
+            return "MujerAnciana" if genero == Genero.M else "HombreAnciano"
         else:
             return "Desconocido"
 
-    @staticmethod
-    def get_mensaje_por_perfil(perfil_demografico, membresia):
-        mensajes = {
-            Membresia.BASICO: "Membresía Básica:\nComo miembro Básico, %s\n- Disfruta de descuentos especiales...",
-            Membresia.PREMIUM: "Membresía Premium:\nComo miembro Premium, %s\n- Obtén descuentos exclusivos...",
-            Membresia.VIP: "Membresía VIP:\nComo miembro VIP, %s\n- Disfruta de los mayores descuentos...",
+    def get_mensaje_por_perfil(self,perfil_demografico, membresia):
+        # Definir los mensajes según la membresía
+        from gestorAplicacion.servicios.enums import Membresia
+        mensajes_por_membresia = {
+            Membresia.BASICO:
+               " Como miembro Básico, {}\nDisfruta de descuentos especiales según tu perfil demográfico.\nMantente al tanto de nuestras ofertas en el boletín mensual.\n"
+            ,
+            Membresia.PREMIUM:
+                "Como miembro Premium, {}\nObtén descuentos exclusivos y acceso anticipado a las últimas tendencias.\nDisfruta de atención prioritaria en cada compra.\nParticipa en eventos exclusivos diseñados para ti.\n"
+            ,
+            Membresia.VIP:
+                "Como miembro VIP, {}\nDisfruta de los mayores descuentos y acceso anticipado a colecciones exclusivas.\nRecibe asesoramiento personal y participa en eventos VIP diseñados especialmente para ti.\nObtén beneficios máximos adaptados a tus preferencias.\n"
+           ,
+            "DEFAULT": """
+                Beneficios Personalizados:
+                Te ofrecemos beneficios adaptados a tu perfil demográfico.
+                - Disfruta de descuentos y ofertas exclusivas.
+                - Consulta nuestras novedades en el boletín mensual.
+            """
         }
-        mensaje = mensajes.get(membresia, "Beneficios Personalizados:\nTe ofrecemos beneficios adaptados a tu perfil demográfico...")
 
-        detalles = {
-            "Mujer Joven": "disfrutarás de descuentos en productos ideales para tu estilo joven y vibrante...",
-            "Mujer Adulta": "obtendrás descuentos en productos que complementan tu estilo sofisticado...",
-            "Mujer Anciana": "te ofrecemos descuentos en productos adaptados a tus necesidades y confort...",
-            "Hombre Joven": "tendrás descuentos en productos que se adaptan a tu estilo dinámico...",
-            "Hombre Adulto": "disfrutarás de descuentos en productos que se ajustan a tu estilo profesional...",
-            "Hombre Anciano": "te ofrecemos descuentos en productos que se adaptan a tus preferencias y comodidad...",
-            "Desconocido": "te ofrecemos descuentos en productos seleccionados..."
+        # Seleccionar el mensaje basado en la membresía
+        mensaje = mensajes_por_membresia.get(membresia, mensajes_por_membresia["DEFAULT"])
+
+        # Definir los mensajes por perfil demográfico
+        mensajes_por_perfil = {
+            "MujerJoven": "disfrutarás de descuentos en productos ideales para tu estilo joven y vibrante.¡No te pierdas nuestras ofertas!",
+            "MujerAdulta": "obtendrás descuentos en productos que complementan tu estilo sofisticado.Mantente al tanto de nuestras ofertas especiales.",
+            "MujerAnciana": "te ofrecemos descuentos en productos adaptados a tus necesidades y confort.Consulta nuestras ofertas en el boletín mensual.",
+            "HombreJoven": "tendrás descuentos en productos que se adaptan a tu estilo dinámico.No olvides revisar el boletín mensual para novedades y ofertas.",
+            "HombreAdulto": "disfrutarás de descuentos en productos que se ajustan a tu estilo profesional.Consulta nuestras ofertas en el boletín mensual.",
+            "HombreAnciano": "te ofrecemos descuentos en productos que se adaptan a tus preferencias y comodidad.Revisa el boletín mensual para más detalles.",
+            "DEFAULT": "te ofrecemos descuentos en productos seleccionados."
         }
-        
-        return mensaje % detalles.get(perfil_demografico, "te ofrecemos descuentos en productos seleccionados.")
 
-    @staticmethod
-    def evolucionar_membresia(cliente, nueva_membresia):
+        # Seleccionar el mensaje basado en el perfil demográfico
+        mensaje_perfil = mensajes_por_perfil.get(perfil_demografico, mensajes_por_perfil["DEFAULT"])
+
+        # Retornar el mensaje final
+        return mensaje.format(mensaje_perfil)
+
+    def evolucionar_membresia(self,cliente, nueva_membresia):
         costo_evolucion = Cliente.calcular_costo_evolucion(cliente.membresia, nueva_membresia)
         if cliente.dinero >= costo_evolucion:
             cliente.dinero -= costo_evolucion
             cliente.set_membresia(nueva_membresia)
-            return f"¡Felicidades! Ahora eres miembro de la membresía {nueva_membresia.nombre}. Tu saldo actual es {cliente.dinero}"
+            return f"Ahora eres miembro de la membresía {nueva_membresia.get_nombre()}.\n Tu saldo total quedo en: ${cliente.get_dinero()}"
         else:
             return f"Lo siento, no tienes suficiente saldo para evolucionar a {nueva_membresia.nombre}"
 

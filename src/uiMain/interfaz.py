@@ -290,7 +290,7 @@ class Iniciar_ventana_usuario():
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente = persona
             funcionalidad1 = Funcionalidad1()
-            funcionalidad1.consultasEco(cliente, window)
+            funcionalidad1.consultasEco (cliente, window)
 
         # Añadir la opción en el menú para activar Funcionalidad Uno
         menuprocesos.add_command(label="Funcionalidad 1", command=mostrar_funcionalidad_uno)
