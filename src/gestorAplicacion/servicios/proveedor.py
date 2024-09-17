@@ -2,17 +2,16 @@ class Proveedor:
     # Atributos estáticos
     seis_proveedores = []
 
-    def __init__(self, nombre=None, entrega=None, tipo=None, tiendas=None,productos=None):
+    def __init__(self, nombre=None, entrega=None, tipo=None, tiendas=None, productos_proveedor=None):
         # Atributos de instancia
         self.nombre = nombre
         self.entrega = entrega if entrega is not None else []
         self.tipo = tipo
         self.tiendas = tiendas if tiendas is not None else []
-        if productos is None:
-            self.productos = []
+        if productos_proveedor is None:
+            self.productos_proveedor = []  # Corregido el nombre del atributo
         else:
-            self.productos = productos
-
+            self.productos_proveedor = productos_proveedor  
         #     for tienda in self.tiendas:
         #         tienda.get_proveedores().append(self)
 
@@ -20,11 +19,11 @@ class Proveedor:
 
     # Getters y setters
 
-    def get_productos(self):
-        return self.productos
+    def get_productos_proveedor(self):
+        return self.productos_proveedor  # Corregido aquí
 
-    def set_productos(self, productos):
-        self.productos = productos
+    def set_productos_proveedor(self, productos):
+        self.productos_proveedor = productos
 
     def set_nombre(self, nombre):
         self.nombre = nombre
