@@ -203,11 +203,18 @@ class Funcionalidad2:
                 if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                     widget.destroy()
 
-            frame1 = Frame(window, bg="light blue")
+            frame = FieldFrame(window,
+                               "La búsqueda de nuestra tienda es" + " lo más accesible para nuestros clientes. ¿Que desea hacer?",
+                               [], "Escoja uno de los botones", [], [], "Funcionalidad2",
+                               "La funcionalidad se basas en darle la posibilidad al cliente de interactuar" + " con los productos de la tienda y con su carrito asociado" + "permitiendo agregar o eliminar productos, ademas de poder guardar la factura de la compra",
+                               False)
+            for widget in frame.campos.winfo_children():
+                widget.destroy()
+            frame1=frame.campos
             frame1.pack(fill=BOTH, expand=True)
 
             label_instrucciones = Label(frame1, text="Selecciona una categoría:",
-                                        font=("Arial", 16, "bold"), bg="light blue")
+                                        font=("Arial", 16, "bold"), bg="#024A86")
             label_instrucciones.pack(pady=10)
 
             from gestorAplicacion.servicios.enums import Categoria
@@ -225,6 +232,7 @@ class Funcionalidad2:
 
             Button(frame1, text="Volver", font=("Arial", 12), bg="#ADD8E6", padx=30, pady=15,
                    command=lambda: self.elegir_tipo_busqueda(cliente,window)).pack(pady=10, anchor=CENTER)
+            frame.pack(fill=BOTH, expand=True)
 
         def buscar_productos_por_categoria(categoria,frame1):
             productos = cliente.get_tienda().buscar_productos(categoria)
@@ -682,7 +690,7 @@ class Funcionalidad2:
             if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
                 widget.destroy()
 
-        frame = Frame(window, bg="light blue", padx=20, pady=20)
+        frame = Frame(window, bg="#024A86", padx=20, pady=20)
         frame.pack(expand=True, fill=BOTH, padx=20, pady=20)
 
         # Etiqueta con mensaje en un cuadro de fondo
