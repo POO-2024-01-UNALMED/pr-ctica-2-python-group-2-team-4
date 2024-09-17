@@ -122,17 +122,11 @@ class Iniciar_ventana_usuario():
     @classmethod
     def mostrar_funcionalidad_uno(cls, window):
         from uiMain.funcionalidad1 import Funcionalidad1
-        from gestorAplicacion.sujetos.cliente import Cliente
-        from gestorAplicacion.sujetos.persona import Persona
-        """"
-        cliente = None
-        for persona in Persona.get_personas():
-            if persona.get_nombre() == "Carlos":
-                print(f"Bienvenido {persona.get_nombre()}")
-                cliente = persona
-        """
         funcionalidad1 = Funcionalidad1()
         funcionalidad1.ingresar(window)
+
+
+        
     def __init__(self):
         def matarloTodo(frameUtilizado):
             for frame in framesAMatar:
