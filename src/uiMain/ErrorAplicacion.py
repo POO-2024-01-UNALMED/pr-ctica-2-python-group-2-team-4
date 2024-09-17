@@ -13,15 +13,18 @@ class CategoriaPropia2(ErrorAplicacion):
     def __init__(self,mensaje):
         super().__init__(mensaje)
 
+# Definir la excepción personalizada que recibe un cliente
 class TiendaNoAsignadaError(Exception):
-    def __init__(self, message="Debe pasar por la funcionalidad 1 para asignar una tienda."):
-        self.message = message
+    def __init__(self, cliente, message="Debe pasar por la funcionalidad 1 para asignar una tienda."):
+        self.cliente = cliente
+        self.message = f"Cliente {cliente.get_nombre()}: {message}"  # Incluir el nombre del cliente en el mensaje
         super().__init__(self.message)
 
 # Función que verifica si el cliente tiene una tienda asignada
 def verificar_tienda_asignada(cliente):
-    if cliente.get_tienda() is None:  
-        raise TiendaNoAsignadaError()
+    if cliente.get_tienda() is None:  # Asume que 'None' significa que no hay tienda asignada
+        raise TiendaNoAsignadaError(cliente)
+
 
 class ExceptionInventada2(CategoriaPropia1):
     pass
