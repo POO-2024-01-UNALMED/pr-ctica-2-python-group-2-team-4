@@ -82,11 +82,15 @@ class HojaVida(Frame):
         else:
             txt="jordan"
         try:
-            with open(os.path.realpath('src\\assets\\'+txt+".txt"), "r+") as hv_text:
+            with open(os.path.realpath('src\\assets\\' + txt + ".txt"), "r+") as hv_text:
                 self._text.insert(INSERT, hv_text.read())
         except:
-            with open(os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\'+txt+".txt"), "r+") as hv_text:
-                self._text.insert(INSERT, hv_text.read())
+            try:
+                with open(os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),
+                                       'src\\assets\\' + txt + ".txt"), "r+") as hv_text:
+                    self._text.insert(INSERT, hv_text.read())
+            except:
+                pass
 
     def proximo(self, _):
         self._text.destroy()
