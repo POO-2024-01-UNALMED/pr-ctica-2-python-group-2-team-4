@@ -1,4 +1,5 @@
 import tkinter as tk
+from lib2to3.fixer_util import String
 from tkinter import Tk, messagebox
 
 #from interfaz import FieldFrame_p
@@ -264,6 +265,16 @@ class Identidad2:
 
     def mostrar_registro(self, id):
         def registrar():
+            from gestorAplicacion.sujetos.persona import Persona
+            for i in range(1,len(self.frame_actual._entrys)-1):
+                if self.frame_actual._entrys[i].get() == "":
+                    messagebox.showerror("Error", "Faltan campos por completar")
+                    return
+            for i in range(1,len(self.frame_actual._entrys)):
+                if (not isinstance(self.frame_actual._entrys[i].get(), int)):
+                    messagebox.showerror("Error", "Algunos campos tienen que ser numericos")
+                    return
+
             nombre = self.frame_actual._entrys[0].get()
             id = self.frame_actual._entrys[1].get()
             edad = self.frame_actual._entrys[2].get()
