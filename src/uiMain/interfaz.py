@@ -292,7 +292,7 @@ class Iniciar_ventana_usuario():
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente = persona
             funcionalidad1 = Funcionalidad1()
-            funcionalidad1.consultasEco(cliente, window)
+            funcionalidad1.consultasEco (cliente, window)
 
         # Añadir la opción en el menú para activar Funcionalidad Uno
         menuprocesos.add_command(label="Funcionalidad 1", command=mostrar_funcionalidad_uno)
@@ -306,7 +306,7 @@ class Iniciar_ventana_usuario():
 
             cliente=None
             for persona in Persona.get_personas():
-                if 11001 == persona.get_id():
+                if "Carlos" == persona.get_nombre():
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente=persona
             funcionalidad2 = Funcionalidad2()
@@ -320,9 +320,34 @@ class Iniciar_ventana_usuario():
 
             cliente = None
             for persona in Persona.get_personas():
-                if 11001 == persona.get_id():
+                if "Carlos"==persona.get_nombre():
                     print(f"Bienvenido {persona.get_nombre()}")
                     cliente = persona
+
+            tienda = cliente.get_tienda()
+            if tienda is None:
+                print("El cliente no está asociado a ninguna tienda.")
+            else:
+                # Crear productos
+                producto1 = Producto(nombre="Manzanas", marca="Veracruz",tamano=Tamano.GRANDE,edad_valida=Edades.MENORES,categoria=Categoria.ALIMENTO, precio=2.5, tienda=tienda)
+                producto2 = Producto(nombre="Pan", marca="Veracruz",tamano=Tamano.GRANDE,edad_valida=Edades.MENORES,categoria=Categoria.ALIMENTO, precio=1.5, tienda=tienda)
+                producto3 = Producto(nombre="Leche", marca="Veracruz",tamano=Tamano.GRANDE,edad_valida=Edades.MENORES,categoria=Categoria.ALIMENTO, precio=3.0, tienda=tienda)
+                for pasillo in tienda.get_pasillos():
+                    if pasillo.get_categoria() == Categoria.ALIMENTO:
+                        pasillo.get_productos().append(producto1)
+                        pasillo.get_productos().append(producto2)
+                        pasillo.get_productos().append(producto3)
+                # Crear carrito y agregar productos
+                carrito = Carrito(tienda=tienda)
+                carrito.get_productos().append(producto1)
+                carrito.get_productos().append(producto2)
+                carrito.get_productos().append(producto3)
+
+                carrito.set_cliente(cliente)
+                cliente.get_facturas().append(carrito)
+                tienda.get_facturas().append(carrito)
+
+            print(cliente.get_facturas())
             funcionalidad3 = Funcionalidad3()
             funcionalidad3.impresion_facturas(cliente, window)
 
@@ -678,7 +703,7 @@ if __name__ == "__main__":
 
     cliente = None
     for persona in Persona.get_personas():  # Asegúrate de que `Persona.get_personas()` devuelva todos los clientes
-        if 11001==persona.get_id():
+        if "Carlos"==persona.get_nombre():
             cliente = persona
             break
 

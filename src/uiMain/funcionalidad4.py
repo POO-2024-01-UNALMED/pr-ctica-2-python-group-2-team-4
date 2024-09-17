@@ -5,7 +5,13 @@ from typing import List, Optional
 import sys
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
 from fieldFrame import FieldFrame
+
 from servicios.proveedor import Proveedor
+
+
+from gestorAplicacion.servicios.proveedor import Proveedor
+
+
 
 from gestorAplicacion.servicios.enums import Genero
 from gestorAplicacion.servicios.tienda import Tienda
