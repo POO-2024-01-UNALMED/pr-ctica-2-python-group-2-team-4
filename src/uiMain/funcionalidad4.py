@@ -436,7 +436,71 @@ class Funcionalidad4:
 
         # Botones para administrar la tienda
         Button(window, text="Administrar Productos", font=("Arial", 12)).pack(pady=5)
-        Button(window, text="Administrar Proveedores", font=("Arial", 12), command=lambda: self.mostrar_proveedores(window, tienda)).pack(pady=5)
+        Button(window, text="Administrar Proveedores", font=("Arial", 12), command=lambda: self.mostrar_proveedores(window, tienda)).pack(pady=5) 
+
+    @classmethod
+    def administrar_productos(self, window, tienda):
+        """Método para administrar los productos de una tienda"""
+        # Limpiar la ventana de widgets anteriores
+        widgets = window.winfo_children()  
+        for i, widget in enumerate(widgets):
+            if i >= 4:  
+                widget.destroy()
+
+        Label(window, text=f"Administrando productos de la tienda: {tienda.get_nombre()}", font=("Arial", 15)).pack(pady=10)
+
+        # Frame para las opciones de administración de productos
+        opciones_frame = Frame(window)
+        opciones_frame.pack(pady=10)
+
+        # Botón para ver todos los productos en el inventario
+        Button(opciones_frame, text="Ver Total de Productos en el Inventario", font=("Arial", 12), 
+            command=lambda: self.mostrar_inventario_productos(window, tienda)).pack(pady=5)
+
+        # Botón para ver productos vencidos
+        Button(opciones_frame, text="Ver Productos Vencidos", font=("Arial", 12), 
+            command=lambda: self.mostrar_productos_vencidos(window, tienda)).pack(pady=5)
+        
+
+    @classmethod
+    def mostrar_inventario_productos(self, window, tienda):
+        """Método para mostrar el total de productos en el inventario"""
+        # Limpiar la ventana de widgets anteriores
+        widgets = window.winfo_children()  
+        for i, widget in enumerate(widgets):
+            if i >= 4:  
+                widget.destroy()
+
+        Label(window, text="Inventario de productos:", font=("Arial", 15)).pack(pady=10)
+
+        # Obtener todos los productos de la tienda
+        productos_totales = tienda.obtener_todos_los_productos()
+
+        # Diccionario para agrupar productos por nombre, tamaño y marca
+        inventario = {}
+        for producto in productos_totales:
+            clave = (producto._nombre, producto._tamano, producto._marca)
+            if clave in inventario:
+                inventario[clave]["cantidad"] += 1
+            else:
+                inventario[clave] = {
+                    "nombre": producto._nombre,
+                    "tamano": producto._tamano,
+                    "marca": producto._marca,
+                    "precio": producto._precio,
+                    "cantidad": 1
+                }
+
+        # Frame para mostrar el inventario
+        inventario_frame = Frame(window)
+        inventario_frame.pack(pady=10)
+
+        # Mostrar los productos en un formato bonito
+        for clave, detalles in inventario.items():
+            Label(inventario_frame, text=f"{detalles['nombre']} - {detalles['tamano']} - {detalles['marca']} - Cantidad: {detalles['cantidad']} - Precio: ${detalles['precio']:.2f}", font=("Arial", 12)).pack(pady=5)
+            
+
+
 
     @classmethod
     def mostrar_proveedores(self, window, tienda):
