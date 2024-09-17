@@ -164,44 +164,54 @@ class Funcionalidad1:
                    font=("Arial", 12), bg="#F2F2F2", padx=30, pady=15,
                    width=35, command=lambda: self.consultasEco(cliente,window)).pack(pady=10, anchor=CENTER)
     #--------------------------------------------------------------------------------------------------------------------------------------------
-    def aplicar_presupuesto(self, cliente, tienda, window,cat=None):
-            widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
-            for i, widget in enumerate(widgets):
-                if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
-                    widget.destroy()
+    def aplicar_presupuesto(self, cliente, tienda, window, cat=None):
+        # Limpiar los widgets existentes en la ventana
+        widgets = window.winfo_children()
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
+                widget.destroy()
 
-            presupuesto_frame = Frame(window, bg="#243340")
-            presupuesto_frame.pack(pady=10, fill=BOTH, expand=True)
+        # Crear el frame principal con color de fondo
+        presupuesto_frame = Frame(window, bg="#243340")
+        presupuesto_frame.pack(pady=20, fill=BOTH, expand=True)
 
-            # Crear el marco para los botones
-            presu_frame = Frame(presupuesto_frame, bg="#243340")
-            presu_frame.pack(pady=10, fill=BOTH, expand=True)
+        # Crear el marco interno con mayor padding
+        presu_frame = Frame(presupuesto_frame, bg="#1C2833", padx=30, pady=30, relief="raised", bd=5)
+        presu_frame.pack(pady=20, fill=BOTH, expand=True)
 
-            # Label para la pregunta
-            label_pregunta = Label(presu_frame,
-                                      text="¿Deseas usar un presupuesto por defecto o ingresar uno personalizado?",
-                                      font=("Arial", 12))
-            label_pregunta.pack(pady=10)
+        # Título principal estilizado
+        label_titulo = Label(presu_frame, text="Selecciona un presupuesto", font=("Arial", 14, "bold"), fg="white",
+                             bg="#1C2833")
+        label_titulo.pack(pady=10)
 
-            # Variable para almacenar la opción seleccionada
+        # Pregunta con un estilo visual más atractivo
+        label_pregunta = Label(presu_frame,
+                               text="¿Deseas usar un presupuesto por defecto o ingresar uno personalizado?",
+                               font=("Arial", 12), fg="white", bg="#1C2833", wraplength=400, justify="center")
+        label_pregunta.pack(pady=15)
 
+        # Botón para presupuesto por defecto, con color mejorado
+        button_defecto = Button(presu_frame, text="Usar presupuesto por defecto", font=("Arial", 12, "bold"),
+                                bg="#2874A6", fg="white", padx=20, pady=10,
+                                command=lambda: self.enlace(cliente, tienda, None, window, cat))
+        button_defecto.pack(pady=10, fill=X)
 
-            # Botón para presupuesto por defecto
-            button_defecto = Button(presu_frame, text="Presupuesto por defecto", font=("Arial", 12),
-                                       command=lambda: self.enlace(cliente, tienda, None, window,cat))
-            button_defecto.pack(pady=5)
+        # Etiqueta para presupuesto personalizado
+        label_personalizado = Label(presu_frame, text="Ingresar presupuesto personalizado",
+                                    font=("Arial", 12, "italic"),
+                                    fg="white", bg="#1C2833")
+        label_personalizado.pack(pady=10)
 
-            # Label y cuadro de texto para presupuesto personalizado
-            label_personalizado = Label(presu_frame, text="Presupuesto personalizado", font=("Arial", 12))
-            label_personalizado.pack(pady=5)
-            self.entry_presupuesto = Entry(presu_frame, font=("Arial", 12))
-            self.entry_presupuesto.pack(pady=5)
+        # Entrada de texto para el presupuesto personalizado
+        self.entry_presupuesto = Entry(presu_frame, font=("Arial", 12), justify="center", relief="sunken", bd=3)
+        self.entry_presupuesto.pack(pady=10, ipadx=5, ipady=5)
 
-
-            # Botón para aplicar presupuesto personalizado
-            button_personalizado = (Button(presu_frame, text="Aplicar presupuesto personalizado", font=("Arial", 12),
-                                             command=lambda: self.enlace(cliente, tienda,self.entry_presupuesto.get(), window,cat)))
-            button_personalizado.pack(pady=10)
+        # Botón para aplicar el presupuesto personalizado con colores llamativos
+        button_personalizado = Button(presu_frame, text="Aplicar presupuesto personalizado", font=("Arial", 12, "bold"),
+                                      bg="#28B463", fg="white", padx=20, pady=10,
+                                      command=lambda: self.enlace(cliente, tienda, self.entry_presupuesto.get(), window,
+                                                                  cat))
+        button_personalizado.pack(pady=20, fill=X)
 
     #--------------------------------------------------------------------------------------------------------------------------------------------
     def enlace(self, cliente, tienda, presupuesto, window,cat=None):
