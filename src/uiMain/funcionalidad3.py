@@ -1,5 +1,6 @@
 import sys
-from tkinter import Frame, Label, Entry, Button, messagebox, simpledialog
+from tkinter import Frame, Label, Entry, Button, messagebox, simpledialog, IntVar, Radiobutton, StringVar, RIGHT, LEFT, \
+    font
 
 from gestorAplicacion.servicios.ahorcado import Ahorcado
 from gestorAplicacion.servicios.enums import TipoCaja
@@ -8,16 +9,15 @@ from gestorAplicacion.sujetos import cliente
 from gestorAplicacion.sujetos.administrador import Administrador
 from gestorAplicacion.sujetos.cliente import Cliente
 from uiMain.main import Main
-
+import tkinter as tk
 
 class Funcionalidad3:
 
-    def impresion_facturas(self,persona, window):
-        from tkinter import Frame, Label, Button, Entry, END, CENTER
-        from uiMain.main import Main
-        from gestorAplicacion.sujetos.administrador import Administrador
-        from gestorAplicacion.sujetos.cliente import Cliente
+    def __init__(self):
+        self.precio_con_descuento = None
 
+    def impresion_facturas(self, persona, window):
+        from tkinter import Frame, Label, Button, Listbox, END, Tk, Scrollbar, VERTICAL
         # Limpiar la ventana actual
         for widget in window.winfo_children():
             widget.destroy()
@@ -25,9 +25,7 @@ class Funcionalidad3:
         # Obtener las tiendas con facturas
         tiendas = persona.get_tiendas_con_facturas()
 
-        print(persona.get_facturas())
-        print(tiendas)
-
+        # Verificar si hay tiendas con facturas
         if not tiendas:
             Label(window, text="No tienes facturas en ninguna tienda.",
                   font=("Arial", 14), bg="light blue").pack(pady=20)
@@ -37,53 +35,32 @@ class Funcionalidad3:
         frame_tiendas = Frame(window, bg="light blue")
         frame_tiendas.pack(fill='both', expand=True, pady=20)
 
-        # Mostrar tabla de tiendas
-        Label(frame_tiendas, text="Número de Facturas",
+        # Título
+        Label(frame_tiendas, text="Selecciona una tienda:",
               font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
 
-        Label(frame_tiendas, text="+-----+----------------+-----------------+",
-              font=("Arial", 12), bg="light blue").pack()
-        Label(frame_tiendas, text="| No. | Nombre         | Cantidad        |",
-              font=("Arial", 12), bg="light blue").pack()
-        Label(frame_tiendas, text="+-----+----------------+-----------------+",
-              font=("Arial", 12), bg="light blue").pack()
+        # Crear Listbox para las tiendas
+        listbox_tiendas = Listbox(frame_tiendas, font=("Arial", 12), width=50, height=10)
+        listbox_tiendas.pack(side='left', fill='y', padx=10)
 
-        conteo_tiendas = {}
+        # Scrollbar para el Listbox
+        scrollbar = Scrollbar(frame_tiendas, orient=VERTICAL)
+        scrollbar.pack(side='right', fill='y')
+        listbox_tiendas.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox_tiendas.yview)
+
+        # Agregar tiendas al Listbox
         for tienda in tiendas:
-            nombre_tienda = tienda.get_nombre()
-            if nombre_tienda:
-                cantidad_facturas = len(tienda.get_facturas()) if tienda.get_facturas() else 0
-                conteo_tiendas[nombre_tienda] = cantidad_facturas
-
-        for numero, (nombre, cantidad) in enumerate(conteo_tiendas.items(), start=1):
-            Label(frame_tiendas, text=f"| {numero:<3} | {nombre:<14} | {cantidad:<15} |",
-                  font=("Arial", 12), bg="light blue").pack()
-
-        Label(frame_tiendas, text="+-----+----------------+-----------------+",
-              font=("Arial", 12), bg="light blue").pack()
-
-        # Entry y botón para seleccionar la tienda
-        Label(frame_tiendas, text="Selecciona el número de la tienda:",
-              font=("Arial", 12), bg="light blue").pack(pady=10)
-        entry_tienda = Entry(frame_tiendas, font=("Arial", 12))
-        entry_tienda.pack(pady=5)
+            listbox_tiendas.insert(END, tienda.get_nombre())
 
         def seleccionar_tienda():
-            try:
-                seleccion = int(entry_tienda.get())
-                tienda_seleccionada = None
-                if 1 <= seleccion <= len(conteo_tiendas):
-                    for numero, tienda in enumerate(tiendas, start=1):
-                        if numero == seleccion:
-                            tienda_seleccionada = tienda
-                            break
-
-                if tienda_seleccionada:
-                    self.mostrar_facturas(tienda_seleccionada, persona, window)
-                else:
-                    mostrar_error("Selección inválida.")
-            except ValueError:
-                mostrar_error("Debes ingresar un número válido.")
+            seleccion = listbox_tiendas.curselection()
+            if seleccion:
+                index = seleccion[0]
+                tienda_seleccionada = tiendas[index]
+                self.mostrar_facturas(tienda_seleccionada, persona, window)
+            else:
+                mostrar_error("Selecciona una tienda de la lista.")
 
         Button(frame_tiendas, text="Seleccionar tienda",
                font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
@@ -92,7 +69,9 @@ class Funcionalidad3:
         def mostrar_error(mensaje):
             Label(frame_tiendas, text=mensaje, font=("Arial", 12), fg="red", bg="light blue").pack(pady=10)
 
-    def mostrar_facturas(self,tienda_seleccionada, persona, window):
+    def mostrar_facturas(self, tienda_seleccionada, persona, window):
+        from tkinter import Frame, Label, Button, Listbox, END, Scrollbar, VERTICAL
+
         # Limpiar la ventana actual
         for widget in window.winfo_children():
             widget.destroy()
@@ -103,51 +82,33 @@ class Funcionalidad3:
         frame_facturas = Frame(window, bg="light blue")
         frame_facturas.pack(fill='both', expand=True, pady=20)
 
-        # Mostrar tabla de facturas
-        Label(frame_facturas, text="Facturas",
+        # Título
+        Label(frame_facturas, text="Selecciona una factura:",
               font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
 
-        Label(frame_facturas,
-              text="+-----+--------------------+------------+-----------------+------------+----------+",
-              font=("Arial", 12), bg="light blue").pack()
-        Label(frame_facturas,
-              text="| No. | Tienda             | Fecha      | Productos        | Precio     | Pagada   |",
-              font=("Arial", 12), bg="light blue").pack()
-        Label(frame_facturas,
-              text="+-----+--------------------+------------+-----------------+------------+----------+",
-              font=("Arial", 12), bg="light blue").pack()
+        # Crear Listbox para las facturas
+        listbox_facturas = Listbox(frame_facturas, font=("Arial", 12), width=70, height=10)
+        listbox_facturas.pack(side='left', fill='y', padx=10)
 
-        for numero, factura in enumerate(mis_facturas, start=1):
-            if factura:
-                estado_pago = "Sí" if factura.get_pagado() else "No"
-                precio_total = factura.calcular_total()
-                Label(frame_facturas,
-                      text=f"| {numero:<3} | {factura.get_tienda().get_nombre():<18} | {factura.get_fecha_facturacion():<10} | {len(factura.get_productos()):<15} | {precio_total:<10.2f} | {estado_pago:<8} |",
-                      font=("Arial", 12), bg="light blue").pack()
+        # Scrollbar para el Listbox
+        scrollbar = Scrollbar(frame_facturas, orient=VERTICAL)
+        scrollbar.pack(side='right', fill='y')
+        listbox_facturas.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox_facturas.yview)
 
-        Label(frame_facturas,
-              text="+-----+--------------------+------------+-----------------+------------+----------+",
-              font=("Arial", 12), bg="light blue").pack()
-
-        # Entry y botón para seleccionar la factura
-        Label(frame_facturas, text="Selecciona el número de la factura:",
-              font=("Arial", 12), bg="light blue").pack(pady=10)
-        entry_factura = Entry(frame_facturas, font=("Arial", 12))
-        entry_factura.pack(pady=5)
+        # Agregar facturas al Listbox
+        for factura in mis_facturas:
+            info_factura = f"{factura.get_fecha_facturacion()} - {len(factura.get_productos())} productos - ${factura.calcular_total():.2f}"
+            listbox_facturas.insert(END, info_factura)
 
         def seleccionar_factura():
-            try:
-                seleccion = int(entry_factura.get())
-                if 1 <= seleccion <= len(mis_facturas):
-                    factura_seleccionada = mis_facturas[seleccion - 1]
-                    if factura_seleccionada:
-                        self.mostrar_detalle_factura(factura_seleccionada, persona,window)
-                    else:
-                        mostrar_error("Factura seleccionada no encontrada.")
-                else:
-                    mostrar_error("Selección inválida.")
-            except ValueError:
-                mostrar_error("Debes ingresar un número válido.")
+            seleccion = listbox_facturas.curselection()
+            if seleccion:
+                index = seleccion[0]
+                factura_seleccionada = mis_facturas[index]
+                self.mostrar_detalle_factura(factura_seleccionada, persona, window)
+            else:
+                mostrar_error("Selecciona una factura de la lista.")
 
         Button(frame_facturas, text="Seleccionar factura",
                font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
@@ -156,33 +117,30 @@ class Funcionalidad3:
         def mostrar_error(mensaje):
             Label(frame_facturas, text=mensaje, font=("Arial", 12), fg="red", bg="light blue").pack(pady=10)
 
-    def mostrar_detalle_factura(self,factura_seleccionada, persona, window):
+    def mostrar_detalle_factura(self, factura_seleccionada, persona, window):
+        from tkinter import Frame, Label, Button
+
         # Limpiar la ventana actual
         for widget in window.winfo_children():
             widget.destroy()
 
-        # Mostrar detalles de los productos de la factura seleccionada
+        # Crear un frame para mostrar los detalles
         frame_detalle = Frame(window, bg="light blue")
         frame_detalle.pack(fill='both', expand=True, pady=20)
 
+        # Título
         Label(frame_detalle, text="Detalles de la Factura",
               font=("Arial", 16, "bold"), bg="light blue").pack(pady=10)
 
-        Label(frame_detalle, text="+-----+--------------------+---------------+----------+------------+----------+",
-              font=("Arial", 12), bg="light blue").pack()
-        Label(frame_detalle, text="| No. | Producto           | Marca         | Tamaño   | Categoría  | Precio   |",
-              font=("Arial", 12), bg="light blue").pack()
-        Label(frame_detalle, text="+-----+--------------------+---------------+----------+------------+----------+",
-              font=("Arial", 12), bg="light blue").pack()
+        # Encabezado
+        Label(frame_detalle, text="Productos de la factura:",
+              font=("Arial", 14, "bold"), bg="light blue").pack(pady=10)
 
         for numero_producto, producto in enumerate(factura_seleccionada.get_productos(), start=1):
             if producto:
                 Label(frame_detalle,
-                      text=f"| {numero_producto:<3} | {producto.get_nombre():<18} | {producto.get_marca():<13} | {producto.get_tamano().get_tamano():<8} | {producto.get_categoria().get_texto():<10} | {producto.get_precio():<8.2f} |",
-                      font=("Arial", 12), bg="light blue").pack()
-
-        Label(frame_detalle, text="+-----+--------------------+---------------+----------+------------+----------+",
-              font=("Arial", 12), bg="light blue").pack()
+                      text=f"{numero_producto}. {producto.get_nombre()} - {producto.get_marca()} - {producto.get_tamano().get_tamano()} - {producto.get_categoria().get_texto()} - ${producto.get_precio():.2f}",
+                      font=("Arial", 12), bg="light blue").pack(pady=5)
 
         # Opciones adicionales
         if isinstance(persona, Administrador):
@@ -200,10 +158,7 @@ class Funcionalidad3:
                   font=("Arial", 12, "bold"), bg="light blue").pack(pady=10)
             Button(frame_detalle, text="Pagar factura",
                    font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
-                   command=lambda: persona.set_tienda(
-                       factura_seleccionada.get_tienda()) or Funcionalidad3.seleccionar_caja(persona,
-                                                                                             factura_seleccionada,persona.get_carrito())).pack(
-                pady=5)
+                   command=lambda: self.seleccionar_caja(persona,factura_seleccionada,window)).pack()
             Button(frame_detalle, text="Escoger otra factura",
                    font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
                    command=lambda: self.impresion_facturas(persona, window)).pack(pady=5)
@@ -211,172 +166,561 @@ class Funcionalidad3:
                    font=("Arial", 12), bg="#ADD8E6", padx=20, pady=10,
                    command=lambda: Main.escoger_funcionalidad()).pack(pady=5)
 
-    def seleccionar_caja(self, cliente, carrito):
-        self.cliente = cliente
-        self.carrito = carrito
+    def seleccionar_caja(self, cliente, carrito, window):
+        for widget in window.winfo_children():
+            widget.destroy()
 
         cajas = cliente.get_tienda().cajas_disponibles()
+        frame=Frame(window)
+        frame.pack(fill='both', expand=True, pady=20)
+
+        def esperar_caja():
+            pass
+
+        def salir():
+            pass
+
         if not cajas:
-            opcion = messagebox.askquestion(
-                "No hay cajas disponibles",
-                "No hay cajas disponibles.\n¿Desea esperar a que una caja esté disponible o salir?"
-            )
-            if opcion == 'yes':
-                # Aquí podrías implementar la lógica para esperar a un cajero disponible
-                cliente.get_tienda().asignar_cajero(
-                    cliente.get_tienda().encontrar_cajero(cliente.get_tienda().empleados))
-                self.seleccionar_caja(cliente, carrito)
-                return
-            else:
-                Main.escoger_funcionalidad()
-                return
+            mensaje_label = Label(frame, text="No hay cajas disponibles.")
+            mensaje_label.pack(pady=5)
 
-        # Mostrar cajas disponibles
-        cajas_str = "\n".join(
-            f"{i + 1}. Caja: {caja.get_nombre()}, Tipo: {caja.get_tipo()}, Empleado: {caja.get_cajero().get_nombre()}"
-            for i, caja in enumerate(cajas)
-        )
-        seleccion = simpledialog.askinteger("Seleccionar Caja", f"Seleccione una caja para pagar:\n{cajas_str}")
+            # Botón para esperar a que una caja esté disponible
+            esperar_button = Button(frame, text="Esperar a que una caja esté disponible",
+                                       command=esperar_caja)
+            esperar_button.pack(pady=5)
 
-        if not seleccion or seleccion < 1 or seleccion > len(cajas):
-            messagebox.showwarning("Selección inválida", "Opción no válida. Inténtelo de nuevo.")
-            return
+            # Botón para no pagar y salir
+            salir_button = Button(frame, text="No pagar y salir", command=salir)
+            salir_button.pack(pady=5)
 
-        self.caja_seleccionada = cajas[seleccion - 1]
-
-        if self.caja_seleccionada.get_tipo() == TipoCaja.RAPIDA and len(carrito.get_productos()) > 5:
-            messagebox.showwarning("Caja rápida no disponible",
-                                   "No puede usar la caja rápida porque tiene más de 5 productos.")
-            return
-
-        self.caja_seleccionada.cliente = cliente
-        self.mostrar_factura()
-
-    def mostrar_factura(self):
-        descuento_membresia = self.cliente.calcular_descuento_por_membresia()
-        precio_total = self.carrito.calcular_total()
-        precio_con_descuento = precio_total * (1 - descuento_membresia)
-
-        detalles_factura = self.carrito.generar_detalles_factura(descuento_membresia, False)
-        detalles_factura += f"\nTotal con descuento: {precio_con_descuento:.2f}"
-
-        respuesta = messagebox.askquestion("Factura", f"{detalles_factura}\n\n¿Desea borrar esta factura y no pagarla?")
-        if respuesta == 'yes':
-            self.carrito.eliminar_carrito()
-            self.cliente.set_tienda(None)
-            self.cliente.set_carrito(None)
-            self.caja_seleccionada.set_cliente(None)
-            self.carrito.set_caja(None)
-            messagebox.showinfo("Factura eliminada", "Factura eliminada y productos devueltos al inventario.")
-            return
-
-        respuesta_juego = messagebox.askquestion("Descuento Adicional",
-                                                 "¿Desea intentar obtener un descuento adicional jugando?")
-        if respuesta_juego == 'yes':
-            self.jugar_para_descuento(precio_total, descuento_membresia)
         else:
-            self.confirmar_pago(precio_con_descuento)
+            caja_label = Label(frame, text="Seleccione una caja para pagar:")
+            caja_label.pack(pady=5)
 
-    def jugar_para_descuento(self, precio_total, descuento_membresia):
-        tiene_membresia = self.cliente.get_membresia() is not None
-        costo_juego = 0
+            for i, caja in enumerate(cajas):
+                cajero = caja.get_cajero()
+                caja_info = f"{i + 1}. Caja: {caja.get_nombre()}, Tipo: {caja.get_tipo()}, Empleado: {cajero.get_nombre()}"
+                caja_button = Button(frame, text=caja_info, command=lambda: self.pagar_factura(cliente, carrito, caja,window))
+                caja_button.pack(pady=5)
+
+    def pagar_factura(self, cliente,carrito,caja_seleccionada,window):
+        for widget in window.winfo_children():
+            widget.destroy()
+        descuento_membresia = cliente.calcular_descuento_por_membresia()
+        precio_total = carrito.calcular_total()
+        self.precio_con_descuento = precio_total * (1 - descuento_membresia)
+
+        # Imprimir factura con descuento por membresía
+        factura_text = carrito.generar_detalles_factura(descuento_membresia, False)
+        Label(window, text=factura_text, justify=LEFT).pack(pady=10)
+
+        # Opción de borrar la factura antes de pagar
+        Label(window, text="¿Desea borrar esta factura y no pagarla?").pack(pady=5)
+        Button(window, text="Sí", command=lambda:self.borrar_factura(carrito,cliente,caja_seleccionada)).pack(side=LEFT, padx=10)
+        Button(window, text="No", command=lambda: self.opcion_juego(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
+
+    def borrar_factura(self,carrito,cliente,caja_seleccionada):
+        carrito.eliminar_carrito()
+        cliente.set_tienda(None)
+        cliente.set_carrito(None)
+        caja_seleccionada.set_cliente(None)
+        carrito.set_caja(None)
+        messagebox.showinfo("Factura", "Factura eliminada y productos devueltos al inventario.")
+        return
+
+    def opcion_juego(self,cliente,carrito,caja_seleccionada, window):
+        for widget in window.winfo_children():
+            widget.destroy()
+        self.gano_juego = False
+        Label(window, text="¿Desea intentar obtener un descuento adicional jugando?").pack(pady=5)
+        Button(window, text="Sí", command=lambda: self.seleccionar_juego(cliente,carrito,caja_seleccionada,window)).pack(side=LEFT, padx=10)
+        Button(window, text="No", command=lambda: self.confirmar_pago(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
+
+    def seleccionar_juego(self,cliente,carrito,caja_seleccionada, window):
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        tiene_membresia = cliente.get_membresia() is not None
         if not tiene_membresia:
-            costo_juego = 10000
-            self.carrito.incrementar_costo(costo_juego)
-            precio_total += costo_juego
+            messagebox.showinfo("Juego", "Debe pagar 10 mil para intentar jugar.")
+            carrito.incrementar_costo(10000)
+        Label(window, text="Seleccione un juego:").pack(pady=5)
+        Button(window, text="Tres en Raya", command=lambda: self.jugar(cliente,carrito,caja_seleccionada,window,1)).pack(side=LEFT, padx=10)
+        Button(window, text="Ahorcado", command=lambda: self.jugar(cliente,carrito,caja_seleccionada,window, 2)).pack(side=RIGHT, padx=10)
 
-        seleccion_juego = simpledialog.askinteger(
-            "Seleccionar Juego",
-            "Seleccione un juego:\n1. Tres en Raya\n2. Ahorcado"
-        )
+    def ahorcado(self, window):
+        from gestorAplicacion.servicios.ahorcado import Ahorcado
 
-        gano_juego = False
-        if seleccion_juego == 1:
-            gano_juego = self.jugar_tres_en_raya()
-        elif seleccion_juego == 2:
-            gano_juego = self.jugar_ahorcado()
+        def handle_guess():
+            letra = guess_entry.get().lower()
+            if letra:
+                juego_ahorcado.jugar(letra)
+                update_display()
+                guess_entry.delete(0, tk.END)
+                if juego_ahorcado.ha_ganado():
+                    result_label.config(text="¡Ganaste!")
+                    guess_entry.config(state=tk.DISABLED)
+                    self.gano_juego = True
+                elif juego_ahorcado.ha_perdido():
+                    result_label.config(text="¡Perdiste!")
+                    guess_entry.config(state=tk.DISABLED)
+                    self.gano_juego = False
 
-        precio_con_descuento = precio_total * (1 - descuento_membresia)
-        if gano_juego:
-            precio_con_descuento *= 0.9
-            messagebox.showinfo("Ganaste", "¡Felicidades! Has ganado un descuento adicional del 10%.")
-        else:
-            messagebox.showinfo("Perdiste", "Lo sentimos, no has ganado el juego.")
-
-        self.confirmar_pago(precio_con_descuento)
-
-    def jugar_tres_en_raya(self):
-        juego_tres_en_raya = TresEnRaya()
-        juego_tres_en_raya.iniciar()
-
-        while not juego_tres_en_raya.ha_ganado() and not juego_tres_en_raya.ha_perdido():
-            estado = juego_tres_en_raya.obtener_estado()
-            posicion = simpledialog.askinteger("Tres en Raya", f"{estado}\nElige una posición (1-9): ")
-            if not juego_tres_en_raya.jugar(posicion):
-                messagebox.showwarning("Posición inválida", "Posición inválida. Intenta de nuevo.")
-                continue
-
-        estado = juego_tres_en_raya.obtener_estado()
-        messagebox.showinfo("Resultado Tres en Raya", estado)
-        return juego_tres_en_raya.ha_ganado()
-
-    def jugar_ahorcado(self):
-        juego_ahorcado = Ahorcado("java")
-        while not juego_ahorcado.ha_ganado() and not juego_ahorcado.ha_perdido():
+        def update_display():
             estado = juego_ahorcado.obtener_estado()
-            letra = simpledialog.askstring("Ahorcado", f"{estado}\nIntroduce una letra: ").lower()
-            juego_ahorcado.jugar(letra)
+            estado_label.config(text=estado)
 
-        estado = juego_ahorcado.obtener_estado()
-        messagebox.showinfo("Resultado Ahorcado", estado)
-        return juego_ahorcado.ha_ganado()
+        def restart_game():
+            nonlocal juego_ahorcado
+            juego_ahorcado = Ahorcado("java")
+            update_display()
+            result_label.config(text="")
+            guess_entry.config(state=tk.NORMAL)
 
-    def confirmar_pago(self, precio_con_descuento):
-        opcion_pago = simpledialog.askinteger(
-            "Confirmar Pago",
-            f"¿Desea pagar la factura?\nTotal con descuento: {precio_con_descuento:.2f}\n1. Sí\n2. No"
-        )
+        # Inicialización del juego
+        juego_ahorcado = Ahorcado("java")
+        juego_ahorcado.iniciar()
 
-        if opcion_pago == 2:
-            messagebox.showinfo("No Pago", "Ha decidido no pagar la factura. Regresando a la tienda...")
-            self.cliente.set_tienda(None)
-            self.cliente.set_carrito(None)
-            self.caja_seleccionada.set_cliente(None)
-            self.carrito.set_caja(None)
+        # Crear un Frame para el juego
+        game_frame = tk.Frame(window)
+        game_frame.pack(padx=10, pady=10)
+
+        # Etiqueta para mostrar el estado del juego
+        estado_label = tk.Label(game_frame, text=juego_ahorcado.obtener_estado())
+        estado_label.pack(pady=5)
+
+        # Entrada para letras
+        guess_entry = tk.Entry(game_frame)
+        guess_entry.pack(pady=5)
+
+        # Botón para hacer la adivinanza
+        guess_button = tk.Button(game_frame, text="Adivinar", command=handle_guess)
+        guess_button.pack(pady=5)
+
+        # Etiqueta para mostrar el resultado
+        result_label = tk.Label(game_frame, text="")
+        result_label.pack(pady=5)
+
+        # Botón para reiniciar el juego
+        restart_button = tk.Button(game_frame, text="Reiniciar", command=restart_game)
+        restart_button.pack(pady=5)
+
+        # Esperar a que el juego termine
+        while not self.ya_jugo:
+            window.update_idletasks()
+            window.update()
+
+        return self.gano_juego
+
+    def tres_en_raya(self, window):
+        from gestorAplicacion.servicios.tresEnRaya import TresEnRaya
+
+        juego = TresEnRaya()
+        juego.iniciar()
+
+        def handle_click(pos):
+            if juego.jugar(pos):
+                update_board()
+                if juego.check_win(juego.jugador):
+                    result_label.config(text="¡Ganaste!")
+                    disable_buttons()
+                    self.gano_juego = True
+                    self.ya_jugo = True
+                elif juego.check_win(juego.maquina):
+                    result_label.config(text="¡Perdiste!")
+                    disable_buttons()
+                    self.gano_juego = False
+                    self.ya_jugo = True
+                elif not juego.hay_espacios():
+                    result_label.config(text="¡Empate!")
+                    disable_buttons()
+                    self.gano_juego = False
+                    self.ya_jugo = True
+
+        def update_board():
+            for i in range(3):
+                for j in range(3):
+                    buttons[i * 3 + j].config(text=juego.tablero[i][j])
+
+        def disable_buttons():
+            for button in buttons:
+                button.config(state=tk.DISABLED)
+
+        buttons = []
+        for i in range(9):
+            button = tk.Button(window, text="", width=10, height=3, command=lambda i=i: handle_click(i + 1))
+            button.grid(row=i // 3, column=i % 3)
+            buttons.append(button)
+
+        result_label = tk.Label(window, text="")
+        result_label.grid(row=3, columnspan=3)
+
+        update_board()
+
+        # Esperar a que el juego termine
+        while not self.ya_jugo:
+            window.update_idletasks()
+            window.update()
+
+        return self.gano_juego
+
+
+    def jugar(self, cliente, carrito, caja_seleccionada, window, seleccion_juego):
+        for widget in window.winfo_children():
+            widget.destroy()
+        self.ya_jugo = False
+
+        if seleccion_juego == 1:
+            self.gano_juego = self.tres_en_raya(window)
+        elif seleccion_juego == 2:
+            self.gano_juego = self.ahorcado(window)
+
+        if self.gano_juego:
+            tk.messagebox.showinfo("Juego", "¡Felicidades! Ha ganado un descuento adicional del 10%.")
+            self.precio_con_descuento *= 0.9
+        else:
+            tk.messagebox.showinfo("Juego", "Lo sentimos, no ha ganado el juego.")
+
+        self.confirmar_pago(cliente, carrito, caja_seleccionada, window)
+
+    def confirmar_pago(self,cliente,carrito,caja_seleccionada, window):
+        for widget in window.winfo_children():
+            widget.destroy()
+
+        Label(window, text="¿Desea pagar la factura?").pack(pady=5)
+        factura_text = carrito.generar_detalles_factura(cliente.calcular_descuento_por_membresia(), self.gano_juego)
+        Label(window, text=factura_text, justify=LEFT).pack(pady=10)
+        Button(window, text="Sí", command=lambda: self.pagar_factura1(cliente,carrito,caja_seleccionada,window)).pack(side=LEFT, padx=10)
+        Button(window, text="No", command=lambda: self.cancelar_pago(cliente,carrito,caja_seleccionada,window)).pack(side=RIGHT, padx=10)
+
+    def cancelar_pago(self,cliente,carrito,caja_seleccionada,window):
+        cliente.set_tienda(None)
+        cliente.set_carrito(None)
+        caja_seleccionada.set_cliente(None)
+        carrito.set_caja(None)
+        messagebox.showinfo("Pago", "Ha decidido no pagar la factura. Regresando a la tienda.")
+        self.impresion_facturas(cliente, window)
+
+    def pagar_factura1(self,cliente,carrito,caja_seleccionada, window):
+        precio_final = self.precio_con_descuento
+        if cliente.get_dinero() < precio_final:
+            messagebox.showinfo("Pago", "No tiene suficiente saldo para pagar la factura. Regresando a la tienda.")
+            self.cancelar_pago(cliente,carrito,caja_seleccionada,window)
             return
-        elif opcion_pago == 1:
-            if self.cliente.get_dinero() < precio_con_descuento:
-                messagebox.showwarning("Saldo Insuficiente",
-                                       "No tiene suficiente saldo para pagar la factura. Regresando a la tienda...")
-                self.cliente.set_tienda(None)
-                self.cliente.set_carrito(None)
-                self.caja_seleccionada.set_cliente(None)
-                self.carrito.set_caja(None)
+
+        carrito.set_pagado(True)
+        cliente.get_facturas().append(carrito)
+        cliente.get_tienda().subir_saldo(precio_final)
+        cliente.bajar_dinero(precio_final)
+
+        cajero = caja_seleccionada.get_cajero()
+        pago_cajero = 20000
+        if cajero.get_prestacion_pension():
+            pago_cajero += 5000
+        if cajero.get_prestacion_salud():
+            pago_cajero += 5000
+        cliente.get_tienda().bajar_saldo(pago_cajero)
+
+        cliente.set_tienda(None)
+        cliente.set_carrito(None)
+        caja_seleccionada.set_cliente(None)
+        carrito.set_caja(None)
+
+        messagebox.showinfo("Pago", "La factura ha sido pagada exitosamente.")
+
+
+""" caja_seleccionada.cliente = cliente
+
+    # Aplicar descuento por membresía
+    descuento_membresia = cliente.calcular_descuento_por_membresia()
+    precio_total = carrito.calcular_total()
+    precio_con_descuento = precio_total * (1 - descuento_membresia)
+
+    # Imprimir factura con descuento por membresía
+    print(carrito.generar_detalles_factura(descuento_membresia, False))
+
+    # Opción de borrar la factura antes de pagar
+    print("¿Desea borrar esta factura y no pagarla?")
+    print("1. Sí")
+    print("2. No")
+    opcion_borrar = Main.escaner_con_rango(2)
+
+    if opcion_borrar == 1:
+        carrito.eliminar_carrito()  # Eliminar carrito y devolver productos
+        cliente.set_tienda(None)
+        cliente.set_carrito(None)  # Desasignar carrito del cliente
+        caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+        carrito.set_caja(None)  # Desasignar cliente de la caja
+        print("Factura eliminada y productos devueltos al inventario.")
+        return
+
+    # Opción de jugar para obtener más descuento
+    print("¿Desea intentar obtener un descuento adicional jugando?")
+    print("1. Sí")
+    print("2. No")
+    opcion_juego = Main.escaner_con_rango(2)
+
+    costo_juego = 0
+    gano_juego = False
+    if opcion_juego == 1:
+        tiene_membresia = cliente.get_membresia() is not None
+        if not tiene_membresia:
+            print("Debe pagar 10 mil para intentar jugar.")
+            costo_juego = 10000
+            carrito.incrementar_costo(costo_juego)
+            precio_total += costo_juego  # Aumentar el precio total antes de aplicar descuento del juego
+
+        # Selección del juego
+        print("Seleccione un juego:")
+        print("1. Tres en Raya")
+        print("2. Ahorcado")
+        seleccion_juego = int(input())
+
+        if seleccion_juego == 1:
+            gano_juego = Funcionalidad3.tres_en_raya()
+        elif seleccion_juego == 2:
+            gano_juego = Funcionalidad3.ahorcado()
+
+        if gano_juego:
+            print("¡Felicidades! Ha ganado un descuento adicional del 10%.")
+            precio_con_descuento *= 0.9  # Aplicar descuento adicional del juego
+        else:
+            print("Lo sentimos, no ha ganado el juego.")
+
+    # Imprimir factura con descuento adicional si ganó el juego
+    print(carrito.generar_detalles_factura(descuento_membresia, gano_juego))
+
+    # Confirmar si el cliente desea pagar la factura
+    print("¿Desea pagar la factura?")
+    print("1. Sí")
+    print("2. No")
+    opcion_pago = int(input())
+
+    if opcion_pago == 2:
+        print("Ha decidido no pagar la factura. Regresando a la tienda...")
+        cliente.set_tienda(None)
+        cliente.set_carrito(None)  # Desasignar carrito del cliente
+        caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+        carrito.set_caja(None)  # Desasignar cliente de la caja
+        return
+    elif opcion_pago == 1:
+        # Verificar si el cliente tiene suficiente saldo
+        precio_final = precio_con_descuento  # Usar el precio con descuento
+        if cliente.get_dinero() < precio_final:
+            print("No tiene suficiente saldo para pagar la factura. Regresando a la tienda...")
+            cliente.set_tienda(None)
+            cliente.set_carrito(None)  # Desasignar carrito del cliente
+            caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+            carrito.set_caja(None)  # Desasignar cliente de la caja
+            return
+
+        # Marcar la factura como pagada
+        carrito.set_pagado(True)
+        cliente.get_facturas().append(carrito)  # Registrar la factura en las facturas del cliente
+
+        # Actualizar saldo de la tienda
+        cliente.get_tienda().subir_saldo(precio_final)
+
+        # Restar el monto al saldo del cliente
+        cliente.bajar_dinero(precio_final + costo_juego)
+
+        # Calcular y descontar el pago del cajero
+        cajero = caja_seleccionada.get_cajero()
+        pago_cajero = 20000  # Pago inicial
+        if cajero.get_prestacion_pension():
+            pago_cajero += 5000
+        if cajero.get_prestacion_salud():
+            pago_cajero += 5000
+        cliente.get_tienda().bajar_saldo(pago_cajero)
+
+        # Desasignar referencias
+        cliente.set_tienda(None)
+        cliente.set_carrito(None)  # Desasignar carrito del cliente
+        caja_seleccionada.set_cliente(None)  # Desasignar cliente de la caja
+        carrito.set_caja(None)  # Desasignar caja del carrito
+
+        print("La factura ha sido pagada exitosamente.")
+        Main.escoger_funcionalidad()
+        caja_seleccionada = None
+
+        def on_select_caja():
+            nonlocal caja_seleccionada
+            seleccion = caja_var.get() - 1
+            if 0 <= seleccion < len(cajas):
+                caja_seleccionada = cajas[seleccion]
+
+                if caja_seleccionada.get_tipo() == TipoCaja.RAPIDA and len(carrito.get_productos()) > 5:
+                    error_label.config(text="No puede usar la caja rápida porque tiene más de 5 productos.")
+                    return
+
+                caja_label.config(text=f"Ha seleccionado la caja: {caja_seleccionada.get_nombre()}")
+                process_payment()
+
+        def process_payment():
+            # Apply membership discount
+            descuento_membresia = cliente.calcular_descuento_por_membresia()
+            precio_total = carrito.calcular_total()
+            precio_con_descuento = precio_total * (1 - descuento_membresia)
+
+            # Show invoice details
+            factura_detalles = carrito.generar_detalles_factura(descuento_membresia, False)
+            factura_text.set(factura_detalles)
+
+            # Ask to delete invoice or not
+            delete_invoice_label.grid(row=6, column=0, columnspan=2)
+            delete_yes_button.grid(row=7, column=0)
+            delete_no_button.grid(row=7, column=1)
+
+        def delete_invoice():
+            carrito.eliminar_carrito()
+            cliente.set_tienda(None)
+            cliente.set_carrito(None)
+            caja_seleccionada.set_cliente(None)
+            carrito.set_caja(None)
+            result_label.config(text="Factura eliminada y productos devueltos al inventario.")
+            delete_invoice_label.grid_forget()
+            delete_yes_button.grid_forget()
+            delete_no_button.grid_forget()
+            pay_or_not_label.grid_forget()
+            pay_yes_button.grid_forget()
+            pay_no_button.grid_forget()
+
+        def dont_delete_invoice():
+            delete_invoice_label.grid_forget()
+            delete_yes_button.grid_forget()
+            delete_no_button.grid_forget()
+            play_game()
+
+        def play_game():
+            # Ask to play for extra discount
+            play_game_label.grid(row=8, column=0, columnspan=2)
+            play_yes_button.grid(row=9, column=0)
+            play_no_button.grid(row=9, column=1)
+
+        def try_play_game():
+            tiene_membresia = cliente.get_membresia() is not None
+            costo_juego = 0
+            gano_juego = False
+            if not tiene_membresia:
+                costo_juego = 10000
+                carrito.incrementar_costo(costo_juego)
+                precio_total = carrito.calcular_total()
+                precio_total += costo_juego
+
+            # Game selection
+            game_select_label.grid(row=10, column=0, columnspan=2)
+            three_in_row_button.grid(row=11, column=0)
+            hangman_button.grid(row=11, column=1)
+
+        def play_three_in_row():
+            gano_juego = Funcionalidad3.tres_en_raya()
+            finish_game()
+
+        def play_hangman():
+            gano_juego = Funcionalidad3.ahorcado()
+            finish_game()
+
+        def finish_game():
+            if gano_juego:
+                result_label.config(text="¡Felicidades! Ha ganado un descuento adicional del 10%.")
+                precio_con_descuento *= 0.9
+            else:
+                result_label.config(text="Lo sentimos, no ha ganado el juego.")
+
+            game_select_label.grid_forget()
+            three_in_row_button.grid_forget()
+            hangman_button.grid_forget()
+            play_yes_button.grid_forget()
+            play_no_button.grid_forget()
+            confirm_payment()
+
+        def confirm_payment():
+            # Confirm payment
+            pay_or_not_label.grid(row=12, column=0, columnspan=2)
+            pay_yes_button.grid(row=13, column=0)
+            pay_no_button.grid(row=13, column=1)
+
+        def pay_invoice():
+            precio_final = precio_con_descuento
+            if cliente.get_dinero() < precio_final:
+                result_label.config(text="No tiene suficiente saldo para pagar la factura. Regresando a la tienda...")
                 return
 
-            # Marcar la factura como pagada
-            self.carrito.set_pagado(True)
-            self.cliente.get_facturas().append(self.carrito)
-            self.cliente.get_tienda().subir_saldo(precio_con_descuento)
-            self.cliente.bajar_dinero(precio_con_descuento)
+            carrito.set_pagado(True)
+            cliente.get_facturas().append(carrito)
+            cliente.get_tienda().subir_saldo(precio_final)
+            cliente.bajar_dinero(precio_final + costo_juego)
 
-            # Calcular y descontar el pago del cajero
-            cajero = self.caja_seleccionada.get_cajero()
+            cajero = caja_seleccionada.get_cajero()
             pago_cajero = 20000
             if cajero.get_prestacion_pension():
                 pago_cajero += 5000
             if cajero.get_prestacion_salud():
                 pago_cajero += 5000
-            self.cliente.get_tienda().bajar_saldo(pago_cajero)
+            cliente.get_tienda().bajar_saldo(pago_cajero)
 
-            # Desasignar referencias
-            self.cliente.set_tienda(None)
-            self.cliente.set_carrito(None)
-            self.caja_seleccionada.set_cliente(None)
-            self.carrito.set_caja(None)
+            cliente.set_tienda(None)
+            cliente.set_carrito(None)
+            caja_seleccionada.set_cliente(None)
+            carrito.set_caja(None)
 
-            messagebox.showinfo("Pago Exitoso", "La factura ha sido pagada exitosamente.")
-            Main.escoger_funcionalidad()
+            result_label.config(text="La factura ha sido pagada exitosamente.")
+            pay_or_not_label.grid_forget()
+            pay_yes_button.grid_forget()
+            pay_no_button.grid_forget()
+
+        def cancel_payment():
+            result_label.config(text="Ha decidido no pagar la factura. Regresando a la tienda...")
+            cliente.set_tienda(None)
+            cliente.set_carrito(None)
+            caja_seleccionada.set_cliente(None)
+            carrito.set_caja(None)
+            pay_or_not_label.grid_forget()
+            pay_yes_button.grid_forget()
+            pay_no_button.grid_forget()
+
+        if not cajas:
+            error_label = Label(window, text="No hay cajas disponibles.")
+            error_label.grid(row=0, column=0, columnspan=2)
+            wait_button = Button(window, text="Esperar", command=lambda: cliente.tienda.asignar_cajero(
+                cliente.tienda.encontrar_cajero(cliente.tienda.empleados)))
+            wait_button.grid(row=1, column=0)
+            leave_button = Button(window, text="Salir", command=lambda: Main.escoger_funcionalidad())
+            leave_button.grid(row=1, column=1)
+            return
+
+        # Display available boxes
+        caja_label = Label(window, text="Seleccione una caja para pagar:")
+        caja_label.grid(row=0, column=0, columnspan=2)
+        caja_var = IntVar()
+        for i, caja in enumerate(cajas):
+            Radiobutton(window, text=f"{caja.get_nombre()}, Tipo: {caja.get_tipo()}", variable=caja_var,
+                           value=i + 1).grid(row=i + 1, column=0, columnspan=2)
+
+        select_button = Button(window, text="Seleccionar", command=on_select_caja)
+        select_button.grid(row=len(cajas) + 1, column=0, columnspan=2)
+
+        factura_text = StringVar()
+        factura_label = Label(window, textvariable=factura_text)
+        factura_label.grid(row=5, column=0, columnspan=2)
+
+        delete_invoice_label = Label(window, text="¿Desea borrar esta factura y no pagarla?")
+        delete_yes_button = Button(window, text="Sí", command=delete_invoice)
+        delete_no_button = Button(window, text="No", command=dont_delete_invoice)
+
+        play_game_label = Label(window, text="¿Desea intentar obtener un descuento adicional jugando?")
+        play_yes_button = Button(window, text="Sí", command=try_play_game)
+        play_no_button = Button(window, text="No", command=confirm_payment)
+
+        game_select_label = Label(window, text="Seleccione un juego:")
+        three_in_row_button = Button(window, text="Tres en Raya", command=play_three_in_row)
+        hangman_button = Button(window, text="Ahorcado", command=play_hangman)
+
+        pay_or_not_label = Label(window, text="¿Desea pagar la factura?")
+        pay_yes_button = Button(window, text="Sí", command=pay_invoice)
+        pay_no_button = Button(window, text="No", command=cancel_payment)
+
+        result_label = Label(window, text="")"""
 
 """
     def impresion_facturas(persona):

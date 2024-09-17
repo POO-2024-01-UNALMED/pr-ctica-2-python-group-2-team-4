@@ -6,14 +6,17 @@ from gestorAplicacion.servicios.enums import Genero, Edades
 from gestorAplicacion.servicios.enums import Membresia
 
 class Cliente(Persona):
-    def __init__(self, nombre, id, edad, genero, dinero=0, carrito=None, tienda=None):
-        super().__init__(nombre, id, edad, genero)
+    def __init__(self, nombre, numero, edad, genero, dinero=0, carrito=None, tienda=None):
+        super().__init__(nombre, numero, edad, genero)
         self._membresia = None
         self._tienda = tienda
         self._dinero = dinero
         self._carrito = carrito
         self._caja = None
         self._facturas = []
+
+    def get_numero(self):
+        return super().get_numero()
 
     def get_membresia(self):
         return self._membresia
