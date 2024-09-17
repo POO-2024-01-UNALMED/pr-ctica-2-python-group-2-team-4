@@ -667,7 +667,7 @@ class Funcionalidad1:
 
         # Botón 4: Volver al menú principal
         boton4 = Button(boton_frame, text="Aceptar", font=("Arial", 15),
-                        command=lambda: self.consulta_membresia(cliente, window))
+                        )
         boton4.grid(row=2, column=0, sticky='ew', padx=50, pady=10)
 
         # Botón 4: Volver al menú principal
@@ -681,6 +681,8 @@ class Funcionalidad1:
 
         # Mostrar el frame con los botones
         zona2Fun1.pack(fill=BOTH, expand=True)
+
+   # def felicitar_membresia(self,cliente,membresia,window):
 
 
 
