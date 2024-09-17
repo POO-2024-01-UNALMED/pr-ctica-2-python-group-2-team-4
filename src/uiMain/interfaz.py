@@ -126,7 +126,7 @@ class Iniciar_ventana_usuario():
         from gestorAplicacion.sujetos.persona import Persona
         cliente = None
         for persona in Persona.get_personas():
-            if persona.get_nombre() == "Juan Pérez":
+            if persona.get_nombre() == "Carlos":
                 print(f"Bienvenido {persona.get_nombre()}")
                 cliente = persona
         funcionalidad1 = Funcionalidad1()
@@ -760,6 +760,11 @@ if __name__ == "__main__":
 
         # Obtener la tienda del cliente
         tienda = cliente.get_tienda()
+
+        for t in tienda.get_cajas():
+            tienda.get_empleados().append(t.get_cajero())
+        print(len(tienda.get_empleados()))
+        print(tienda.get_nombre())
         if tienda is None:
             print("El cliente no está asociado a ninguna tienda.")
         else:

@@ -214,15 +214,11 @@ class Identidad2:
 
             from gestorAplicacion.sujetos.persona import Persona
             personas = Persona.get_personas()
-            print(p)
             for persona in Persona.personas:
-                print(persona.get_id())
                 if (int(persona.get_id()))==(int(p)):
                     self.resultado = persona
                     self.mostrar_mensaje(f"Bienvenido {persona.get_nombre()}")
                     return persona
-            print(self.resultado)
-
             if not self.resultado:
                 self.mostrar_alerta(p)
 

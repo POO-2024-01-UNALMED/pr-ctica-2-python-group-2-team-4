@@ -5,6 +5,7 @@ from math import trunc
 from tkinter import *
 from tkinter import messagebox, simpledialog
 
+
 from gestorAplicacion.servicios.enums import Membresia
 from gestorAplicacion.servicios.tienda import Tienda
 from gestorAplicacion.sujetos.cliente import Cliente
@@ -113,6 +114,8 @@ class Funcionalidad1:
         tiendas_frame.pack(pady=10, fill=BOTH, expand=True)
 
         if Tienda.buscar_tienda():
+            for t in Tienda.get_tiendas()[0].get_cajas():
+                Tienda.get_tiendas()[0].get_empleados().append(t.get_cajero())
             tiendas = Tienda.revision_tienda(Tienda.get_tiendas())
             Label(tiendas_frame, text="Selecciona una de las tiendas que tenemos disponibles para ti:",
                   font=("Arial", 16), bg="#F2F2F2", fg="black").pack(pady=10)
@@ -240,10 +243,15 @@ class Funcionalidad1:
                 self.aplicar_presupuesto(cliente, tienda, window)
     #--------------------------------------------------------------------------------------------------------------------------------------------
     def presupuestoAsignado(self,cliente,tienda,window,cat=None):
+        from gestorAplicacion.servicios.carrito import Carrito
         widgets = window.winfo_children()
         for i, widget in enumerate(widgets):
             if i >= 4:  # Si el índice es 3 o mayor, elimina el widget
                 widget.destroy()
+
+        cliente.set_tienda(tienda)
+        carrito=Carrito(cliente)
+        cliente.set_carrito(carrito)
 
         # Crear un FieldFrame con el título y descripción correspondiente
         zona2Fun1 = FieldFrame(window, "", [None], "", [],
