@@ -40,21 +40,32 @@ class HojaVida(Frame):
             png = "juanDiego/foto"+str(numero+1)
         else:
             png="jordan/foto"+str(numero+1)
+
         try:
             path = os.path.realpath('src\\assets\\'+png+'.png')
             photo = PhotoImage(file=path)
+            # Redimensionar la imagen usando subsample
+            photo = photo.subsample(2, 2)  # Ajusta los valores según sea necesario
+
+            self._photos[numero] = photo  # Mantén la referencia a la imagen
+            self._labels[numero].configure(image=photo)
+            #self._labels[numero].image = photo
         except:
-            path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets', png+'.png')
-            photo = PhotoImage(file=path)
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"Image file not found at path: {path}")
+            try:
+                path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src', 'assets',
+                                    png + '.png')
+                photo = PhotoImage(file=path)
+                # Redimensionar la imagen usando subsample
+                photo = photo.subsample(2, 2)  # Ajusta los valores según sea necesario
 
-        # Redimensionar la imagen usando subsample
-        photo = photo.subsample(2, 2)  # Ajusta los valores según sea necesario
+                self._photos[numero] = photo  # Mantén la referencia a la imagen
+                self._labels[numero].configure(image=photo)
+                #self._labels[numero].image = photo
+            except:
+                pass
+        #if not os.path.exists(path):
+        #    raise FileNotFoundError(f"Image file not found at path: {path}")
 
-        self._photos[numero] = photo  # Mantén la referencia a la imagen
-        self._labels[numero].configure(image=photo)
-        self._labels[numero].image = photo
 
     def cargar_hv(self, numero):
         self._text = Text(self.frame_p5, height=10, width=77, bg="light blue", font=("Serif", 10, "bold"), wrap="word")
@@ -71,11 +82,15 @@ class HojaVida(Frame):
         else:
             txt="jordan"
         try:
-            with open(os.path.realpath('src\\assets\\'+txt+".txt"), "r+") as hv_text:
+            with open(os.path.realpath('src\\assets\\' + txt + ".txt"), "r+") as hv_text:
                 self._text.insert(INSERT, hv_text.read())
         except:
-            with open(os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), 'src\\assets\\'+txt+".txt"), "r+") as hv_text:
-                self._text.insert(INSERT, hv_text.read())
+            try:
+                with open(os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(),
+                                       'src\\assets\\' + txt + ".txt"), "r+") as hv_text:
+                    self._text.insert(INSERT, hv_text.read())
+            except:
+                pass
 
     def proximo(self, _):
         self._text.destroy()
