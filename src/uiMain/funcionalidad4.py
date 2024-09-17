@@ -4,13 +4,10 @@ import tkinter as tk
 from typing import List, Optional
 import sys
 sys.path.append('C:\\Users\\js682\\OneDrive\\Documentos\\pr-ctica-2-python-group-2-team-4\\src')
+
+from servicios.producto import Producto
 from fieldFrame import FieldFrame
-
-
-
 from gestorAplicacion.servicios.proveedor import Proveedor
-
-
 
 from gestorAplicacion.servicios.enums import Genero
 from gestorAplicacion.servicios.tienda import Tienda
@@ -482,8 +479,10 @@ class Funcionalidad4:
     def seleccionar_proveedor(self, window, proveedor):
         """Método para manejar la selección de un proveedor y mostrar los productos para que el usuario seleccione la cantidad a pedir"""
         # Limpiar la ventana de widgets anteriores
-        for widget in window.winfo_children():
-            widget.destroy()
+        widgets = window.winfo_children()  # Obtén todos los widgets en la ventana
+        for i, widget in enumerate(widgets):
+            if i >= 4:  # Si el índice es 4 o mayor, elimina el widget
+                widget.destroy()
 
         Label(window, text=f"Has seleccionado al proveedor: {proveedor.get_nombre()}", font=("Arial", 15)).pack(pady=10)
 
